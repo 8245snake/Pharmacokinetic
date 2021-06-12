@@ -23,8 +23,9 @@ namespace SimulationApp
 
             // プロポフォールのモデルでシミュレーション開始
             PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol(50);
-            PharmacokineticSimulator sim = createSimulator(time, 30, 20);
-            sim.BolusDose(time.AddMinutes(1), 100, WeightUnitEnum.ug);
+            PharmacokineticSimulator sim = createSimulator(time, 6, 20);
+            // ボーラスだと一気に上がるので持続を短時間で入れるようにしてみた
+            sim.ContinuousDose(time, time.AddSeconds(30), 200, WeightUnitEnum.ug, TimeUnitEnum.minute);
             LoadGraph(chartSimulation, sim, model);
         }
 
@@ -57,6 +58,13 @@ namespace SimulationApp
             chart.ChartAreas.Add(area1);
             chart.Series.Add(seriesC1);
             chart.Series.Add(seriesCe);
+
+            chart.Legends[0].Title = "凡例";
+            chart.Legends[0].Position.Auto = false;
+            chart.Legends[0].Position.Width = 8.0F;
+            chart.Legends[0].Position.Height = 10.0F;
+            chart.Legends[0].Position.X = 0.0F;
+            chart.Legends[0].Position.Y = 0.0F;
         }
 
         private PharmacokineticSimulator createSimulator(DateTime start, int step, int duration)
