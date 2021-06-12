@@ -22,14 +22,13 @@ namespace Simulator
 
         private List<IMedicineDosing> _MedicineDosingList = new List<IMedicineDosing>();
 
-        public void BolusDose(DateTime time, double amount, Medicine.WeightUnitEnum weightUnit, Medicine.VolumeUnitEnum volumeUnit)
+        public void BolusDose(DateTime time, double amount, Medicine.WeightUnitEnum weightUnit)
         {
             BolusMedicineDosing dosing = new BolusMedicineDosing()
             {
                 DoseTime = time,
                 DoseAmount = amount,
                 WeightUnit = weightUnit,
-                VolumeUnit = volumeUnit,
                 CalculationStartTime = CalculationStartTime,
             };
 

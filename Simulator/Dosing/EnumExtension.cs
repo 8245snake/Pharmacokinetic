@@ -42,35 +42,6 @@ namespace Simulator.Dosing
             }
         }
 
-        public static double Factor(this Medicine.VolumeUnitEnum self)
-        {
-            switch (self)
-            {
-                case Medicine.VolumeUnitEnum.L:
-                case Medicine.VolumeUnitEnum.mL:
-                    return (int)self / 1000;
-                case Medicine.VolumeUnitEnum.None:
-                    return 1;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(self), self, null);
-            }
-        }
-
-        public static double Factor(this Medicine.WeightUnitEnum self)
-        {
-            switch (self)
-            {
-                case Medicine.WeightUnitEnum.g:
-                case Medicine.WeightUnitEnum.mg:
-                case Medicine.WeightUnitEnum.ug:
-                case Medicine.WeightUnitEnum.ng:
-                    return (int)self / 1000;
-                case Medicine.WeightUnitEnum.None:
-                    return 1;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(self), self, null);
-            }
-        }
 
     }
 }

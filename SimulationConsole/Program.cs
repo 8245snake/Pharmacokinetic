@@ -26,26 +26,34 @@ namespace SimulationConsole
 
         static void Main(string[] args)
         {
+            TestBolus();
+        }
 
-            var time= new DateTime(2021, 6, 12, 12, 30, 0);
+        private static void TestBolus()
+        {
+            var time = new DateTime(2021, 6, 12, 12, 30, 0);
 
             PharmacokineticModel model = new PharmacokineticModel("ﾌｪﾝﾀ", k10, k12, k13, k21, k31, ke0, v1, weight);
             PharmacokineticSimulator sim = new PharmacokineticSimulator()
             {
                 DurationdMinutes = 10,
-                StepSeconds = 30,
+                StepSeconds = 60,
                 CalculationStartTime = time
             };
 
-            sim.BolusDose(time, 10, WeightUnitEnum.ug, VolumeUnitEnum.None);
+            // 開始時に5μg投与
+            sim.BolusDose(time, 5, WeightUnitEnum.ug);
+            // 1分後に2μg投与
+            time = time.AddMinutes(1);
+            sim.BolusDose(time, 2, WeightUnitEnum.ug);
 
+            // シミュレーション開始
             foreach (var result in sim.Predict(model))
             {
                 Console.WriteLine(result.ToString());
             }
 
             Console.ReadKey();
-
         }
     }
 }

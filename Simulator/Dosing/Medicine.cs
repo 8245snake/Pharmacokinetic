@@ -1,5 +1,7 @@
 ﻿
 
+using System;
+
 namespace Simulator.Dosing
 {
     public class Medicine
@@ -66,7 +68,16 @@ namespace Simulator.Dosing
 
         public  string Name { get; set; }
 
-
+        /// <summary>
+        /// 単位換算するための係数
+        /// </summary>
+        /// <param name="from">変換元単位</param>
+        /// <param name="to">変換先単位</param>
+        /// <returns>係数</returns>
+        public static double GetUnitConvertFactor(Medicine.WeightUnitEnum from, Medicine.WeightUnitEnum to)
+        {
+            return (double)to / (double)from;
+        }
 
     }
 
