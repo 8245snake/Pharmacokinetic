@@ -75,7 +75,15 @@ namespace Simulator
             };
 
             _MedicineDosingList.Add(dosing);
+        }
 
+        /// <summary>
+        /// 投与データ追加
+        /// </summary>
+        /// <param name="dosing">投与データ</param>
+        public void AddDose(IMedicineDosing dosing)
+        {
+            _MedicineDosingList.Add(dosing);
         }
 
         /// <summary>
@@ -137,15 +145,44 @@ namespace Simulator
 
     }
 
+    /// <summary>
+    /// シミュレーション結果格納用構造体
+    /// </summary>
     public struct SimulatorResult
     {
-
+        /// <summary>
+        /// 時刻
+        /// </summary>
         public DateTime PlotTime { get; set; }
+
+        /// <summary>
+        /// 血中濃度（ng/ml）
+        /// </summary>
         public double C1 { get; set; }
+
+        /// <summary>
+        /// C2濃度（ng/ml）
+        /// </summary>
         public double C2 { get; set; }
+
+        /// <summary>
+        /// C3濃度（ng/ml）
+        /// </summary>
         public double C3 { get; set; }
+
+        /// <summary>
+        /// 効果部位濃度（ng/ml）
+        /// </summary>
         public double Ce { get; set; }
+
+        /// <summary>
+        /// ボーラス投与量（ng）
+        /// </summary>
         public double Bolus { get; set; }
+
+        /// <summary>
+        /// 持続投与量（ng/min）
+        /// </summary>
         public double Continuous { get; set; }
 
         public override string ToString()
