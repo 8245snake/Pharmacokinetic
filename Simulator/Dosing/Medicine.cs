@@ -74,7 +74,19 @@ namespace Simulator.Dosing
         /// <param name="from">変換元単位</param>
         /// <param name="to">変換先単位</param>
         /// <returns>係数</returns>
-        public static double GetUnitConvertFactor(Medicine.WeightUnitEnum from, Medicine.WeightUnitEnum to)
+        public static double GetWeightUnitConvertFactor(Medicine.WeightUnitEnum from, Medicine.WeightUnitEnum to)
+        {
+            return (double)to / (double)from;
+        }
+
+
+        /// <summary>
+        /// 単位換算するための係数
+        /// </summary>
+        /// <param name="from">変換元単位</param>
+        /// <param name="to">変換先単位</param>
+        /// <returns>係数</returns>
+        public static double GetTimeUnitConvertFactor(Medicine.TimeUnitEnum from, Medicine.TimeUnitEnum to)
         {
             return (double)to / (double)from;
         }

@@ -24,11 +24,6 @@ namespace Simulator.Dosing
         public WeightUnitEnum WeightUnit { get; set; }
 
         /// <summary>
-        /// シミュレーション開始時刻。刻み時間の基準となる。
-        /// </summary>
-        public DateTime CalculationStartTime { get; set; }
-
-        /// <summary>
         /// 刻み時間。
         /// </summary>
         public int StepSeconds { get; set; }
@@ -53,9 +48,9 @@ namespace Simulator.Dosing
             if (spanSecond >= 0 && spanSecond <= StepSeconds)
             {
                 _isAlreadyReturned = true;
-                // 濃度がmg/Lとなっているのでmg基準に合わせて返す
-                return DoseAmount * (double) WeightUnit * GetUnitConvertFactor(WeightUnit, WeightUnitEnum.ug) /
-                       GetUnitConvertFactor(WeightUnitEnum.mg, WeightUnit);
+                double conc = DoseAmount * (double) WeightUnit * GetWeightUnitConvertFactor(WeightUnit, WeightUnitEnum.ug);
+                // 濃度がmg/Lと定義されているのでmg基準に合わせて返す
+                return conc / GetWeightUnitConvertFactor(WeightUnitEnum.mg, WeightUnit);
             }
 
             return 0;

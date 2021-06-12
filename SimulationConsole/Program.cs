@@ -26,7 +26,7 @@ namespace SimulationConsole
 
         static void Main(string[] args)
         {
-            TestBolus();
+            TestContinuous();
         }
 
         private static void TestBolus()
@@ -46,6 +46,34 @@ namespace SimulationConsole
             // 1分後に2μg投与
             time = time.AddMinutes(1);
             sim.BolusDose(time, 2, WeightUnitEnum.ug);
+
+            // シミュレーション開始
+            foreach (var result in sim.Predict(model))
+            {
+                Console.WriteLine(result.ToString());
+            }
+
+            Console.ReadKey();
+        }
+
+        private static void TestContinuous()
+        {
+            var time = new DateTime(2021, 6, 12, 12, 30, 0);
+
+            PharmacokineticModel model = new PharmacokineticModel("ﾌｪﾝﾀ", k10, k12, k13, k21, k31, ke0, v1, weight);
+            PharmacokineticSimulator sim = new PharmacokineticSimulator()
+            {
+                DurationdMinutes = 10,
+                StepSeconds = 60,
+                CalculationStartTime = time
+            };
+
+            // 開始時に100μg/h持続投与開始
+            sim.ContinuousDose(time, time.AddMinutes(3),  100, WeightUnitEnum.ug, TimeUnitEnum.hour);
+            // 1分後に300μg/hへ流速変更
+            time = time.AddMinutes(3);
+            sim.ContinuousDose(time, DateTime.MaxValue, 300, WeightUnitEnum.ug, TimeUnitEnum.hour);
+
 
             // シミュレーション開始
             foreach (var result in sim.Predict(model))

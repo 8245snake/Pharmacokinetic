@@ -29,14 +29,25 @@ namespace Simulator
                 DoseTime = time,
                 DoseAmount = amount,
                 WeightUnit = weightUnit,
-                CalculationStartTime = CalculationStartTime,
+                StepSeconds = this.StepSeconds
             };
 
             _MedicineDosingList.Add(dosing);
         }
 
-        public void ContinuousDose()
+        public void ContinuousDose(DateTime start, DateTime end, double flow, Medicine.WeightUnitEnum weightUnit, Medicine.TimeUnitEnum timeUnit)
         {
+            ContinuousMedicineDosing dosing = new ContinuousMedicineDosing()
+            {
+                DoseStartTime = start,
+                DoseEndTime = end,
+                FlowVelocity = flow,
+                WeightUnit = weightUnit,
+                TimeUnit = timeUnit,
+                StepSeconds = this.StepSeconds
+            };
+
+            _MedicineDosingList.Add(dosing);
 
         }
 
