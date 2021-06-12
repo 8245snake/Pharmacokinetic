@@ -2,30 +2,106 @@
 
 namespace Simulator
 {
+    /// <summary>
+    /// 薬物動態モデル
+    /// </summary>
     public class PharmacokineticModel
     {
+        /// <summary>
+        /// 薬剤名称
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// k10速度定数(h^-1)
+        /// </summary>
         public double K10 { get; set; }
 
+        /// <summary>
+        /// k12速度定数(h^-1)
+        /// </summary>
         public double K12 { get; set; }
 
+        /// <summary>
+        /// k13速度定数(h^-1)
+        /// </summary>
         public double K13 { get; set; }
 
+        /// <summary>
+        /// k21速度定数(h^-1)
+        /// </summary>
         public double K21 { get; set; }
 
+        /// <summary>
+        /// k31速度定数(h^-1)
+        /// </summary>
         public double K31 { get; set; }
 
+        /// <summary>
+        /// 消失速度定数(h^-1)
+        /// </summary>
         public double Ke0 { get; set; }
 
+        /// <summary>
+        /// 体重(kg)
+        /// </summary>
         public double Weight { get; set; }
 
+        /// <summary>
+        /// 分布容量(L)
+        /// </summary>
         public double V1 { get; set; }
 
+        /// <summary>
+        /// 分布容量(L)
+        /// </summary>
         public double V2 { get; set; }
 
+        /// <summary>
+        /// 分布容量(L)
+        /// </summary>
         public double V3 { get; set; }
 
+        /// <summary>
+        /// 血中からのクリアランス
+        /// </summary>
+        public double CL1
+        {
+            get => K10 * V1;
+            set => K10 = value / V1;
+        }
+
+        /// <summary>
+        /// C2へのクリアランス
+        /// </summary>
+        public double CL2
+        {
+            get => K12 * V1;
+            set => K12 = value / V1;
+        }
+
+        /// <summary>
+        /// C3へのクリアランス
+        /// </summary>
+        public double CL3
+        {
+            get => K13 * V1;
+            set => K13 = value / V1;
+        }
+
+
+        /// <summary>
+        /// モデルを作成します。
+        /// </summary>
+        /// <param name="name">薬剤名称</param>
+        /// <param name="k10">k10速度定数(h^-1)</param>
+        /// <param name="k12">k12速度定数(h^-1)</param>
+        /// <param name="k13">k13速度定数(h^-1)</param>
+        /// <param name="k21">k21速度定数(h^-1)</param>
+        /// <param name="k31">k31速度定数(h^-1)</param>
+        /// <param name="ke0">消失速度定数(h^-1)</param>
+        /// <param name="v1">Vd分布容量(L/kg)</param>
+        /// <param name="weight">体重(kg)</param>
         public PharmacokineticModel(string name, double k10, double k12, double k13, double k21, double k31, double ke0, double v1, double weight)
         {
             Name = name;
@@ -93,13 +169,13 @@ namespace Simulator
         /// <summary>
         /// ルンゲクッタ法でh分だけ未来の値を予測する
         /// </summary>
-        /// <param name="c1"></param>
-        /// <param name="c2"></param>
-        /// <param name="c3"></param>
-        /// <param name="ce"></param>
-        /// <param name="bolus"></param>
-        /// <param name="continuous"></param>
-        /// <param name="h"></param>
+        /// <param name="c1">血中濃度</param>
+        /// <param name="c2">C2濃度</param>
+        /// <param name="c3">C3濃度</param>
+        /// <param name="ce">効果部位濃度</param>
+        /// <param name="bolus">ボーラス投与量</param>
+        /// <param name="continuous">持続投与量</param>
+        /// <param name="h">刻み(分)</param>
         /// <returns></returns>
         public RungeKuttaResult RungeKuttaCalculation(double c1, double c2, double c3, double ce, double bolus, double continuous, double h)
         {
@@ -138,6 +214,10 @@ namespace Simulator
             return result;
         }
 
+        /// <summary>
+        /// クローンを作成します。
+        /// </summary>
+        /// <returns>クローン</returns>
         public PharmacokineticModel DeepCopy()
         {
             return this.MemberwiseClone() as PharmacokineticModel;
