@@ -7,7 +7,7 @@ using  static  Simulator.Dosing.Medicine;
 
 namespace SimulationConsole
 {
-    class Program
+    class ConsoleMain
     {
 
         static void Main(string[] args)
