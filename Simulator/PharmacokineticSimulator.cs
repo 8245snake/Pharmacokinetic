@@ -7,9 +7,19 @@ namespace Simulator
 {
     public class PharmacokineticSimulator
     {
+        /// <summary>
+        /// 計算開始時刻
+        /// </summary>
         public DateTime CalculationStartTime { get; set; } = DateTime.Now;
+        
+        /// <summary>
+        /// 計算時間範囲（分）
+        /// </summary>
         public int DurationdMinutes { get; set; } = 60 * 4;
 
+        /// <summary>
+        /// 計算終了時刻
+        /// </summary>
         public DateTime CalculationLastTime
         {
             get => CalculationStartTime.AddMinutes(DurationdMinutes);
@@ -20,8 +30,17 @@ namespace Simulator
         /// </summary>
         public int StepSeconds { get; set; } = 60;
 
+        /// <summary>
+        /// 投与データ
+        /// </summary>
         private List<IMedicineDosing> _MedicineDosingList = new List<IMedicineDosing>();
 
+        /// <summary>
+        /// ボーラス投与
+        /// </summary>
+        /// <param name="time">投与時刻</param>
+        /// <param name="amount">投与量</param>
+        /// <param name="weightUnit">質量単位</param>
         public void BolusDose(DateTime time, double amount, Medicine.WeightUnitEnum weightUnit)
         {
             BolusMedicineDosing dosing = new BolusMedicineDosing()
@@ -35,6 +54,14 @@ namespace Simulator
             _MedicineDosingList.Add(dosing);
         }
 
+        /// <summary>
+        /// 持続投与
+        /// </summary>
+        /// <param name="start">開始時刻</param>
+        /// <param name="end">終了時刻</param>
+        /// <param name="flow">流速</param>
+        /// <param name="weightUnit">質量単位</param>
+        /// <param name="timeUnit">時間単位</param>
         public void ContinuousDose(DateTime start, DateTime end, double flow, Medicine.WeightUnitEnum weightUnit, Medicine.TimeUnitEnum timeUnit)
         {
             ContinuousMedicineDosing dosing = new ContinuousMedicineDosing()
@@ -51,7 +78,11 @@ namespace Simulator
 
         }
 
-
+        /// <summary>
+        /// 血中濃度など予測するして逐次返す
+        /// </summary>
+        /// <param name="predictSource">モデル</param>
+        /// <returns>予測結果</returns>
         public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource)
         {
             double h = 60 / (double) StepSeconds;

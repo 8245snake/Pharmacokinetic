@@ -49,8 +49,8 @@ namespace Simulator.Dosing
         /// <returns>投与量（単位はμg）</returns>
         public double GetDosing(DateTime time)
         {
-            // 開始より前か終了より後なら無効
-            if (time.Ticks < DoseStartTime.Ticks || time.Ticks > DoseEndTime.Ticks)
+            // 開始より前か終了より後なら無効（投与直後に濃度上昇しないため開始時刻ちょうどのときもはじく）
+            if (time.Ticks <= DoseStartTime.Ticks || time.Ticks > DoseEndTime.Ticks)
             {
                 return 0;
             }
