@@ -11,5 +11,10 @@ namespace Simulator.Dosing
         /// <returns>投与量</returns>
         double GetDosing(DateTime time);
 
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        void Inittialize();
+
     }
 }

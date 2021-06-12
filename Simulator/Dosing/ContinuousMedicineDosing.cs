@@ -63,5 +63,9 @@ namespace Simulator.Dosing
             weight /= GetWeightUnitConvertFactor(WeightUnitEnum.mg, WeightUnit);
             return weight;
         }
+
+        public void Inittialize()
+        {
+        }
     }
 }

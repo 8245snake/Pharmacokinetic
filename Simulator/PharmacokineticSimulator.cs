@@ -93,6 +93,12 @@ namespace Simulator
         /// <returns>予測結果</returns>
         public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource)
         {
+            // 初期化
+            foreach (var item in _MedicineDosingList)
+            {
+                item.Inittialize();
+            }
+
             double h = 60 / (double) StepSeconds;
 
             // 単位時間あたりの係数に変換する

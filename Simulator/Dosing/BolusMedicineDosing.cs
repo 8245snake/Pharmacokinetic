@@ -56,6 +56,11 @@ namespace Simulator.Dosing
             return 0;
         }
 
+        public void Inittialize()
+        {
+            _isAlreadyReturned = false;
+        }
+
 
         public override string ToString()
         {

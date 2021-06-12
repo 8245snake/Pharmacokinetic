@@ -77,7 +77,11 @@ namespace Simulator
         public double CL2
         {
             get => K12 * V1;
-            set => K12 = value / V1;
+            set
+            {
+                K12 = value / V1;
+                K21 = CL2 / V2;
+            }
         }
 
         /// <summary>
@@ -86,7 +90,17 @@ namespace Simulator
         public double CL3
         {
             get => K13 * V1;
-            set => K13 = value / V1;
+            set
+            {
+                K13 = value / V1;
+                K31 = CL3 / V3;
+            }
+        }
+
+        public PharmacokineticModel(string name, double weight)
+        {
+            Name = name;
+            Weight = weight;
         }
 
 
@@ -127,7 +141,7 @@ namespace Simulator
         /// <param name="bolus"></param>
         /// <param name="continuous"></param>
         /// <returns></returns>
-        public double GetDeltaC1(double c1, double c2, double c3, double h, double bolus, double continuous)
+        private double GetDeltaC1(double c1, double c2, double c3, double h, double bolus, double continuous)
         {
             return (-c1 * (K10 + K12 + K13) + c2 * K21 + c3 * K31) + continuous / h;
         }
@@ -139,7 +153,7 @@ namespace Simulator
         /// <param name="c1"></param>
         /// <param name="c2"></param>
         /// <returns></returns>
-        public double GetDeltaC2(double c1, double c2)
+        private double GetDeltaC2(double c1, double c2)
         {
             return (c1 * K12 - c2 * K21);
         }
@@ -150,7 +164,7 @@ namespace Simulator
         /// <param name="c1"></param>
         /// <param name="c3"></param>
         /// <returns></returns>
-        public double GetDeltaC3(double c1, double c3)
+        private double GetDeltaC3(double c1, double c3)
         {
             return (c1 * K13 - c3 * K31);
         }
@@ -161,7 +175,7 @@ namespace Simulator
         /// <param name="c1"></param>
         /// <param name="ce"></param>
         /// <returns></returns>
-        public double GetDeltaCe(double c1, double ce)
+        private double GetDeltaCe(double c1, double ce)
         {
             return (c1 * Ke0 - ce * Ke0);
         }
@@ -221,6 +235,30 @@ namespace Simulator
         public PharmacokineticModel DeepCopy()
         {
             return this.MemberwiseClone() as PharmacokineticModel;
+        }
+
+        public override string ToString()
+        {
+            return $"{nameof(Name)}: {Name}, {nameof(K10)}: {K10}, {nameof(K12)}: {K12}, {nameof(K13)}: {K13}, {nameof(K21)}: {K21}, {nameof(K31)}: {K31}, {nameof(Ke0)}: {Ke0}, {nameof(Weight)}: {Weight}, {nameof(V1)}: {V1}, {nameof(V2)}: {V2}, {nameof(V3)}: {V3}, {nameof(CL1)}: {CL1}, {nameof(CL2)}: {CL2}, {nameof(CL3)}: {CL3}";
+        }
+
+        public void ConsoleLog()
+        {
+            string log = $"{nameof(Name)}: {Name}, \r\n" +
+                         $"{nameof(K10)}: {K10}, \r\n" +
+                         $"{nameof(K12)}: {K12}, \r\n" +
+                         $"{nameof(K13)}: {K13}, \r\n" +
+                         $"{nameof(K21)}: {K21}, \r\n" +
+                         $"{nameof(K31)}: {K31}, \r\n" +
+                         $"{nameof(Ke0)}: {Ke0}, \r\n" +
+                         $"{nameof(V1)}: {V1}, \r\n" +
+                         $"{nameof(V2)}: {V2}, \r\n" +
+                         $"{nameof(V3)}: {V3}, \r\n" +
+                         $"{nameof(CL1)}: {CL1}, \r\n" +
+                         $"{nameof(CL2)}: {CL2}, \r\n" +
+                         $"{nameof(CL3)}: {CL3}";
+
+            Console.WriteLine(log);
         }
 
     }

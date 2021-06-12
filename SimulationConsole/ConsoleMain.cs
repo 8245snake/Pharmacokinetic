@@ -12,7 +12,10 @@ namespace SimulationConsole
 
         static void Main(string[] args)
         {
-            TestBolusPropofol();
+            TestEleveldModel();
+
+            Console.ReadKey();
+
         }
 
         private static void TestBolus()
@@ -39,7 +42,6 @@ namespace SimulationConsole
                 Console.WriteLine(result.ToString());
             }
 
-            Console.ReadKey();
         }
 
         private static void TestContinuous()
@@ -67,7 +69,6 @@ namespace SimulationConsole
                 Console.WriteLine(result.ToString());
             }
 
-            Console.ReadKey();
         }
 
         private static void TestBolusPropofol()
@@ -90,8 +91,31 @@ namespace SimulationConsole
             {
                 Console.WriteLine(result.ToString());
             }
+        }
 
-            Console.ReadKey();
+        private static void TestEleveldModel()
+        {
+            var time = new DateTime(2021, 6, 12, 12, 30, 0);
+
+            PharmacokineticSimulator simulator = new PharmacokineticSimulator()
+            {
+                DurationdMinutes = 10,
+                StepSeconds = 60,
+                CalculationStartTime = time
+            };
+
+            // 開始時に100μg投与
+            simulator.BolusDose(time, 100, WeightUnitEnum.ug);
+
+            // モデル作成
+            var f = new EleveldModelFactory(50, 150, 40, 2200, true, false);
+            var model = f.Create("動脈", EleveldModelFactory.BloodVessels.Arterial);
+            model.ConsoleLog();
+
+            foreach (var result in simulator.Predict(model))
+            {
+                Console.WriteLine(result.ToString());
+            }
         }
     }
 }
