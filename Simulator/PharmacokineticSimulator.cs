@@ -35,23 +35,65 @@ namespace Simulator
         /// </summary>
         private List<IMedicineDosing> _MedicineDosingList = new List<IMedicineDosing>();
 
+        public PharmacokineticSimulator(){}
+
+        /// <summary>
+        /// シミュレーターを作成します
+        /// </summary>
+        /// <param name="start">計算開始時刻</param>
+        /// <param name="step">計算間隔(秒)</param>
+        /// <param name="duration">計算時間範囲（分）</param>
+        public PharmacokineticSimulator(DateTime start, int step, int duration)
+        {
+            DurationdMinutes = duration;
+            StepSeconds = step;
+            CalculationStartTime = start;
+        }
+
+
         /// <summary>
         /// ボーラス投与
         /// </summary>
         /// <param name="time">投与時刻</param>
         /// <param name="amount">投与量</param>
         /// <param name="weightUnit">質量単位</param>
-        public void BolusDose(DateTime time, double amount, Medicine.WeightUnitEnum weightUnit)
+        /// <param name="offsetSecond">ピークに達するまでの遅延時間（秒）。拡散時間を表現するため。
+        /// 計算間隔より精度を高めることはできないので必ず<see cref="StepSeconds"/>の倍数を指定すること。</param>
+        public void BolusDose(DateTime time, double amount, Medicine.WeightUnitEnum weightUnit, int offsetSecond = 0)
         {
-            BolusMedicineDosing dosing = new BolusMedicineDosing()
-            {
-                DoseTime = time,
-                DoseAmount = amount,
-                WeightUnit = weightUnit,
-                StepSeconds = this.StepSeconds
-            };
+            IMedicineDosing dosing = null;
 
-            _MedicineDosingList.Add(dosing);
+            if ((offsetSecond > 0) && (offsetSecond % StepSeconds == 0))
+            {               
+                // 拡散時間ありのボーラスは短時間の持続を入れる
+                var flow = amount / offsetSecond;
+
+                dosing = new ContinuousMedicineDosing()
+                {
+                    DoseStartTime = time,
+                    DoseEndTime = time.AddSeconds(offsetSecond),
+                    FlowVelocity = flow,
+                    WeightUnit = weightUnit,
+                    TimeUnit = Medicine.TimeUnitEnum.second,
+                    StepSeconds = this.StepSeconds
+                };
+            }
+            else
+            {
+                dosing = new BolusMedicineDosing()
+                {
+                    DoseTime = time,
+                    DoseAmount = amount,
+                    WeightUnit = weightUnit,
+                    StepSeconds = this.StepSeconds
+                };
+            }
+
+            if (dosing != null)
+            {
+                _MedicineDosingList.Add(dosing);
+            }
+
         }
 
         /// <summary>
@@ -135,12 +177,12 @@ namespace Simulator
                 ce = result.Ce;
 
                 // 結果返却(計算結果の単位がng/mlなので所望の単位に変換して返す)
-                var factor = Medicine.GetWeightUnitConvertFactor(Medicine.WeightUnitEnum.ug, weightUnit);
+                var factor = Medicine.GetWeightUnitConvertFactor(Medicine.WeightUnitEnum.ng, weightUnit);
                 yield return new SimulatorResult() {
-                    C1 = c1 / model.V1 /1000 / factor,
-                    C2 = c2 / model.V1 / 1000 / factor,
-                    C3 = c3 / model.V1 / 1000 / factor,
-                    Ce = ce / model.V1 / 1000 / factor, 
+                    C1 = c1 / model.V1 /1000 * factor,
+                    C2 = c2 / model.V1 / 1000 * factor,
+                    C3 = c3 / model.V1 / 1000 * factor,
+                    Ce = ce / model.V1 / 1000 * factor, 
                     Bolus = bolus,
                     Continuous = continuous,
                     PlotTime = targetTime};

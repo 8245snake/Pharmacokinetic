@@ -19,14 +19,14 @@ namespace SimulationApp
         {
             InitializeComponent();
 
-            var time = new DateTime(2021, 6, 12, 12, 30, 0);
+            var time = new DateTime(2021, 6, 12, 12, 20, 0);
 
             // プロポフォールのモデルでシミュレーション開始
-            var f = new EleveldModelFactory(50, 1.5, 40, 2200, true, false);
+            var f = new EleveldModelFactory(50, 1.5, 40, 2200, false, true);
             var model1 = f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_動脈", EleveldModelFactory.BloodVessels.Arterial);
             var model2 = PharmacokineticModelFactory.CreatePropofol(50);
-            PharmacokineticSimulator sim = createSimulator(time, 1, 30);
-            sim.ContinuousDose(time, DateTime.MaxValue, 1000, WeightUnitEnum.ug, TimeUnitEnum.hour);
+            PharmacokineticSimulator sim = new PharmacokineticSimulator(time, 1, 30);
+            sim.BolusDose(time, 100, WeightUnitEnum.mg, 20);
             LoadGraph(chartSimulation, sim, model1, model2);
         }
 
@@ -77,18 +77,6 @@ namespace SimulationApp
             //chart.Legends[0].Position.Height = 10.0F;
             //chart.Legends[0].Position.X = 0.0F;
             //chart.Legends[0].Position.Y = 0.0F;
-        }
-
-        private PharmacokineticSimulator createSimulator(DateTime start, int step, int duration)
-        {
-            PharmacokineticSimulator sim = new PharmacokineticSimulator()
-            {
-                DurationdMinutes = duration,
-                StepSeconds = step,
-                CalculationStartTime = start
-            };
-
-            return sim;
         }
 
         private Series CreateSeries(string title, Color lineColor)
