@@ -1,74 +1,88 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Simulator;
 using Simulator.Dosing;
+using SpecialControls.CollectionViews;
 using static Simulator.Dosing.Medicine;
+using SpecialControls.GenericWrappers;
 
 namespace SimulationApp
 {
     public partial class MainForm : Form
     {
+
+        private GenericComboBoxWrapper<List<PharmacokineticModel>> _combMedicine;
+
         public MainForm()
         {
-            // いろいろ初期化
             InitializeComponent();
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            // いろいろ初期化
             chartSimulation.Series.Clear();
             chartSimulation.ChartAreas.Clear();
 
-            // 描画
-            DrawChartTest();
+            _combMedicine = new GenericComboBoxWrapper<List<PharmacokineticModel>>(combMedicine);
+
+            // プロポフォールのモデル作成（50kg）
+            var factory = new PharmacokineticModelFactory(50, 1.5, 40, true);
+            List<PharmacokineticModel> models = new List<PharmacokineticModel>();
+            models.Add(factory.Create(1));
+            models.Add(factory.Create(2));
+            models.Add(PharmacokineticModelFactory.CreatePropofol1(50));
+            models.Add(PharmacokineticModelFactory.CreatePropofol2(50));
+            models.Add(PharmacokineticModelFactory.CreatePropofol3(50));
+            var f = new EleveldModelFactory(50, 1.5, 40, 2200, false, true);
+            models.Add(f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(動脈)", EleveldModelFactory.BloodVessels.Arterial));
+            models.Add(f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(動脈)", EleveldModelFactory.BloodVessels.Venous));
+            _combMedicine.Add("プロポフォール", models);
+            // レミフェンタニル
+            models = new List<PharmacokineticModel>();
+            models.Add(factory.Create(3));
+            models.Add(factory.Create(4));
+            _combMedicine.Add("レミフェンタニル", models);
+            // フェンタニル
+            models = new List<PharmacokineticModel>();
+            models.Add(factory.Create(5));
+            models.Add(factory.Create(6));
+            models.Add(PharmacokineticModelFactory.CreateFentanyl1(50));
+            _combMedicine.Add("フェンタニル", models);
+
+            combMedicine.SelectedIndex = -1;
+            combMedicine.SelectedIndex = 0;
+
 
         }
 
-        /// <summary>
-        /// テスト関数
-        /// </summary>
-        private void DrawChartTest()
+        private void combMedicine_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // 開始時刻設定
-            var time = new DateTime(2021, 6, 12, 17, 20, 0);
+            if(combMedicine.SelectedIndex < 0){return;}
 
-            // プロポフォールのモデル作成（50kg）
-            var f = new EleveldModelFactory(50, 1.5, 40, 2200, false, true);
-            var model1 = f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(動脈)", EleveldModelFactory.BloodVessels.Arterial);
-            var model2 = f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(静脈)", EleveldModelFactory.BloodVessels.Venous);
-            var model3 = PharmacokineticModelFactory.CreatePropofol2(50);
-            var model4 = PharmacokineticModelFactory.CreatePropofol2(50);
-            var model5 = PharmacokineticModelFactory.CreatePropofol3(50);
-            var factory = new PharmacokineticModelFactory(50, 1.5, 40, true);
-            var model6 = factory.Create(1);
-            var model7 = factory.Create(2);
+            chartSimulation.Series.Clear();
+            chartSimulation.ChartAreas.Clear();
 
             // チャートエリア作成
             SimulationChart chart = new SimulationChart(this.chartSimulation);
-            chart.AddPlots(new SimulationChartPlots(model1.Name, SimulationChartPlots.ColorPattern.Red, model1));
-            chart.AddPlots(new SimulationChartPlots(model2.Name, SimulationChartPlots.ColorPattern.Blue, model2));
-            chart.AddPlots(new SimulationChartPlots(model3.Name, SimulationChartPlots.ColorPattern.Green, model3));
-            chart.AddPlots(new SimulationChartPlots(model4.Name, SimulationChartPlots.ColorPattern.Orange, model4));
-            chart.AddPlots(new SimulationChartPlots(model5.Name, SimulationChartPlots.ColorPattern.Yellow, model5));
-            chart.AddPlots(new SimulationChartPlots(model5.Name, SimulationChartPlots.ColorPattern.Water, model6));
-            chart.AddPlots(new SimulationChartPlots(model5.Name, SimulationChartPlots.ColorPattern.Pink, model7));
-
+            for (int i = 0; i < _combMedicine.SelectedValue.Count; i++)
+            {
+                PharmacokineticModel model = _combMedicine.SelectedValue[i];
+                chart.AddPlots(new SimulationChartPlots(model.Name, (SimulationChartPlots.ColorPattern)i, model));
+            }
+            // 開始時刻設定
+            var time = new DateTime(2021, 6, 12, 17, 20, 0);
             // シミュレータ作成
-            PharmacokineticSimulator sim = new PharmacokineticSimulator(time, 1,10);
+            PharmacokineticSimulator sim = new PharmacokineticSimulator(time, 1, 10);
             // 開始時刻に投与
             sim.BolusDose(time.AddMinutes(2), 100, WeightUnitEnum.mg, 30);
             // 描画
             chart.Draw(sim);
-
-            // todo 対数グラフにする設定
-            //chartSimulation.SuppressExceptions = true;
-            //chartSimulation.ChartAreas.First().AxisY.IsLogarithmic = true;
-
         }
+
     }
 
     public class SimulationChart

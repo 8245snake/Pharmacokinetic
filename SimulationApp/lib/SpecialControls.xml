@@ -1,0 +1,981 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+SpecialControls
+</name>
+</assembly>
+<members>
+<member name="T:SpecialControls.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:SpecialControls.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:SpecialControls.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:SpecialControls.GenericWrappers.GenericRadioButtonWrapper`1">
+ <summary>
+ 任意の型をラジオボタンと紐付けるためのラッパークラス
+ </summary>
+ <typeparam name="T">ラジオボタンと紐付ける型</typeparam>
+</member>
+<member name="P:SpecialControls.GenericWrappers.GenericRadioButtonWrapper`1.SelectedValue">
+ <summary>
+ チェックされたラジオボタンに紐付くデータを取得もしくは設定する
+ </summary>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericRadioButtonWrapper`1.AddBinding(System.Windows.Forms.RadioButton@,`0@)">
+ <summary>
+ ラジオボタンとデータの紐付けを追加する
+ </summary>
+ <param name="radioButton">ラジオボタン</param>
+ <param name="value">データ</param>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericRadioButtonWrapper`1.RemoveBinding(System.Windows.Forms.RadioButton@)">
+ <summary>
+ ラジオボタンとデータの紐付けを削除する
+ </summary>
+ <param name="radioButton">ラジオボタン</param>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericRadioButtonWrapper`1.GetValue(System.Windows.Forms.RadioButton@)">
+ <summary>
+ ラジオボタンに紐付くデータを取得する
+ </summary>
+ <param name="radioButton">ラジオボタン</param>
+ <returns>データ</returns>
+</member>
+<member name="T:SpecialControls.GenericWrappers.GenericComboBoxWrapper`1">
+ <summary>
+ 任意の型をコンボボックスと紐付けるためのラッパークラス
+ </summary>
+ <typeparam name="T">コンボボックスと紐付ける型</typeparam>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericComboBoxWrapper`1.Add(System.String,`0@)">
+ <summary>
+ 要素を追加する
+ </summary>
+ <param name="dispText">表示されるテキスト</param>
+ <param name="value">内部の値</param>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericComboBoxWrapper`1.Clear">
+ <summary>
+ コンボボックスの中身をクリアする
+ </summary>
+</member>
+<member name="T:SpecialControls.GenericWrappers.GenericListBoxWrapper`1">
+ <summary>
+ 任意の型をリストボックスと紐付けるためのラッパークラス
+ </summary>
+ <typeparam name="T">コンボボックスと紐付ける型</typeparam>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericListBoxWrapper`1.Add(System.String,`0@)">
+ <summary>
+ 要素を追加する
+ </summary>
+ <param name="dispText">表示されるテキスト</param>
+ <param name="value">内部の値</param>
+</member>
+<member name="M:SpecialControls.GenericWrappers.GenericListBoxWrapper`1.Clear">
+ <summary>
+ リストボックスの中身をクリアする
+ </summary>
+</member>
+<member name="T:SpecialControls.Inputting.ExTextBox">
+ <summary>
+ 機能拡張したテキストボックス。
+ ウォーターマーク表示やエラーチェック機能を有する。
+ </summary>
+</member>
+<member name="E:SpecialControls.Inputting.ExTextBox.ErrorDetected">
+ <summary>
+ チェックエラーが検出されたときに発火します。
+ チェックが走るタイミングはValidationTriggerプロパティによります。
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.WatermarkText">
+ <summary>
+ Textが空のときに表示されるヒントテキスト
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.IsError">
+ <summary>
+ チェックエラーが発生しているか否か
+ </summary>
+ <returns>True；エラー、False：正常</returns>
+</member>
+<member name="T:SpecialControls.Inputting.ExTextBox.ValidationTriggerType">
+ <summary>
+ エラーチェックのタイミング
+ </summary>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox.ValidationTriggerType.TextChange">
+ <summary>
+ テキストが変更されたとき
+ </summary>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox.ValidationTriggerType.FocusLeave">
+ <summary>
+ フォーカスが外れたとき
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.ValidationTrigger">
+ <summary>
+ エラーチェックのタイミングを取得または設定します
+ </summary>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox._ValidateFunction">
+ <summary>
+ エラーチェック関数
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.ValidateFunction">
+ <summary>
+ エラーチェック関数。
+ エラーの場合はFalseを返す。
+ </summary>
+ <remarks>Nothingの場合はエラーチェックしない</remarks>
+</member>
+<member name="T:SpecialControls.Inputting.ExTextBox.ValidateFunctionDelegate">
+ <summary>
+ エラーチェック関数のデリゲート
+ </summary>
+ <param name="text">検証対象のテキスト</param>
+ <param name="result">結果返却用</param>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox._ErrorText">
+ <summary>
+ チェックエラーの際にテキストボックスの近くに表示されるメッセージ
+ </summary>
+</member>
+<member name="T:SpecialControls.Inputting.ExTextBox.ErrorDisplayPositionType">
+ <summary>
+ エラーテキストの表示位置
+ </summary>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox.ErrorDisplayPositionType.Bottom">
+ <summary>
+ テキストボックスの下
+ </summary>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox.ErrorDisplayPositionType.Right">
+ <summary>
+ テキストボックスの右
+ </summary>
+</member>
+<member name="F:SpecialControls.Inputting.ExTextBox.ErrorDisplayPositionType.RightToolTip">
+ <summary>
+ テキストボックスの右にアイコンを表示し、内容はツールチップで出す
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.ErrorDisplayPosition">
+ <summary>
+ エラーテキストの表示位置
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.NeedDisplayError">
+ <summary>
+ エラーテキストを表示すべきかを判定する
+ </summary>
+ <returns>True：必要、False：不要</returns>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.LastValue">
+ <summary>
+ 前回入力値。
+ Validatedのたびに更新される。
+ ValidatingやValidatedのHandlerで参照することで前回の値との比較ができる。
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ExTextBox.LastValidValue">
+ <summary>
+ 前回の有効な入力値。
+ Validatedのたびに更新される。
+ ValidatingやValidatedのHandlerで参照することで前回の値との比較ができる。
+ </summary>
+</member>
+<member name="M:SpecialControls.Inputting.ExTextBox.tryToDisplayWatermark">
+ <summary>
+ 可能ならばウォーターマークを表示する
+ </summary>
+</member>
+<member name="M:SpecialControls.Inputting.ExTextBox.tryToHighlight">
+ <summary>
+ エラーが出ていたらテキストボックスの外周に赤い枠線を描く
+ </summary>
+</member>
+<member name="M:SpecialControls.Inputting.ExTextBox.tryToDisplayError">
+ <summary>
+ エラーテキストを表示する
+ </summary>
+</member>
+<member name="M:SpecialControls.Inputting.ExTextBox.getErrorMessageRectangle">
+ <summary>
+ エラーテキストを表示する領域を取得する
+ </summary>
+ <returns>エラーテキストを表示する領域</returns>
+</member>
+<member name="M:SpecialControls.Inputting.ExTextBox.errorCheck">
+ <summary>
+ エラーチェックして結果を描画する
+ </summary>
+</member>
+<member name="M:SpecialControls.Inputting.ExTextBox.UpdateDisplay">
+ <summary>
+ 表示を更新する
+ </summary>
+</member>
+<member name="T:SpecialControls.Inputting.ValidationResult">
+ <summary>
+ エラーチェック結果を格納するクラス
+ </summary>
+</member>
+<member name="P:SpecialControls.Inputting.ValidationResult.Pass">
+ <summary>
+ チェック結果
+ </summary>
+ <returns>True：OK、False：NG</returns>
+</member>
+<member name="P:SpecialControls.Inputting.ValidationResult.ErrorText">
+ <summary>
+ エラーの文言
+ </summary>
+ <returns>エラーとして表示される文字列</returns>
+</member>
+<member name="T:SpecialControls.Inputting.TransparentRichTextBox">
+ <summary>
+ 背景色透過可能なリッチテキストボックス
+ </summary>
+ <remarks>厳密には透過ではなく親コントロールと同じ背景色にしているだけ</remarks>
+</member>
+<member name="P:SpecialControls.Inputting.TransparentRichTextBox.IsTransparent">
+ <summary>
+ 透過するか
+ </summary>
+</member>
+<member name="T:SpecialControls.Messaging.ExMessageBox">
+ <summary>
+ リッチテキスト形式対応メッセージボックス
+ </summary>
+</member>
+<member name="P:SpecialControls.Messaging.ExMessageBox.FileDirectory">
+ <summary>
+ リッチテキストファイルが格納されているフォルダパス
+ </summary>
+</member>
+<member name="F:SpecialControls.Messaging.ExMessageBox._Patterns">
+ <summary>
+ パターンデータ
+ </summary>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.Boolean)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および [ヘルプ] ボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="displayHelpButton"> [ヘルプ] ボタンを表示する場合は true。それ以外の場合は false。 既定値は、false です。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons)">
+ <summary>
+ 指定したオブジェクトの前に、指定したテキスト、キャプション、およびボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)">
+ <summary>
+ 指定したオブジェクトの前に、指定したテキスト、キャプション、ボタン、およびアイコンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する <seealso cref="T:System.Windows.Forms.IWin32Window"/> の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton)">
+ <summary>
+ 指定したオブジェクトの前に、指定したテキスト、キャプション、ボタン、アイコン、および既定のボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)">
+ <summary>
+ 指定したオブジェクトの前に、指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、およびオプションを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String)">
+ <summary>
+ 指定したテキストを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String)">
+ <summary>
+ 指定したテキストとキャプションを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons)">
+ <summary>
+ 指定したテキスト、キャプション、およびボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、およびアイコンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String)">
+ <summary>
+ 指定したオブジェクトの前に、指定したテキストとキャプションを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、および既定のボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String,System.Windows.Forms.HelpNavigator,System.Object)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイル、HelpNavigator、およびヘルプ トピックを使用する [ヘルプ] ボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <param name="navigator"><seealso cref="T:System.Windows.Forms.HelpNavigator"/>値のいずれか 1 つ。</param>
+ <param name="param">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ トピックの数値 ID。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String,System.Windows.Forms.HelpNavigator,System.Object)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイル、HelpNavigator、およびヘルプ トピックを使用する[ヘルプ] ボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <param name="navigator"><seealso cref="T:System.Windows.Forms.HelpNavigator"/>値のいずれか 1 つ。</param>
+ <param name="param">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ トピックの数値 ID。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String,System.Windows.Forms.HelpNavigator)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイルと HelpNavigator を使用する [ヘルプ]ボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <param name="navigator"><seealso cref="T:System.Windows.Forms.HelpNavigator"/>値のいずれか 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String,System.Windows.Forms.HelpNavigator)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイルと HelpNavigator を使用する [ヘルプ]ボタンを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <param name="navigator"><seealso cref="T:System.Windows.Forms.HelpNavigator"/>値のいずれか 1 つ。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String,System.String)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイルとヘルプ キーワードを使用する [ヘルプ] ボタンを表示するメッセージボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <param name="keyword">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ キーワード。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String,System.String)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイルとヘルプ キーワードを使用する [ヘルプ] ボタンを表示するメッセージボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <param name="keyword">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ キーワード。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイルを使用する [ヘルプ] ボタンを表示するメッセージボックスを表示します。
+ </summary>
+ <param name="owner"></param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions,System.String)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、オプション、および指定したヘルプ ファイルを使用する [ヘルプ] ボタンを表示するメッセージボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <param name="helpFilePath">ユーザーが [ヘルプ] ボタンをクリックしたときに表示されるヘルプ ファイルのパスと名前。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)">
+ <summary>
+ 指定したテキスト、キャプション、ボタン、アイコン、既定のボタン、およびオプションを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <param name="caption">メッセージ ボックスのタイトル バーに表示するテキスト。</param>
+ <param name="buttons">メッセージ ボックスに表示するボタンを指定する System.Windows.Forms.MessageBoxButtons 値の 1 つ。</param>
+ <param name="icon">メッセージ ボックスに表示するアイコンを指定する System.Windows.Forms.MessageBoxIcon 値の 1 つ。</param>
+ <param name="defaultButton">メッセージ ボックスの既定のボタンを指定する System.Windows.Forms.MessageBoxDefaultButton 値の 1 つ。</param>
+ <param name="options">メッセージ ボックスで使用する表示オプションと関連付けオプションを指定する System.Windows.Forms.MessageBoxOptions値の 1 つ。 既定値を使用する場合は、0 を渡します。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Show(System.Windows.Forms.IWin32Window,System.String)">
+ <summary>
+ 指定したオブジェクトの前に、指定したテキストを表示するメッセージ ボックスを表示します。
+ </summary>
+ <param name="owner">モーダル ダイアログ ボックスを所有する System.Windows.Forms.IWin32Window の実装。</param>
+ <param name="text">メッセージ ボックスに表示するテキスト。</param>
+ <returns>System.Windows.Forms.DialogResult 値のいずれか 1 つ。</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.Compile">
+ <summary>
+ 設定を読み込み、正規表現パターンを作る
+ </summary>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.ShowRichDialog(System.String,SpecialControls.Messaging.TemplatePattern@)">
+ <summary>
+ リッチテキスト形式ダイアログを表示する
+ </summary>
+ <param name="text">オリジナルのメッセージ</param>
+ <param name="template">テンプレート</param>
+ <returns>DialogResult</returns>
+</member>
+<member name="M:SpecialControls.Messaging.ExMessageBox.IsRichTextMessage(System.String,SpecialControls.Messaging.TemplatePattern@)">
+ <summary>
+ 正規表現にマッチするテンプレートを取得する
+ </summary>
+ <param name="text">オリジナルのメッセージ</param>
+ <param name="template">テンプレート</param>
+ <returns>True：テンプレート取得成功、False：取得失敗</returns>
+</member>
+<member name="T:SpecialControls.Messaging.RichMessageDialog">
+ <summary>
+ リッチテキスト形式対応ダイアログフォーム
+ </summary>
+</member>
+<member name="M:SpecialControls.Messaging.RichMessageDialog.LoadRichText">
+ <summary>
+ リッチテキスト形式を画面に表示する
+ </summary>
+</member>
+<member name="T:SpecialControls.Messaging.SplashMessage">
+ <summary>
+ スプラッシュメッセージを表示するクラス
+ </summary>
+</member>
+<member name="T:SpecialControls.Messaging.SplashMessage.DisplayDuration">
+ <summary>
+ スプラッシュメッセージが消えるまでの時間
+ </summary>
+</member>
+<member name="F:SpecialControls.Messaging.SplashMessage.DisplayDuration.ShortTime">
+ <summary>
+ 短時間（約1秒）
+ </summary>
+</member>
+<member name="F:SpecialControls.Messaging.SplashMessage.DisplayDuration.LongTime">
+ <summary>
+ 長時間（約3秒）
+ </summary>
+</member>
+<member name="F:SpecialControls.Messaging.SplashMessage.DisplayDuration.Endless">
+ <summary>
+ 消えない
+ </summary>
+</member>
+<member name="P:SpecialControls.Messaging.SplashMessage.IsEndless">
+ <summary>
+ 常に表示し続けるか
+ </summary>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessage.Show(System.Drawing.Bitmap,System.Int32,System.Int32,SpecialControls.Messaging.SplashMessage.DisplayDuration)">
+ <summary>
+ スプラッシュメッセージを表示する
+ </summary>
+ <param name="bmp">表示するビットマップ</param>
+ <param name="x">X座標</param>
+ <param name="y">Y座標</param>
+ <param name="duration">表示時間</param>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessage.Hide">
+ <summary>
+ 表示中のスプラッシュメッセージを閉じる
+ </summary>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessage.showSplashMessage(System.Drawing.Bitmap,System.Int32,System.Int32)">
+ <summary>
+  ビットマップを指定した座標に表示する
+ </summary>
+ <param name="bmp"></param>
+ <param name="x"></param>
+ <param name="y"></param>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessage.CreateTextImage(System.String,System.Drawing.Font,System.Drawing.Color,System.Drawing.Color,System.Single,System.Single,System.Int32,System.Int32,System.Boolean)">
+ <summary>
+ テキストが書かれたビットマップを作成する
+ </summary>
+ <param name="text">表示するテキスト</param>
+ <param name="font">フォント</param>
+ <param name="fontColor">文字色(省略時は黒)</param>
+ <param name="backgroundColor">背景色(省略時は白)</param>
+ <param name="paddingX">水平方向のパディング</param>
+ <param name="paddingY">垂直方向のパディング</param>
+ <param name="width">幅</param>
+ <param name="height">高さ</param>
+ <param name="sizeToFit">幅と高さを自動で合わせるか（widthとheight引数は無視されます）</param>
+ <returns>ビットマップ</returns>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessage.CreateFormImage(System.Windows.Forms.Form,System.Boolean)">
+ <summary>
+ 指定したフォームのビットマップを作成する
+ </summary>
+ <param name="form">フォーム</param>
+ <param name="clientAreaOnly">クライアント領域のみに限定するか</param>
+ <returns>ビットマップ</returns>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessage.CaptureControl(System.Windows.Forms.Control)">
+ <summary>
+ コントロールをキャプチャする。
+ DrawToBitmapでは不可能なリッチテキストコントロールにも対応。
+ </summary>
+ <param name="ctrl">コントロール</param>
+ <returns>ビットマップ</returns>
+</member>
+<member name="T:SpecialControls.Messaging.SplashMessageForm">
+ <summary>
+ スプラッシュメッセージとして表示可能なフォーム。
+ デザインはサブクラスで行う。
+ </summary>
+ <remarks>ShowWithoutActivation=Trueになっているので普通のモードレスダイアログとしての利用には適さない</remarks>
+</member>
+<member name="P:SpecialControls.Messaging.SplashMessageForm.Delay">
+ <summary>
+ スプラッシュメッセージを表示するまでの遅延時間（ミリ秒）
+ </summary>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessageForm.ShowSplash(System.Int32,System.Int32,SpecialControls.Messaging.SplashMessage.DisplayDuration)">
+ <summary>
+ 自身をスプラッシュメッセージとして表示します
+ </summary>
+ <param name="x">X座標</param>
+ <param name="y">Y座標</param>
+ <param name="duration">表示時間</param>
+ <remarks>using句内で呼び出すとうまく動作しません</remarks>
+</member>
+<member name="M:SpecialControls.Messaging.SplashMessageForm.HideSplash">
+ <summary>
+ スプラッシュメッセージを閉じます
+ </summary>
+</member>
+<member name="T:SpecialControls.Messaging.TextBoxWriter">
+ <summary>
+ テキストボックスに出力するTextWriter
+ </summary>
+</member>
+<member name="F:SpecialControls.Messaging.TextBoxWriter.TargetTextBox">
+ <summary>
+ Console.WriteLineしたときに出力されるテキストボックス
+ </summary>
+</member>
+<member name="T:SpecialControls.Painting.Character">
+ <summary>
+ 文字列の描画用オブジェクト
+ </summary>
+</member>
+<member name="T:SpecialControls.Painting.Circle">
+ <summary>
+ 円の描画用オブジェクト
+ </summary>
+</member>
+<member name="T:SpecialControls.Painting.CircularSector">
+ <summary>
+ 扇形の描画用オブジェクト
+ </summary>
+</member>
+<member name="T:SpecialControls.Painting.ExpandedCircle">
+ <summary>
+ 伸びた円の描画用オブジェクト
+ </summary>
+</member>
+<member name="M:SpecialControls.Painting.ExpandedCircle.DrawBorder(System.Drawing.Graphics@)">
+ <summary>
+ 枠線を描画する
+ </summary>
+ <param name="g">デバイスコンテキスト</param>
+</member>
+<member name="M:SpecialControls.Painting.Paint.AdjustBrightness(System.Drawing.Image,System.Int32)">
+ <summary>
+ 指定した画像を指定した明るさにして新しい画像を作成する
+ </summary>
+ <param name="img">基になる画像</param>
+ <param name="brightness">明るさ（-255～255）</param>
+ <returns>明るさが変更された画像</returns>
+</member>
+<member name="M:SpecialControls.Painting.Paint.ChangeSaturation(System.Drawing.Image,System.Single)">
+ <summary>
+ 指定した画像の彩度を変更した画像を作成する
+ </summary>
+ <param name="img">基になる画像</param>
+ <param name="saturation">彩度</param>
+ <returns>作成された画像</returns>
+</member>
+<member name="T:SpecialControls.Painting.Tetragon">
+ <summary>
+ 四角形の描画用オブジェクト
+ </summary>
+</member>
+<member name="T:SpecialControls.Services.ControlHighlightingService">
+ <summary>
+ コントロールをハイライトする機能のマネージャクラス
+ </summary>
+</member>
+<member name="E:SpecialControls.Services.ControlHighlightingService.HighlightingControlChanged">
+ <summary>
+ ハイライトするコントロールが変化したときに発火する
+ </summary>
+</member>
+<member name="P:SpecialControls.Services.ControlHighlightingService.HighlightingControl">
+ <summary>
+ ハイライト対象のコントロール
+ </summary>
+</member>
+<member name="T:SpecialControls.Switches.LargeCheckBox">
+ <summary>
+ 大きなチェックボックス
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeCheckBox.HoverColor">
+ <summary>
+ マウスホバーしたときの背景色
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeCheckBox.BorderShape">
+ <summary>
+ マウスホバーしたときに追加で表示される枠線
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeRadioButton.HoverColor">
+ <summary>
+ マウスホバーしたときの背景色
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeRadioButton.CircleBorderWidth">
+ <summary>
+ ラジオボタンの円の枠線の太さ
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeRadioButton.OuterCircle">
+ <summary>
+ ラジオボタン外側の丸
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeRadioButton.InnerCircle">
+ <summary>
+ ラジオボタン内側の丸（チェック時に出る）
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.LargeRadioButton.BorderShape">
+ <summary>
+ マウスホバーしたときに追加で表示される枠線
+ </summary>
+</member>
+<member name="T:SpecialControls.Switches.ToggleSwitch">
+ <summary>
+ OnとOffの状態が見やすいトグルスイッチ
+ </summary>
+</member>
+<member name="E:SpecialControls.Switches.ToggleSwitch.CheckedChanged">
+ <summary>
+ チェック状態が変化したときに発火する
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.IsChecked">
+ <summary>
+ チェック状態を取得または設定します
+ </summary>
+ <returns>True;チェックあり、False:チェックなし</returns>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.TrueText">
+ <summary>
+ <seealso cref="P:SpecialControls.Switches.ToggleSwitch.IsChecked"/>がTrueのときのキャプション
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.TrueColor">
+ <summary>
+ <seealso cref="P:SpecialControls.Switches.ToggleSwitch.IsChecked"/>がTrueのときの背景色
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.FalseText">
+ <summary>
+ <seealso cref="P:SpecialControls.Switches.ToggleSwitch.IsChecked"/>がFalseのときのキャプション
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.FalseColor">
+ <summary>
+ <seealso cref="P:SpecialControls.Switches.ToggleSwitch.IsChecked"/>がFalseのときの背景色
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.FontName">
+ <summary>
+ フォント名
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.FontSize">
+ <summary>
+ フォントサイズ
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.FontStyle">
+ <summary>
+ フォントスタイル
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.ValueProgress">
+ <summary>
+ スイッチの位置（0.0～1.0）
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.MinValue">
+ <summary>
+ スイッチの位置の最小X座標値
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.MaxValue">
+ <summary>
+ スイッチの位置の最大X座標値
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.EnableAnimation">
+ <summary>
+ チェックした際にアニメーションを表示ずるか
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.OutlineShape">
+ <summary>
+ コントロールの外枠の<seealso cref="T:SpecialControls.Painting.Shape"/>
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.BorderShape">
+ <summary>
+ マウスホバーしたときに追加で表示される枠線
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.SwitchShape">
+ <summary>
+ スイッチの部分の<seealso cref="T:SpecialControls.Painting.Shape"/>
+ </summary>
+</member>
+<member name="P:SpecialControls.Switches.ToggleSwitch.TextShape">
+ <summary>
+ OnとOffの文言表示ラベルの<seealso cref="T:SpecialControls.Painting.Shape"/>
+ </summary>
+</member>
+<member name="M:SpecialControls.Switches.ToggleSwitch.OnPaint(System.Windows.Forms.PaintEventArgs)">
+ <summary>
+ 描画処理
+ </summary>
+ <param name="pe"></param>
+</member>
+<member name="M:SpecialControls.Switches.ToggleSwitch.CheckedChangeWithAnimation">
+ <summary>
+ 少しずつチェック状態が遷移するアニメーションの処理。
+ ValueProgress値を変えながら再描画する。
+ </summary>
+</member>
+<member name="T:SpecialControls.CollectionViews.StrictComboBox">
+ <summary>
+ ユーザーが手で選択を変えたかプログラムによって自動でSelectedIndexを変化されたかを判定できるコンボボックス
+ </summary>
+</member>
+<member name="P:SpecialControls.CollectionViews.StrictComboBox.IsStrictOccuration">
+ <summary>
+ インデックスが本当に変化したときにSelectedIndexChangedが発火するかを設定または取得します
+ </summary>
+ <returns></returns>
+</member>
+<member name="F:SpecialControls.CollectionViews.StrictComboBox._LastIndex">
+ <summary>
+ 前回選択したインデックス
+ </summary>
+</member>
+<member name="F:SpecialControls.CollectionViews.StrictComboBox._IsCommited">
+ <summary>
+ SelectionChangeCommittedイベントが発火したかのフラグ
+ </summary>
+</member>
+<member name="E:SpecialControls.CollectionViews.StrictComboBox.SelectedIndexChangedManually">
+ <summary>
+ 手動でインデックスを変更したら発火する
+ </summary>
+</member>
+<member name="E:SpecialControls.CollectionViews.StrictComboBox.SelectedIndexChangedAutomatically">
+ <summary>
+ 自動でインデックスを変更したら発火する
+ </summary>
+</member>
+<member name="T:SpecialControls.CollectionViews.StrictComboBox.SelectedIndexStrictChanged">
+ <summary>
+ 
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ <param name="lastIndex"></param>
+ <param name="currentIndex"></param>
+</member>
+<member name="T:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations">
+ <summary>
+     Specifies a raster-operation code. These codes define how the color data for the
+     source rectangle is to be combined with the color data for the destination
+     rectangle to achieve the final color.
+ </summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.SRCCOPY">
+ <summary>dest = source</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.SRCPAINT">
+ <summary>dest = source OR dest</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.SRCAND">
+ <summary>dest = source AND dest</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.SRCINVERT">
+ <summary>dest = source XOR dest</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.SRCERASE">
+ <summary>dest = source AND (NOT dest)</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.NOTSRCCOPY">
+ <summary>dest = (NOT source)</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.NOTSRCERASE">
+ <summary>dest = (NOT src) AND (NOT dest)</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.MERGECOPY">
+ <summary>dest = (source AND pattern)</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.MERGEPAINT">
+ <summary>dest = (NOT source) OR dest</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.PATCOPY">
+ <summary>dest = pattern</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.PATPAINT">
+ <summary>dest = DPSnoo</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.PATINVERT">
+ <summary>dest = pattern XOR dest</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.DSTINVERT">
+ <summary>dest = (NOT dest)</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.BLACKNESS">
+ <summary>dest = BLACK</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.WHITENESS">
+ <summary>dest = WHITE</summary>
+</member>
+<member name="F:SpecialControls.Win32.GraphicAPI.TernaryRasterOperations.CAPTUREBLT">
+ <summary>
+ Capture window as seen on screen.  This includes layered windows
+ such as WPF windows with AllowsTransparency="true"
+ </summary>
+</member>
+</members>
+</doc>
