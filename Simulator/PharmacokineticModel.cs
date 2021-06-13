@@ -103,6 +103,28 @@ namespace Simulator
             Weight = weight;
         }
 
+        /// <summary>
+        /// モデルを作成します。
+        /// </summary>
+        /// <param name="name">薬剤名称</param>
+        /// <param name="k10">k10速度定数(h^-1)</param>
+        /// <param name="k12">k12速度定数(h^-1)</param>
+        /// <param name="k13">k13速度定数(h^-1)</param>
+        /// <param name="k21">k21速度定数(h^-1)</param>
+        /// <param name="k31">k31速度定数(h^-1)</param>
+        /// <param name="ke0">消失速度定数(h^-1)</param>
+        /// <param name="weight">体重(kg)</param>
+        public PharmacokineticModel(string name, double k10, double k12, double k13, double k21, double k31, double ke0, double weight)
+        {
+            Name = name;
+            K10 = k10;
+            K12 = k12;
+            K13 = k13;
+            K21 = k21;
+            K31 = k31;
+            Ke0 = ke0;
+            Weight = weight;
+        }
 
         /// <summary>
         /// モデルを作成します。

@@ -34,16 +34,18 @@ namespace SimulationApp
         private void DrawChartTest()
         {
             // 開始時刻設定
-            var time = new DateTime(2021, 6, 12, 12, 20, 0);
+            var time = new DateTime(2021, 6, 12, 17, 20, 0);
 
             // プロポフォールのモデル作成（50kg）
             var f = new EleveldModelFactory(50, 1.5, 40, 2200, false, true);
             var model1 = f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(動脈)", EleveldModelFactory.BloodVessels.Arterial);
             var model2 = f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(静脈)", EleveldModelFactory.BloodVessels.Venous);
-            var model3 = PharmacokineticModelFactory.CreatePropofol1(50);
+            var model3 = PharmacokineticModelFactory.CreatePropofol2(50);
             var model4 = PharmacokineticModelFactory.CreatePropofol2(50);
             var model5 = PharmacokineticModelFactory.CreatePropofol3(50);
-            var model6 = PharmacokineticModelFactory.CreatePropofol4(50);
+            var factory = new PharmacokineticModelFactory(50, 1.5, 40, true);
+            var model6 = factory.Create(1);
+            var model7 = factory.Create(2);
 
             // チャートエリア作成
             SimulationChart chart = new SimulationChart(this.chartSimulation);
@@ -52,14 +54,20 @@ namespace SimulationApp
             chart.AddPlots(new SimulationChartPlots(model3.Name, SimulationChartPlots.ColorPattern.Green, model3));
             chart.AddPlots(new SimulationChartPlots(model4.Name, SimulationChartPlots.ColorPattern.Orange, model4));
             chart.AddPlots(new SimulationChartPlots(model5.Name, SimulationChartPlots.ColorPattern.Yellow, model5));
-            chart.AddPlots(new SimulationChartPlots(model6.Name, SimulationChartPlots.ColorPattern.Pink, model6));
+            chart.AddPlots(new SimulationChartPlots(model5.Name, SimulationChartPlots.ColorPattern.Water, model6));
+            chart.AddPlots(new SimulationChartPlots(model5.Name, SimulationChartPlots.ColorPattern.Pink, model7));
 
             // シミュレータ作成
-            PharmacokineticSimulator sim = new PharmacokineticSimulator(time, 1, 10);
+            PharmacokineticSimulator sim = new PharmacokineticSimulator(time, 1,10);
             // 開始時刻に投与
-            sim.BolusDose(time, 100, WeightUnitEnum.mg, 10);
+            sim.BolusDose(time.AddMinutes(2), 100, WeightUnitEnum.mg, 30);
             // 描画
             chart.Draw(sim);
+
+            // todo 対数グラフにする設定
+            //chartSimulation.SuppressExceptions = true;
+            //chartSimulation.ChartAreas.First().AxisY.IsLogarithmic = true;
+
         }
     }
 

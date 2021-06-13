@@ -4,4 +4,14 @@
     <TargetFramework>net40</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="IniUtils" Version="3.0.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Models.ini">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
