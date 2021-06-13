@@ -88,7 +88,7 @@ namespace SimulationConsole
             sim.BolusDose(time, 100, WeightUnitEnum.mg);
 
             // プロポフォールのモデルでシミュレーション開始
-            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol(50);
+            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol1(50);
             foreach (var result in sim.Predict(model, WeightUnitEnum.ng))
             {
                 Console.WriteLine(result.ToString());
@@ -110,7 +110,7 @@ namespace SimulationConsole
             sim.ContinuousDose(time, DateTime.MaxValue, 1000, WeightUnitEnum.ug, TimeUnitEnum.hour);
 
             // プロポフォールのモデルでシミュレーション開始
-            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol(50);
+            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol1(50);
             foreach (var result in sim.Predict(model, WeightUnitEnum.ug))
             {
                 Console.WriteLine(result.ToString());
