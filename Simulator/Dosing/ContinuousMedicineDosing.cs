@@ -55,9 +55,9 @@ namespace Simulator.Dosing
                 return 0;
             }
 
-            // 刻み時間(秒)ごとの投与量に変換
-            double seconds =  GetTimeUnitConvertFactor(TimeUnit, TimeUnitEnum.second);
-            double weight = FlowVelocity / seconds * StepSeconds;
+            // 1秒ごとの投与量に変換
+            double seconds =  GetTimeUnitConvertFactor(TimeUnit, TimeUnitEnum.minute);
+            double weight = FlowVelocity / seconds;
             weight *= (double) WeightUnit * GetWeightUnitConvertFactor(WeightUnit, WeightUnitEnum.ug);
             // 濃度がmg/Lと定義されているのでmg基準に合わせる
             weight /= GetWeightUnitConvertFactor(WeightUnitEnum.mg, WeightUnit);

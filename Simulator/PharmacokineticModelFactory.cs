@@ -49,7 +49,7 @@ namespace Simulator
             //分布容積
             double v1 = 0.228;
 
-            var model = new PharmacokineticModel("ﾌﾟﾛﾎﾟﾌｫｰﾙ", k10, k12, k13, k21, k31, ke0, v1, weight);
+            var model = new PharmacokineticModel("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Marshモデル", k10, k12, k13, k21, k31, ke0, v1, weight);
             return model;
 
         }

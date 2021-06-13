@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using  Simulator.Dosing;
-
-
 
 namespace Simulator
 {
@@ -27,13 +24,13 @@ namespace Simulator
             Venous
         }
 
-
+        // 参照用データ（文献では70kg, 170cm, 35歳の男性をrefとしている）
         private const double AGE_ref = 35;
         private const double WGT_ref = 70;
         private const double STAT_ref = 1.7;
         private const double BMI_ref = WGT_ref / STAT_ref / STAT_ref;
 
-
+        // モデル内パラメータ
         private const double THETA_1 = 6.28;
         private const double THETA_2 = 25.5;
         private const double THETA_3 = 273;
@@ -53,6 +50,7 @@ namespace Simulator
         private const double THETA_17 = 1.42;
         private const double THETA_18 = 0.68;
 
+        // 確率変数（個体間の誤差）
         private const double ETA_1 = 0.610;
         private const double ETA_2 = 0.565;
         private const double ETA_3 = 0.597;
@@ -60,7 +58,6 @@ namespace Simulator
         private const double ETA_5 = 0.346;
         private const double ETA_6 = 0.209;
         private const double ETA_7 = 0.463;
-
 
         public double PMA { get; set; }
         public double AGE { get; set; }
@@ -117,14 +114,12 @@ namespace Simulator
 
         private double Q3MaturationFunction()
         {
-            // todo : 正確じゃない
-            return SigmoidFunction(AGE + 1, THETA_14, 1);
+            return SigmoidFunction((AGE * 54 + 40) / 54,THETA_14, 1);
         }
 
         private double Q3MaturationFunctionRef()
         {
-            // todo : 正確じゃない
-            return SigmoidFunction(AGE_ref + 1, THETA_14, 1);
+            return SigmoidFunction((AGE_ref * 54 + 40) / 54, THETA_14, 1);
         }
 
         private double OpiatesFunction(double x)
@@ -188,7 +183,12 @@ namespace Simulator
         private double Ke0Arterial => THETA_2 * Math.Pow(WGT / 70, -0.25) * Math.Exp(ETA_2);
         private double Ke0Venous => THETA_8 * Math.Pow(WGT / 70, -0.25) * Math.Exp(ETA_2);
 
-
+        /// <summary>
+        /// Eleveldモデルを作成する
+        /// </summary>
+        /// <param name="name">任意の名前</param>
+        /// <param name="mode">動脈 or 静脈</param>
+        /// <returns>モデル</returns>
         public PharmacokineticModel Create(string name, BloodVessels mode)
         {
             var model = new PharmacokineticModel(name, WGT);

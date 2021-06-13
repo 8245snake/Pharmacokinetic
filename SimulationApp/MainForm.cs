@@ -23,33 +23,31 @@ namespace SimulationApp
 
             // プロポフォールのモデルでシミュレーション開始
             var f = new EleveldModelFactory(50, 1.5, 40, 2200, true, false);
-            var model1 = f.Create("プロポフォール_動脈", EleveldModelFactory.BloodVessels.Arterial);
-            var model2 = f.Create("プロポフォール_静脈", EleveldModelFactory.BloodVessels.Venous);
-
-            PharmacokineticSimulator sim = createSimulator(time, 1, 20);
-            sim.BolusDose(time.AddMinutes(1), 100, WeightUnitEnum.ug);
-            //sim.ContinuousDose(time, time.AddMinutes(1), 6000, WeightUnitEnum.mg, TimeUnitEnum.hour);
+            var model1 = f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_動脈", EleveldModelFactory.BloodVessels.Arterial);
+            var model2 = PharmacokineticModelFactory.CreatePropofol(50);
+            PharmacokineticSimulator sim = createSimulator(time, 1, 30);
+            sim.ContinuousDose(time, DateTime.MaxValue, 1000, WeightUnitEnum.ug, TimeUnitEnum.hour);
             LoadGraph(chartSimulation, sim, model1, model2);
         }
 
         private void LoadGraph(Chart chart, PharmacokineticSimulator simulator,  PharmacokineticModel model1, PharmacokineticModel model2)
         {
-            Series seriesC1Arterial = CreateSeries("血中濃度(動脈)", Color.Red);
-            Series seriesCeArterial = CreateSeries("効果部位濃度(動脈)", Color.Orange);
+            Series seriesC1Model1 = CreateSeries($"血中濃度({model1.Name})", Color.Red);
+            Series seriesCeModel1 = CreateSeries($"効果部位濃度({model1.Name})", Color.Orange);
 
             foreach (var result in simulator.Predict(model1))
             {
-                seriesC1Arterial.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.C1));
-                seriesCeArterial.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.Ce));
+                seriesC1Model1.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.C1));
+                seriesCeModel1.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.Ce));
             }
 
-            Series seriesC1Venous = CreateSeries("血中濃度(静脈)", Color.Blue);
-            Series seriesCeVenous = CreateSeries("効果部位濃度(静脈)", Color.LightSkyBlue);
+            Series seriesC1Model2 = CreateSeries($"血中濃度({model2.Name})", Color.Blue);
+            Series seriesCeModel2 = CreateSeries($"効果部位濃度({model2.Name})", Color.LightSkyBlue);
 
             foreach (var result in simulator.Predict(model2))
             {
-                seriesC1Venous.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.C1));
-                seriesCeVenous.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.Ce));
+                seriesC1Model2.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.C1));
+                seriesCeModel2.Points.Add(new DataPoint(result.PlotTime.ToOADate(), result.Ce));
             }
 
             // chartarea
@@ -68,17 +66,17 @@ namespace SimulationApp
             chart.Series.Clear();
             chart.ChartAreas.Clear();
             chart.ChartAreas.Add(area1);
-            chart.Series.Add(seriesC1Arterial);
-            chart.Series.Add(seriesCeArterial);
-            chart.Series.Add(seriesC1Venous);
-            chart.Series.Add(seriesCeVenous);
+            chart.Series.Add(seriesC1Model1);
+            chart.Series.Add(seriesCeModel1);
+            chart.Series.Add(seriesC1Model2);
+            chart.Series.Add(seriesCeModel2);
 
-            chart.Legends[0].Title = "凡例";
-            chart.Legends[0].Position.Auto = false;
-            chart.Legends[0].Position.Width = 8.0F;
-            chart.Legends[0].Position.Height = 10.0F;
-            chart.Legends[0].Position.X = 0.0F;
-            chart.Legends[0].Position.Y = 0.0F;
+            //chart.Legends[0].Title = "凡例";
+            //chart.Legends[0].Position.Auto = false;
+            //chart.Legends[0].Position.Width = 8.0F;
+            //chart.Legends[0].Position.Height = 10.0F;
+            //chart.Legends[0].Position.X = 0.0F;
+            //chart.Legends[0].Position.Y = 0.0F;
         }
 
         private PharmacokineticSimulator createSimulator(DateTime start, int step, int duration)

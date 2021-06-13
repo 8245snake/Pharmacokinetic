@@ -90,8 +90,9 @@ namespace Simulator
         /// 血中濃度など予測するして逐次返す
         /// </summary>
         /// <param name="predictSource">モデル</param>
+        /// <para>重量の単位変換する場合は指定する（デフォルトはμg）</para>
         /// <returns>予測結果</returns>
-        public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource)
+        public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource, Medicine.WeightUnitEnum weightUnit = Medicine.WeightUnitEnum.ug)
         {
             // 初期化
             foreach (var item in _MedicineDosingList)
@@ -132,12 +133,14 @@ namespace Simulator
                 c2 = result.C2;
                 c3 = result.C3;
                 ce = result.Ce;
-                // 結果返却
+
+                // 結果返却(計算結果の単位がng/mlなので所望の単位に変換して返す)
+                var factor = Medicine.GetWeightUnitConvertFactor(Medicine.WeightUnitEnum.ug, weightUnit);
                 yield return new SimulatorResult() {
-                    C1 = c1 / model.V1 /1000,
-                    C2 = c2 / model.V1 / 1000,
-                    C3 = c3 / model.V1 / 1000,
-                    Ce = ce / model.V1 / 1000, 
+                    C1 = c1 / model.V1 /1000 / factor,
+                    C2 = c2 / model.V1 / 1000 / factor,
+                    C3 = c3 / model.V1 / 1000 / factor,
+                    Ce = ce / model.V1 / 1000 / factor, 
                     Bolus = bolus,
                     Continuous = continuous,
                     PlotTime = targetTime};

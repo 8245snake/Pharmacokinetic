@@ -12,8 +12,10 @@ namespace SimulationConsole
 
         static void Main(string[] args)
         {
-            TestEleveldModel();
-
+            //TestBolus();
+            //TestContinuous();
+            //TestBolusPropofol();
+            TestContinuousPropofol();
             Console.ReadKey();
 
         }
@@ -83,11 +85,33 @@ namespace SimulationConsole
             };
 
             // 開始時に100μg投与
-            sim.BolusDose(time, 100, WeightUnitEnum.ug);
+            sim.BolusDose(time, 100, WeightUnitEnum.mg);
 
             // プロポフォールのモデルでシミュレーション開始
             PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol(50);
-            foreach (var result in sim.Predict(model))
+            foreach (var result in sim.Predict(model, WeightUnitEnum.ng))
+            {
+                Console.WriteLine(result.ToString());
+            }
+        }
+
+        private static void TestContinuousPropofol()
+        {
+            var time = new DateTime(2021, 6, 12, 12, 30, 0);
+
+            PharmacokineticSimulator sim = new PharmacokineticSimulator()
+            {
+                DurationdMinutes = 10,
+                StepSeconds = 30,
+                CalculationStartTime = time
+            };
+
+            // 開始時に1000μg/h持続投与開始
+            sim.ContinuousDose(time, DateTime.MaxValue, 1000, WeightUnitEnum.ug, TimeUnitEnum.hour);
+
+            // プロポフォールのモデルでシミュレーション開始
+            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol(50);
+            foreach (var result in sim.Predict(model, WeightUnitEnum.ug))
             {
                 Console.WriteLine(result.ToString());
             }
@@ -108,7 +132,7 @@ namespace SimulationConsole
             simulator.BolusDose(time, 100, WeightUnitEnum.ug);
 
             // モデル作成
-            var f = new EleveldModelFactory(50, 150, 40, 2200, true, false);
+            var f = new EleveldModelFactory(50, 1.5, 40, 2200, true, false);
             var model = f.Create("動脈", EleveldModelFactory.BloodVessels.Arterial);
             model.ConsoleLog();
 
