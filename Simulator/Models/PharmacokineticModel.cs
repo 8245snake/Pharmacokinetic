@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Simulator
+namespace Simulator.Models
 {
     /// <summary>
     /// 薬物動態モデル
@@ -163,7 +163,7 @@ namespace Simulator
         /// <param name="bolus"></param>
         /// <param name="continuous"></param>
         /// <returns></returns>
-        private double GetDeltaC1(double c1, double c2, double c3, double h, double bolus, double continuous)
+        private double GetDeltaC1(double c1, double c2, double c3, double h, double continuous)
         {
             return (-c1 * (K10 + K12 + K13) + c2 * K21 + c3 * K31) + continuous / h;
         }
@@ -215,22 +215,22 @@ namespace Simulator
         /// <returns></returns>
         public RungeKuttaResult RungeKuttaCalculation(double c1, double c2, double c3, double ce, double bolus, double continuous, double h)
         {
-            double d1c1 = GetDeltaC1(c1, c2, c3, h, bolus, continuous);
+            double d1c1 = GetDeltaC1(c1, c2, c3, h, continuous);
             double d1c2 = GetDeltaC2(c1, c2);
             double d1c3 = GetDeltaC3(c1, c3);
             double d1ce = GetDeltaCe(c1, ce);
 
-            double d2c1 = GetDeltaC1(c1 + d1c1 * 0.5, c2 + d1c2 * 0.5, c3 + d1c3 * 0.5, h, bolus, continuous);
+            double d2c1 = GetDeltaC1(c1 + d1c1 * 0.5, c2 + d1c2 * 0.5, c3 + d1c3 * 0.5, h, continuous);
             double d2c2 = GetDeltaC2(c1 + d1c1 * 0.5, c2 + d1c2 * 0.5);
             double d2c3 = GetDeltaC3(c1 + d1c1 * 0.5, c3 + d1c3 * 0.5);
             double d2ce = GetDeltaCe(c1 + d1c1 * 0.5, ce + d1ce * 0.5);
 
-            double d3c1 = GetDeltaC1(c1 + d2c1 * 0.5, c2 + d2c2 * 0.5, c3 + d2c3 * 0.5, h, bolus, continuous);
+            double d3c1 = GetDeltaC1(c1 + d2c1 * 0.5, c2 + d2c2 * 0.5, c3 + d2c3 * 0.5, h, continuous);
             double d3c2 = GetDeltaC2(c1 + d2c1 * 0.5, c2 + d2c2 * 0.5);
             double d3c3 = GetDeltaC3(c1 + d2c1 * 0.5, c3 + d2c3 * 0.5);
             double d3ce = GetDeltaCe(c1 + d2c1 * 0.5, ce + d2ce * 0.5);
 
-            double d4c1 = GetDeltaC1(c1 + d3c1, c2 + d3c2, c3 + d3c3, h, bolus, continuous);
+            double d4c1 = GetDeltaC1(c1 + d3c1, c2 + d3c2, c3 + d3c3, h, continuous);
             double d4c2 = GetDeltaC2(c1 + d3c1, c2 + d3c2);
             double d4c3 = GetDeltaC3(c1 + d3c1, c3 + d3c3);
             double d4ce = GetDeltaCe(c1 + d3c1, ce + d3ce);

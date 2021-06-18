@@ -5,9 +5,8 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Simulator;
 using Simulator.Dosing;
-using SpecialControls.CollectionViews;
 using static Simulator.Dosing.Medicine;
-using SpecialControls.GenericWrappers;
+using Simulator.Models;
 
 namespace SimulationApp
 {
@@ -34,12 +33,8 @@ namespace SimulationApp
             List<PharmacokineticModel> models = new List<PharmacokineticModel>();
             models.Add(factory.Create(1));
             models.Add(factory.Create(2));
-            models.Add(PharmacokineticModelFactory.CreatePropofol1(50));
-            models.Add(PharmacokineticModelFactory.CreatePropofol2(50));
-            models.Add(PharmacokineticModelFactory.CreatePropofol3(50));
             var f = new EleveldModelFactory(50, 1.5, 40, 2200, false, true);
-            models.Add(f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(動脈)", EleveldModelFactory.BloodVessels.Arterial));
-            models.Add(f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld(動脈)", EleveldModelFactory.BloodVessels.Venous));
+            models.Add(f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld"));
             _combMedicine.Add("プロポフォール", models);
             // レミフェンタニル
             models = new List<PharmacokineticModel>();
@@ -50,7 +45,6 @@ namespace SimulationApp
             models = new List<PharmacokineticModel>();
             models.Add(factory.Create(5));
             models.Add(factory.Create(6));
-            models.Add(PharmacokineticModelFactory.CreateFentanyl1(50));
             _combMedicine.Add("フェンタニル", models);
 
             combMedicine.SelectedIndex = -1;

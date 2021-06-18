@@ -1,5 +1,5 @@
 ﻿using System;
-using  Simulator.Dosing;
+using  Simulator.Models;
 
 namespace Simulator
 {
@@ -189,30 +189,17 @@ namespace Simulator
         /// <param name="name">任意の名前</param>
         /// <param name="mode">動脈 or 静脈</param>
         /// <returns>モデル</returns>
-        public PharmacokineticModel Create(string name, BloodVessels mode)
+        public PharmacokineticModel Create(string name)
         {
             var model = new PharmacokineticModel(name, WGT);
 
-            if (mode == BloodVessels.Arterial)
-            {
-                model.V1 = V1Arterial;
-                model.V2 = V2;
-                model.V3 = V3;
-                model.Ke0 = Ke0Arterial;
-                model.CL1 = CL1;
-                model.CL2 = Q2Arterial;
-                model.CL3 = Q3;
-            }
-            else
-            {
-                model.V1 = V1Venous;
-                model.V2 = V2;
-                model.V3 = V3;
-                model.Ke0 = Ke0Venous;
-                model.CL1 = CL1;
-                model.CL2 = Q2Venous;
-                model.CL3 = Q3;
-            }
+            model.V1 = V1Venous;
+            model.V2 = V2;
+            model.V3 = V3;
+            model.Ke0 = Ke0Venous;
+            model.CL1 = CL1;
+            model.CL2 = Q2Venous;
+            model.CL3 = Q3;
 
             // min^-1 から h^-1 に補正
             model.Ke0 /= 60;
