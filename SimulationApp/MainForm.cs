@@ -33,8 +33,7 @@ namespace SimulationApp
             List<PharmacokineticModel> models = new List<PharmacokineticModel>();
             models.Add(factory.Create(1));
             models.Add(factory.Create(2));
-            var f = new EleveldModelFactory(50, 1.5, 40, 2200, false, true);
-            models.Add(f.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld"));
+            models.Add(EleveldModelFactory.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld", 50, 1.5, 40, 2200, false, true));
             _combMedicine.Add("プロポフォール", models);
             // レミフェンタニル
             models = new List<PharmacokineticModel>();

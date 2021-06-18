@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Simulator;
+using Simulator.Models;
 using  static  Simulator.Dosing.Medicine;
 
 namespace SimulationConsole
@@ -23,8 +24,8 @@ namespace SimulationConsole
         private static void TestBolus()
         {
             var time = new DateTime(2021, 6, 12, 12, 30, 0);
-
-            PharmacokineticModel model = PharmacokineticModelFactory.CreateFentanyl1(50);
+            var f = new PharmacokineticModelFactory();
+            PharmacokineticModel model = f.Create(1);
             PharmacokineticSimulator sim = new PharmacokineticSimulator()
             {
                 DurationdMinutes = 10,
@@ -50,7 +51,8 @@ namespace SimulationConsole
         {
             var time = new DateTime(2021, 6, 12, 12, 30, 0);
 
-            PharmacokineticModel model = PharmacokineticModelFactory.CreateFentanyl1(50);
+            var f = new PharmacokineticModelFactory();
+            PharmacokineticModel model = f.Create(1);
             PharmacokineticSimulator sim = new PharmacokineticSimulator()
             {
                 DurationdMinutes = 10,
@@ -88,7 +90,8 @@ namespace SimulationConsole
             sim.BolusDose(time, 100, WeightUnitEnum.mg);
 
             // プロポフォールのモデルでシミュレーション開始
-            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol1(50);
+            var f = new PharmacokineticModelFactory();
+            PharmacokineticModel model = f.Create(1);
             foreach (var result in sim.Predict(model, WeightUnitEnum.ng))
             {
                 Console.WriteLine(result.ToString());
@@ -110,7 +113,8 @@ namespace SimulationConsole
             sim.ContinuousDose(time, DateTime.MaxValue, 1000, WeightUnitEnum.ug, TimeUnitEnum.hour);
 
             // プロポフォールのモデルでシミュレーション開始
-            PharmacokineticModel model = PharmacokineticModelFactory.CreatePropofol1(50);
+            var f = new PharmacokineticModelFactory();
+            PharmacokineticModel model = f.Create(1);
             foreach (var result in sim.Predict(model, WeightUnitEnum.ug))
             {
                 Console.WriteLine(result.ToString());
@@ -132,8 +136,7 @@ namespace SimulationConsole
             simulator.BolusDose(time, 100, WeightUnitEnum.ug);
 
             // モデル作成
-            var f = new EleveldModelFactory(50, 1.5, 40, 2200, true, false);
-            var model = f.Create("動脈", EleveldModelFactory.BloodVessels.Arterial);
+            var model = EleveldModelFactory.Create("動脈", 50, 1.5, 40, 2200, true, false);
             model.ConsoleLog();
 
             foreach (var result in simulator.Predict(model))

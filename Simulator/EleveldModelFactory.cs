@@ -9,20 +9,6 @@ namespace Simulator
     /// </summary>
     public class EleveldModelFactory
     {
-        /// <summary>
-        /// 血管モード
-        /// </summary>
-        public enum BloodVessels
-        {
-            /// <summary>
-            /// 動脈
-            /// </summary>
-            Arterial,
-            /// <summary>
-            /// 静脈
-            /// </summary>
-            Venous
-        }
 
         // 参照用データ（文献では70kg, 170cm, 35歳の男性をrefとしている）
         private const double AGE_ref = 35;
@@ -204,6 +190,23 @@ namespace Simulator
             // min^-1 から h^-1 に補正
             model.Ke0 /= 60;
             return model;
+        }
+
+        /// <summary>
+        /// Eleveldモデルを作成する
+        /// </summary>
+        /// <param name="name">モデル名</param>
+        /// <param name="weight">体重(kg)</param>
+        /// <param name="stat">身長(m)</param>
+        /// <param name="age">年齢(year)</param>
+        /// <param name="pma">在胎週数</param>
+        /// <param name="isMale">True:男、False:女</param>
+        /// <param name="hasOpiates">オピオイド有無（True:あり, False:なし）</param>
+        /// <returns>Eleveldモデル</returns>
+        public static PharmacokineticModel Create(string name, double weight, double stat, double age, double pma, bool isMale, bool hasOpiates)
+        {
+            var factory = new EleveldModelFactory(weight, stat, age, pma, isMale, hasOpiates);
+            return factory.Create(name);
         }
 
 

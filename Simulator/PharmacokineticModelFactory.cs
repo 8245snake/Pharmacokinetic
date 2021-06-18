@@ -35,6 +35,7 @@ namespace Simulator
         }
 
         public PharmacokineticModelFactory(double weight, double stat, double age, bool isMale)
+            :this()
         {
             Weight = weight;
             Stat = stat;
