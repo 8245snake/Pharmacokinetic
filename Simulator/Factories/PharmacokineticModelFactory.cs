@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using Simulator.Models;
 
-namespace Simulator
+namespace Simulator.Factories
 {
 
     /// <summary>
@@ -35,7 +35,6 @@ namespace Simulator
         }
 
         public PharmacokineticModelFactory(double weight, double stat, double age, bool isMale)
-            :this()
         {
             Weight = weight;
             Stat = stat;
@@ -44,6 +43,11 @@ namespace Simulator
 
             CompileCustomParams();
 
+        }
+
+        public PharmacokineticModelFactory(IndividualModel individual)
+        : this(individual.Weight, individual.Stat, individual.Age, individual.IsMale)
+        {
         }
 
 

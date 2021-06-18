@@ -1,7 +1,8 @@
 ﻿using System;
 using  Simulator.Models;
+using  Simulator.Factories;
 
-namespace Simulator
+namespace Simulator.Factories
 {
 
     /// <summary>
@@ -70,6 +71,12 @@ namespace Simulator
             PMA = pma;
             IsMale = isMale;
             Opiates = hasOpiates;
+        }
+
+        public EleveldModelFactory(IndividualModel individual)
+            : this(individual.Weight, individual.Stat, individual.Age, individual.PMA, individual.IsMale,
+                individual.Opiates)
+        {
         }
 
 

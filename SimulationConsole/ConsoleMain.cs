@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Simulator;
+using Simulator.Factories;
 using Simulator.Models;
 using  static  Simulator.Dosing.Medicine;
 

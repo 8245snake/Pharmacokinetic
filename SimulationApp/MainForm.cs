@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 using Simulator;
 using Simulator.Dosing;
+using Simulator.Factories;
 using static Simulator.Dosing.Medicine;
 using Simulator.Models;
 
