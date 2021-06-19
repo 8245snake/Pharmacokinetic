@@ -42,8 +42,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dosing\ConcentrationValueUnitTests.cs" />
     <Compile Include="Dosing\VolumeValueUnitTests.cs" />
     <Compile Include="Dosing\WeightValueUnitTests.cs" />
+    <Compile Include="Models\PharmacokineticModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

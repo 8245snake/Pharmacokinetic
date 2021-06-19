@@ -97,6 +97,11 @@ namespace Simulator.Models
             }
         }
 
+        /// <summary>
+        /// 名前と体重のみ指定してモデルを作成します
+        /// </summary>
+        /// <param name="name">薬剤名称</param>
+        /// <param name="weight">体重(kg)</param>
         public PharmacokineticModel(string name, double weight)
         {
             Name = name;
@@ -104,7 +109,7 @@ namespace Simulator.Models
         }
 
         /// <summary>
-        /// モデルを作成します。
+        /// 名前、体重と速度定数を指定してモデルを作成します。V1は0になります。
         /// </summary>
         /// <param name="name">薬剤名称</param>
         /// <param name="k10">k10速度定数(h^-1)</param>
@@ -115,19 +120,18 @@ namespace Simulator.Models
         /// <param name="ke0">消失速度定数(h^-1)</param>
         /// <param name="weight">体重(kg)</param>
         public PharmacokineticModel(string name, double k10, double k12, double k13, double k21, double k31, double ke0, double weight)
+        : this(name, weight)
         {
-            Name = name;
             K10 = k10;
             K12 = k12;
             K13 = k13;
             K21 = k21;
             K31 = k31;
             Ke0 = ke0;
-            Weight = weight;
         }
 
         /// <summary>
-        /// モデルを作成します。
+        /// 名前、体重、速度定数とV1を指定してモデルを作成します。V2,V3はV1から計算されます。
         /// </summary>
         /// <param name="name">薬剤名称</param>
         /// <param name="k10">k10速度定数(h^-1)</param>
@@ -139,15 +143,8 @@ namespace Simulator.Models
         /// <param name="v1">Vd分布容量(L/kg)</param>
         /// <param name="weight">体重(kg)</param>
         public PharmacokineticModel(string name, double k10, double k12, double k13, double k21, double k31, double ke0, double v1, double weight)
+        : this(name, k10, k12, k13, k21, k31, ke0, weight)
         {
-            Name = name;
-            K10 = k10;
-            K12 = k12;
-            K13 = k13;
-            K21 = k21;
-            K31 = k31;
-            Ke0 = ke0;
-            Weight = weight;
             V1 = v1 * weight;
             V2 = k12 * V1 / k21;
             V3 = k13 * V1 / k31;

@@ -131,7 +131,7 @@ namespace Simulator
         }
 
         /// <summary>
-        /// 血中濃度など予測するして逐次返す
+        /// 血中濃度など予測して逐次返す
         /// </summary>
         /// <param name="predictSource">モデル</param>
         /// <para>重量の単位変換する場合は指定する（デフォルトはμg）</para>
@@ -144,6 +144,7 @@ namespace Simulator
                 item.Initialize();
             }
 
+            // 刻み時間（）
             double h = 60 / (double) StepSeconds;
 
             // 単位時間あたりの係数に変換する
