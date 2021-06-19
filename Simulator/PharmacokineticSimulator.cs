@@ -61,7 +61,7 @@ namespace Simulator
         /// <param name="weightUnit">質量単位</param>
         /// <param name="offsetSecond">ピークに達するまでの遅延時間（秒）。拡散時間を表現するため。
         /// 計算間隔より精度を高めることはできないので必ず<see cref="StepSeconds"/>の倍数を指定すること。</param>
-        public void BolusDose(DateTime time, double amount, Medicine.WeightUnitEnum weightUnit, int offsetSecond = 0)
+        public void BolusDose(DateTime time, double amount, ValueUnit.WeightUnitEnum weightUnit, int offsetSecond = 0)
         {
             IMedicineDosing dosing = null;
 
@@ -76,7 +76,7 @@ namespace Simulator
                     DoseEndTime = time.AddSeconds(offsetSecond),
                     FlowVelocity = flow,
                     WeightUnit = weightUnit,
-                    TimeUnit = Medicine.TimeUnitEnum.second,
+                    TimeUnit = ValueUnit.TimeUnitEnum.second,
                     StepSeconds = this.StepSeconds
                 };
             }
@@ -106,7 +106,7 @@ namespace Simulator
         /// <param name="flow">流速</param>
         /// <param name="weightUnit">質量単位</param>
         /// <param name="timeUnit">時間単位</param>
-        public void ContinuousDose(DateTime start, DateTime end, double flow, Medicine.WeightUnitEnum weightUnit, Medicine.TimeUnitEnum timeUnit)
+        public void ContinuousDose(DateTime start, DateTime end, double flow, ValueUnit.WeightUnitEnum weightUnit, ValueUnit.TimeUnitEnum timeUnit)
         {
             ContinuousMedicineDosing dosing = new ContinuousMedicineDosing()
             {
@@ -136,12 +136,12 @@ namespace Simulator
         /// <param name="predictSource">モデル</param>
         /// <para>重量の単位変換する場合は指定する（デフォルトはμg）</para>
         /// <returns>予測結果</returns>
-        public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource, Medicine.WeightUnitEnum weightUnit = Medicine.WeightUnitEnum.ug)
+        public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource, ValueUnit.WeightUnitEnum weightUnit = ValueUnit.WeightUnitEnum.ug)
         {
             // 初期化
             foreach (var item in _MedicineDosingList)
             {
-                item.Inittialize();
+                item.Initialize();
             }
 
             double h = 60 / (double) StepSeconds;
@@ -179,7 +179,7 @@ namespace Simulator
                 ce = result.Ce;
 
                 // 結果返却(計算結果の単位がng/mlなので所望の単位に変換して返す)
-                var factor = Medicine.GetWeightUnitConvertFactor(Medicine.WeightUnitEnum.ng, weightUnit);
+                var factor = ValueUnit.GetWeightUnitConvertFactor(ValueUnit.WeightUnitEnum.ng, weightUnit);
                 yield return new SimulatorResult() {
                     C1 = c1 / model.V1 /1000 * factor,
                     C2 = c2 / model.V1 / 1000 * factor,

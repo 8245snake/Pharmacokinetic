@@ -8,34 +8,34 @@ namespace Simulator.Dosing
     public static class EnumExtension
     {
 
-        public static string Name(this Medicine.VolumeUnitEnum self)
+        public static string Name(this ValueUnit.VolumeUnitEnum self)
         {
             switch (self)
             {
-                case Medicine.VolumeUnitEnum.L:
+                case ValueUnit.VolumeUnitEnum.L:
                     return "L";
-                case Medicine.VolumeUnitEnum.mL:
+                case ValueUnit.VolumeUnitEnum.mL:
                     return "ml";
-                case Medicine.VolumeUnitEnum.None:
+                case ValueUnit.VolumeUnitEnum.None:
                     return "";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(self), self, null);
             }
         }
 
-        public static string Name(this Medicine.WeightUnitEnum self)
+        public static string Name(this ValueUnit.WeightUnitEnum self)
         {
             switch (self)
             {
-                case Medicine.WeightUnitEnum.g:
+                case ValueUnit.WeightUnitEnum.g:
                     return "g";
-                case Medicine.WeightUnitEnum.mg:
+                case ValueUnit.WeightUnitEnum.mg:
                     return "mg"; ;
-                case Medicine.WeightUnitEnum.ug:
+                case ValueUnit.WeightUnitEnum.ug:
                     return "μg";
-                case Medicine.WeightUnitEnum.ng:
+                case ValueUnit.WeightUnitEnum.ng:
                     return "ng";
-                case Medicine.WeightUnitEnum.None:
+                case ValueUnit.WeightUnitEnum.None:
                     return "";
                 default:
                     throw new ArgumentOutOfRangeException(nameof(self), self, null);

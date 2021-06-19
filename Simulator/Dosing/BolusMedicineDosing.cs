@@ -1,5 +1,5 @@
 ﻿using System;
-using static Simulator.Dosing.Medicine;
+using static Simulator.Dosing.ValueUnit;
 
 namespace Simulator.Dosing
 {
@@ -21,7 +21,7 @@ namespace Simulator.Dosing
         /// <summary>
         /// 投与量単位（重量）
         /// </summary>
-        public WeightUnitEnum WeightUnit { get; set; }
+        public ValueUnit.WeightUnitEnum WeightUnit { get; set; }
 
         /// <summary>
         /// 刻み時間。
@@ -56,7 +56,7 @@ namespace Simulator.Dosing
             return 0;
         }
 
-        public void Inittialize()
+        public void Initialize()
         {
             _isAlreadyReturned = false;
         }

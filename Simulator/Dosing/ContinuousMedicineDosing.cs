@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static Simulator.Dosing.Medicine;
+using static Simulator.Dosing.ValueUnit;
 
 namespace Simulator.Dosing
 {
@@ -29,12 +29,12 @@ namespace Simulator.Dosing
         /// <summary>
         /// 流速単位（重量）
         /// </summary>
-        public WeightUnitEnum WeightUnit { get; set; }
+        public ValueUnit.WeightUnitEnum WeightUnit { get; set; }
 
         /// <summary>
         /// 流速単位（時間）
         /// </summary>
-        public TimeUnitEnum TimeUnit { get; set; }
+        public ValueUnit.TimeUnitEnum TimeUnit { get; set; }
 
         /// <summary>
         /// 刻み時間(秒)
@@ -64,7 +64,7 @@ namespace Simulator.Dosing
             return weight;
         }
 
-        public void Inittialize()
+        public void Initialize()
         {
         }
     }

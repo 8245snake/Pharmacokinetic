@@ -14,7 +14,7 @@ namespace Simulator.Dosing
         /// <summary>
         /// 初期化処理
         /// </summary>
-        void Inittialize();
+        void Initialize();
 
     }
 }

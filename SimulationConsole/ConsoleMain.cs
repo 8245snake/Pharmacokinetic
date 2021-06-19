@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Simulator;
+using Simulator.Dosing;
 using Simulator.Factories;
 using Simulator.Models;
 using  static  Simulator.Dosing.Medicine;
@@ -17,7 +18,10 @@ namespace SimulationConsole
             //TestBolus();
             //TestContinuous();
             //TestBolusPropofol();
-            TestContinuousPropofol();
+            //TestContinuousPropofol();
+
+            ValueUnit val = new ValueUnit(10, ValueUnit.WeightUnitEnum.ug);
+
             Console.ReadKey();
 
         }
@@ -35,10 +39,10 @@ namespace SimulationConsole
             };
 
             // 開始時に5μg投与
-            sim.BolusDose(time, 5, WeightUnitEnum.ug);
+            sim.BolusDose(time, 5, ValueUnit.WeightUnitEnum.ug);
             // 1分後に2μg投与
             time = time.AddMinutes(1);
-            sim.BolusDose(time, 2, WeightUnitEnum.ug);
+            sim.BolusDose(time, 2, ValueUnit.WeightUnitEnum.ug);
 
             // シミュレーション開始
             foreach (var result in sim.Predict(model))
@@ -62,10 +66,10 @@ namespace SimulationConsole
             };
 
             // 開始時に100μg/h持続投与開始
-            sim.ContinuousDose(time, time.AddMinutes(3),  100, WeightUnitEnum.ug, TimeUnitEnum.hour);
+            sim.ContinuousDose(time, time.AddMinutes(3),  100, ValueUnit.WeightUnitEnum.ug, ValueUnit.TimeUnitEnum.hour);
             // 1分後に300μg/hへ流速変更
             time = time.AddMinutes(3);
-            sim.ContinuousDose(time, DateTime.MaxValue, 300, WeightUnitEnum.ug, TimeUnitEnum.hour);
+            sim.ContinuousDose(time, DateTime.MaxValue, 300, ValueUnit.WeightUnitEnum.ug, ValueUnit.TimeUnitEnum.hour);
 
 
             // シミュレーション開始
@@ -88,12 +92,12 @@ namespace SimulationConsole
             };
 
             // 開始時に100μg投与
-            sim.BolusDose(time, 100, WeightUnitEnum.mg);
+            sim.BolusDose(time, 100, ValueUnit.WeightUnitEnum.mg);
 
             // プロポフォールのモデルでシミュレーション開始
             var f = new PharmacokineticModelFactory();
             PharmacokineticModel model = f.Create(1);
-            foreach (var result in sim.Predict(model, WeightUnitEnum.ng))
+            foreach (var result in sim.Predict(model, ValueUnit.WeightUnitEnum.ng))
             {
                 Console.WriteLine(result.ToString());
             }
@@ -111,12 +115,12 @@ namespace SimulationConsole
             };
 
             // 開始時に1000μg/h持続投与開始
-            sim.ContinuousDose(time, DateTime.MaxValue, 1000, WeightUnitEnum.ug, TimeUnitEnum.hour);
+            sim.ContinuousDose(time, DateTime.MaxValue, 1000, ValueUnit.WeightUnitEnum.ug, ValueUnit.TimeUnitEnum.hour);
 
             // プロポフォールのモデルでシミュレーション開始
             var f = new PharmacokineticModelFactory();
             PharmacokineticModel model = f.Create(1);
-            foreach (var result in sim.Predict(model, WeightUnitEnum.ug))
+            foreach (var result in sim.Predict(model, ValueUnit.WeightUnitEnum.ug))
             {
                 Console.WriteLine(result.ToString());
             }
@@ -134,7 +138,7 @@ namespace SimulationConsole
             };
 
             // 開始時に100μg投与
-            simulator.BolusDose(time, 100, WeightUnitEnum.ug);
+            simulator.BolusDose(time, 100, ValueUnit.WeightUnitEnum.ug);
 
             // モデル作成
             var model = EleveldModelFactory.Create("動脈", 50, 1.5, 40, 2200, true, false);

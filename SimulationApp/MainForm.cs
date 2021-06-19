@@ -72,7 +72,7 @@ namespace SimulationApp
             // シミュレータ作成
             PharmacokineticSimulator sim = new PharmacokineticSimulator(time, 1, 10);
             // 開始時刻に投与
-            sim.BolusDose(time.AddMinutes(2), 100, WeightUnitEnum.mg, 30);
+            sim.BolusDose(time.AddMinutes(2), 100, ValueUnit.WeightUnitEnum.mg, 30);
             // 描画
             chart.Draw(sim);
         }
@@ -121,7 +121,7 @@ namespace SimulationApp
             _simulationChartPlotsList.Add(plots);
         }
 
-        public void Draw(PharmacokineticSimulator simulator, Medicine.WeightUnitEnum displayWeightUnit = Medicine.WeightUnitEnum.ug)
+        public void Draw(PharmacokineticSimulator simulator, ValueUnit.WeightUnitEnum displayWeightUnit = ValueUnit.WeightUnitEnum.ug)
         {
             Chart.ChartAreas[0].AxisY.Title = $"濃度({displayWeightUnit.Name()}/ml)";
 
