@@ -58,5 +58,29 @@ namespace Simulator.Dosing.Test
             Assert.AreEqual(converted.ToString(), "5mg/L");
         }
 
+        [TestMethod()]
+        public void ToWeightTest1()
+        {
+            ConcentrationValueUnit conc = new ConcentrationValueUnit(0.005, WeightUnitEnum.mg, VolumeUnitEnum.mL);
+            VolumeValueUnit vol = new VolumeValueUnit(1000, VolumeUnitEnum.mL);
+            Assert.AreEqual("5mg", conc.ToWeight(vol).ToString());
+        }
+
+        [TestMethod()]
+        public void ToWeightTest2()
+        {
+            ConcentrationValueUnit conc = new ConcentrationValueUnit(100, WeightUnitEnum.ug, VolumeUnitEnum.mL);
+            VolumeValueUnit vol = new VolumeValueUnit(1, VolumeUnitEnum.L);
+            Assert.AreEqual("100000μg", conc.ToWeight(vol).ToString());
+        }
+
+        [TestMethod()]
+        public void ToWeightTest3()
+        {
+            var conc = new ConcentrationValueUnit(new WeightValueUnit(50, WeightUnitEnum.mg), new VolumeValueUnit(200, VolumeUnitEnum.mL));
+            var vol = new VolumeValueUnit(4, VolumeUnitEnum.mL);
+            // 50mg/200ml の薬剤を4ml使用する→1mg
+            Assert.AreEqual("1mg", conc.ToWeight(vol).ToString());
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 
 namespace Simulator.Dosing
 {
@@ -8,7 +9,7 @@ namespace Simulator.Dosing
     public class WeightValueUnit : ValueUnit
     {
 
-        public WeightUnitEnum WeightUnit { get; set; } = WeightUnitEnum.ug;
+        public WeightUnitEnum WeightUnit { get; set; }
 
         public WeightValueUnit(double value, WeightUnitEnum weightUnit)
         {
@@ -16,8 +17,92 @@ namespace Simulator.Dosing
             WeightUnit = weightUnit;
         }
 
+        #region Operation
+
+
+        /// <summary>
+        /// 足し算
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <param name="weightUnit">単位</param>
+        /// <returns>足し算した結果</returns>
+        public WeightValueUnit Plus(double value, WeightUnitEnum weightUnit)
+        {
+            WeightValueUnit addend = new WeightValueUnit(value, weightUnit).ConvertUnit(this.WeightUnit);
+            addend.Value += this.Value;
+            return addend;
+        }
+
+        /// <summary>
+        /// 足し算
+        /// </summary>
+        /// <param name="other">重量</param>
+        /// <returns>足し算した結果</returns>
+        public override ValueUnit Plus(ValueUnit other)
+        {
+            if (!(other is WeightValueUnit weight))
+            {
+                return base.Plus(other);
+            }
+
+            return Plus(other.Value, weight.WeightUnit);
+        }
+
+
+        /// <summary>
+        /// 引き算
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <param name="weightUnit">単位</param>
+        /// <returns>引き算した結果</returns>
+        public WeightValueUnit Minus(double value, WeightUnitEnum weightUnit)
+        {
+            // マイナスを掛けて足し算
+            return Plus(-1 * value, weightUnit);
+        }
+
+        /// <summary>
+        /// 引き算
+        /// </summary>
+        /// <param name="other">重量</param>
+        /// <returns>引き算した結果</returns>
+        public override ValueUnit Minus(ValueUnit other)
+        {
+            if (!(other is WeightValueUnit weight))
+            {
+                return base.Minus(other);
+            }
+            return Minus(weight.Value, weight.WeightUnit);
+        }
+
+
+        public override ValueUnit Multiply(ValueUnit other)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override ValueUnit Divide(ValueUnit other)
+        {
+            VolumeValueUnit volume = other as VolumeValueUnit;
+            if (volume == null)
+            {
+                throw new NotImplementedException();
+            }
+            // 重量÷体積の場合は濃度を出す
+            return new ConcentrationValueUnit(this, volume);
+        }
+
+
+        #endregion
+
         public WeightValueUnit ConvertUnit(WeightUnitEnum unit)
         {
+            if (unit == WeightUnitEnum.None || unit == this.WeightUnit)
+            {
+                return new WeightValueUnit(this.Value, unit);
+            }
+
             double factor = 0.0;
             if (unit == WeightUnitEnum.kg)
             {

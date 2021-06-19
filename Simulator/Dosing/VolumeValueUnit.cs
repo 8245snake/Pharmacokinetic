@@ -19,6 +19,10 @@ namespace Simulator.Dosing
 
         public VolumeValueUnit ConvertUnit(VolumeUnitEnum unit)
         {
+            if (unit == VolumeUnitEnum.None || unit == this.VolumeUnit)
+            {
+                return new VolumeValueUnit(this.Value, unit);
+            }
             double factor = (double)unit / (double)this.VolumeUnit;
             return new VolumeValueUnit(this.Value * factor, unit);
         }

@@ -44,6 +44,23 @@ namespace Simulator.Dosing
             }
         }
 
+        public static string Name(this ValueUnit.TimeUnitEnum self)
+        {
+            switch (self)
+            {
+                case ValueUnit.TimeUnitEnum.hour: 
+                    return "h";
+                case ValueUnit.TimeUnitEnum.minute:
+                    return "min";
+                case ValueUnit.TimeUnitEnum.second:
+                    return "sec";
+                case ValueUnit.TimeUnitEnum.None:
+                    return "";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(self), self, null);
+            }
+        }
+
 
     }
 }

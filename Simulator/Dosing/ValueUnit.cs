@@ -74,10 +74,19 @@ namespace Simulator.Dosing
 
         #endregion
 
-
+        #region Operator
         public double Value { get; set; } = 0.0;
-        public TimeUnitEnum TimeUnit { get; set; } = TimeUnitEnum.None;
 
+
+        public virtual ValueUnit Plus(ValueUnit other)
+        {
+            return other;
+        }
+
+        public virtual ValueUnit Minus(ValueUnit other)
+        {
+            return other;
+        }
 
         public virtual ValueUnit Multiply(ValueUnit other)
         {
@@ -88,6 +97,30 @@ namespace Simulator.Dosing
         {
             return other;
         }
+
+        public static ValueUnit operator +(ValueUnit a, ValueUnit b)
+        {
+            return a.Plus(b);
+        }
+
+        public static ValueUnit operator -(ValueUnit a, ValueUnit b)
+        {
+            return a.Minus(b);
+        }
+
+        public static ValueUnit operator *(ValueUnit a, ValueUnit b)
+        {
+            return a.Multiply(b);
+        }
+
+        public static ValueUnit operator /(ValueUnit a, ValueUnit b)
+        {
+            return a.Divide(b);
+        }
+
+        #endregion
+
+
 
 
         #region statucMethod

@@ -28,6 +28,28 @@
             return new ConcentrationValueUnit(weight, volume);
         }
 
+        /// <summary>
+        /// 体積から重量を計算する
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <param name="volumeUnit">単位</param>
+        /// <returns>重量</returns>
+        public WeightValueUnit ToWeight(double value, VolumeUnitEnum volumeUnit)
+        {
+            return ToWeight(new VolumeValueUnit(value, volumeUnit));
+        }
+
+        /// <summary>
+        /// 体積から重量を計算する
+        /// </summary>
+        /// <param name="volume">体積</param>
+        /// <returns>重量</returns>
+        public WeightValueUnit ToWeight(VolumeValueUnit volume)
+        {
+            var conv = volume.ConvertUnit(this.VolumeUnit);
+            return new WeightValueUnit(this.Value * conv.Value, this.WeightUnit);
+        }
+
         public override string ToString()
         {
             return $"{this.Value}{this.WeightUnit.Name()}/{this.VolumeUnit.Name()}";

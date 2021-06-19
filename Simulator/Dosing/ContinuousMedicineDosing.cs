@@ -9,7 +9,7 @@ namespace Simulator.Dosing
     /// <summary>
     /// 持続投与を表現するクラス
     /// </summary>
-    class ContinuousMedicineDosing : IMedicineDosing
+    public class ContinuousMedicineDosing : IMedicineDosing
     {
         /// <summary>
         /// 投与開始時刻。丸められていない厳密な値が入っている。
