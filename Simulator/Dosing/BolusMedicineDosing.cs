@@ -23,20 +23,38 @@ namespace Simulator.Dosing
         /// </summary>
         public ValueUnit.WeightUnitEnum WeightUnit { get; set; }
 
-        /// <summary>
-        /// 刻み時間。
-        /// </summary>
-        public int StepSeconds { get; set; }
 
+        /// <summary>
+        /// ボーラス投与量をすでに返却済みか否か
+        /// </summary>
         private bool _isAlreadyReturned = false;
+
+        public BolusMedicineDosing()
+        {
+        }
+
+
+        public BolusMedicineDosing(DateTime doseTime, double doseAmount, WeightUnitEnum weightUnit)
+        {
+            DoseTime = doseTime;
+            DoseAmount = doseAmount;
+            WeightUnit = weightUnit;
+        }
+
+        public BolusMedicineDosing(DateTime doseTime, WeightValueUnit weight)
+        : this(doseTime, weight.Value, weight.WeightUnit)
+        {
+        }
+
 
         /// <summary>
         /// 指定時刻の投与量を取得する。
         /// 単位はμgに統一する。
         /// </summary>
         /// <param name="time">この時刻で投与したとして相応しい場合に結果を返す。</param>
+        /// <param name="stepSeconds">刻み時間(秒)</param>
         /// <returns>投与量（単位はμg）</returns>
-        public double GetDosing(DateTime time)
+        public double GetDosing(DateTime time, int stepSeconds)
         {
             if (_isAlreadyReturned)
             {
@@ -45,7 +63,7 @@ namespace Simulator.Dosing
             }
 
             var spanSecond = (time.Ticks - DoseTime.Ticks) / 1000 / 1000 / 10;
-            if (spanSecond >= 0 && spanSecond <= StepSeconds)
+            if (spanSecond >= 0 && spanSecond < stepSeconds)
             {
                 _isAlreadyReturned = true;
                 double conc = DoseAmount * (double) WeightUnit * GetWeightUnitConvertFactor(WeightUnit, WeightUnitEnum.ug);
@@ -56,6 +74,10 @@ namespace Simulator.Dosing
             return 0;
         }
 
+        /// <summary>
+        /// 初期化処理。
+        /// 返却済みフラグをfalseにするのみ。
+        /// </summary>
         public void Initialize()
         {
             _isAlreadyReturned = false;

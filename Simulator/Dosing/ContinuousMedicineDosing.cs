@@ -36,18 +36,15 @@ namespace Simulator.Dosing
         /// </summary>
         public ValueUnit.TimeUnitEnum TimeUnit { get; set; }
 
-        /// <summary>
-        /// 刻み時間(秒)
-        /// </summary>
-        public int StepSeconds { get; set; }
 
         /// <summary>
         /// 指定時刻の投与量を取得する。
         /// 単位はμgに統一する。
         /// </summary>
         /// <param name="time">この時刻で投与したとして相応しい場合に結果を返す。</param>
+        /// <param name="stepSeconds">刻み時間(秒)</param>
         /// <returns>投与量（単位はμg）</returns>
-        public double GetDosing(DateTime time)
+        public double GetDosing(DateTime time, int stepSeconds)
         {
             // 開始より前か終了より後なら無効（投与直後に濃度上昇しないため開始時刻ちょうどのときもはじく）
             if (time.Ticks <= DoseStartTime.Ticks || time.Ticks > DoseEndTime.Ticks)
@@ -64,6 +61,10 @@ namespace Simulator.Dosing
             return weight;
         }
 
+        /// <summary>
+        /// 初期化処理。
+        /// とくに何もしない。
+        /// </summary>
         public void Initialize()
         {
         }

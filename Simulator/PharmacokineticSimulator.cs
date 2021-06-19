@@ -77,7 +77,6 @@ namespace Simulator
                     FlowVelocity = flow,
                     WeightUnit = weightUnit,
                     TimeUnit = ValueUnit.TimeUnitEnum.second,
-                    StepSeconds = this.StepSeconds
                 };
             }
             else
@@ -87,7 +86,6 @@ namespace Simulator
                     DoseTime = time,
                     DoseAmount = amount,
                     WeightUnit = weightUnit,
-                    StepSeconds = this.StepSeconds
                 };
             }
 
@@ -115,7 +113,6 @@ namespace Simulator
                 FlowVelocity = flow,
                 WeightUnit = weightUnit,
                 TimeUnit = timeUnit,
-                StepSeconds = this.StepSeconds
             };
 
             _MedicineDosingList.Add(dosing);
@@ -169,9 +166,9 @@ namespace Simulator
             {
                 // その時刻のボーラスと持続の投与量の合計値を出す
                 double bolus = _MedicineDosingList.Where(dosing => dosing is BolusMedicineDosing)
-                    .Sum(dosing => dosing.GetDosing(targetTime));
+                    .Sum(dosing => dosing.GetDosing(targetTime, this.StepSeconds));
                 double continuous = _MedicineDosingList.Where(dosing => dosing is ContinuousMedicineDosing)
-                    .Sum(dosing => dosing.GetDosing(targetTime));
+                    .Sum(dosing => dosing.GetDosing(targetTime, this.StepSeconds));
 
                 var result = model.RungeKuttaCalculation(c1, c2, c3, ce, bolus * h, continuous, h);
                 c1 = result.C1;

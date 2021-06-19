@@ -20,14 +20,13 @@ namespace Simulator.Dosing.Test
                 DoseTime = new DateTime(2021,6,19,10, 0, 0),
                 DoseAmount = 100,
                 WeightUnit = ValueUnit.WeightUnitEnum.ng,
-                StepSeconds = 60
             };
 
             // 投与時間ジャスト→取得成功
-            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0));
+            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0), 60);
             Assert.AreEqual(100, amount);
             // もう一度読んだら→0が返る
-            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0));
+            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0), 60);
             Assert.AreEqual(0, amount);
 
         }
@@ -40,14 +39,13 @@ namespace Simulator.Dosing.Test
                 DoseTime = new DateTime(2021, 6, 19, 10, 0, 0),
                 DoseAmount = 100,
                 WeightUnit = ValueUnit.WeightUnitEnum.ng,
-                StepSeconds = 60
             };
 
             // 投与より1秒前→0が返る
-            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 9, 59, 59));
+            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 9, 59, 59), 60);
             Assert.AreEqual(0, amount);
             // 投与より1秒後→取得成功
-            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 00, 1));
+            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 00, 1), 60);
             Assert.AreEqual(100, amount);
 
         }
@@ -60,11 +58,10 @@ namespace Simulator.Dosing.Test
                 DoseTime = new DateTime(2021, 6, 19, 10, 0, 0),
                 DoseAmount = 100,
                 WeightUnit = ValueUnit.WeightUnitEnum.ng,
-                StepSeconds = 60
             };
 
             // 刻み時間の最後→取得成功
-            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 00, 59));
+            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 00, 59), 60);
             Assert.AreEqual(100, amount);
 
         }
@@ -77,11 +74,10 @@ namespace Simulator.Dosing.Test
                 DoseTime = new DateTime(2021, 6, 19, 10, 0, 0),
                 DoseAmount = 100,
                 WeightUnit = ValueUnit.WeightUnitEnum.ng,
-                StepSeconds = 60
             };
 
             // 次の刻み時間→0が返る
-            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 1, 0));
+            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 1, 0), 60);
             Assert.AreEqual(0, amount);
 
         }
@@ -94,17 +90,16 @@ namespace Simulator.Dosing.Test
                 DoseTime = new DateTime(2021, 6, 19, 10, 0, 0),
                 DoseAmount = 100,
                 WeightUnit = ValueUnit.WeightUnitEnum.ng,
-                StepSeconds = 1 // 1秒刻み
             };
 
             // 次の刻み時間→0が返る
-            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 1));
+            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 1), 1);
             Assert.AreEqual(0, amount);
             // 投与より1秒前→0が返る
-            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 9, 59, 59));
+            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 9, 59, 59), 1);
             Assert.AreEqual(0, amount);
             // 投与時間ジャスト→取得成功
-            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0));
+            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0), 1);
             Assert.AreEqual(100, amount);
 
         }
