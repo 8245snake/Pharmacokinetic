@@ -6,7 +6,7 @@ using Simulator;
 using Simulator.Dosing;
 using Simulator.Factories;
 using Simulator.Models;
-using  static  Simulator.Dosing.Medicine;
+using  static  Simulator.Dosing.ValueUnit;
 
 namespace SimulationConsole
 {
@@ -19,8 +19,6 @@ namespace SimulationConsole
             //TestContinuous();
             //TestBolusPropofol();
             //TestContinuousPropofol();
-
-            ValueUnit val = new ValueUnit(10, ValueUnit.WeightUnitEnum.ug);
 
             Console.ReadKey();
 

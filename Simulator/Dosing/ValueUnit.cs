@@ -5,11 +5,15 @@ namespace Simulator.Dosing
     public class ValueUnit
     {
 
-
         #region const
 
         public enum WeightUnitEnum
         {
+            /// <summary>
+            /// キログラム
+            /// </summary>
+            /// <remarks>SI単位を基準にしてg=1にしたため本当は0.001にしたかったが、Enumなので少数が定義できなかった</remarks>
+            kg = -1,
             /// <summary>
             /// グラム
             /// </summary>
@@ -72,21 +76,17 @@ namespace Simulator.Dosing
 
 
         public double Value { get; set; } = 0.0;
-        public WeightUnitEnum WeightUnit { get; set; } = WeightUnitEnum.None;
-        public VolumeUnitEnum VolumeUnit { get; set; } = VolumeUnitEnum.None;
         public TimeUnitEnum TimeUnit { get; set; } = TimeUnitEnum.None;
 
-        public ValueUnit(double value)
+
+        public virtual ValueUnit Multiply(ValueUnit other)
         {
-            Value = value;
+            return other;
         }
 
-        public ValueUnit(double value, WeightUnitEnum weightUnit, VolumeUnitEnum volumeUnit = VolumeUnitEnum.None, TimeUnitEnum timeUnit = TimeUnitEnum.None)
-        : this(value)
+        public virtual ValueUnit Divide(ValueUnit other)
         {
-            WeightUnit = weightUnit;
-            VolumeUnit = volumeUnit;
-            TimeUnit = timeUnit;
+            return other;
         }
 
 

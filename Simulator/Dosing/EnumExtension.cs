@@ -27,6 +27,8 @@ namespace Simulator.Dosing
         {
             switch (self)
             {
+                case ValueUnit.WeightUnitEnum.kg:
+                    return "kg";
                 case ValueUnit.WeightUnitEnum.g:
                     return "g";
                 case ValueUnit.WeightUnitEnum.mg:
