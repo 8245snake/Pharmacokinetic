@@ -31,7 +31,7 @@ namespace Simulator.Dosing
                 // 体積÷時間の場合は速度を出す（濃度は未確定なのでダミーとする）
                 var time = other as TimeValueUnit;
                 var conc = new ConcentrationValueUnit(1, WeightUnitEnum.None, VolumeUnitEnum.None);
-                return new FlowValueUnit(this.Value / time.Value, this.VolumeUnit, conc, time.TimeUnit);
+                return new VolumeFlowValueUnit(this.Value / time.Value, this.VolumeUnit, conc, time.TimeUnit);
             }
             else
             {

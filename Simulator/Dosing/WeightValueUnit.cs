@@ -92,7 +92,7 @@ namespace Simulator.Dosing
             {
                 // 重量÷時間の場合は速度を出す
                 var time = other as TimeValueUnit;
-                return new FlowValueUnit(this.Value / time.Value, this.WeightUnit, time.TimeUnit);
+                return new WeightFlowValueUnit(this.Value / time.Value, this.WeightUnit, time.TimeUnit);
             }
             else
             {
