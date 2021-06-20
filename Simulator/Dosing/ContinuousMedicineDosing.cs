@@ -40,11 +40,11 @@ namespace Simulator.Dosing
 
         /// <summary>
         /// 指定時刻の投与量を取得する。
-        /// 単位はμgに統一する。
+        /// 単位はngに統一する。
         /// </summary>
         /// <param name="time">この時刻で投与したとして相応しい場合に結果を返す。</param>
         /// <param name="stepSeconds">刻み時間(秒)</param>
-        /// <returns>投与量（単位はμg）</returns>
+        /// <returns>投与量（単位はng）</returns>
         public double GetDosing(DateTime time, int stepSeconds)
         {
             // 開始より前か終了より後なら無効（投与直後に濃度上昇しないため開始時刻ちょうどのときもはじく）
@@ -52,14 +52,10 @@ namespace Simulator.Dosing
             {
                 return 0;
             }
-
-            // 1秒ごとの投与量に変換
-            double seconds =  GetTimeUnitConvertFactor(TimeUnit, TimeUnitEnum.minute);
-            double weight = FlowVelocity / seconds;
-            weight *= (double) WeightUnit * GetWeightUnitConvertFactor(WeightUnit, WeightUnitEnum.ug);
-            // 濃度がmg/Lと定義されているのでmg基準に合わせる
-            weight /= GetWeightUnitConvertFactor(WeightUnitEnum.mg, WeightUnit);
-            return weight;
+            
+            var flow = new WeightFlowValueUnit(this.FlowVelocity, this.WeightUnit, this.TimeUnit);
+            // 1分ごとの量を返す
+            return flow.ToWeight(1, TimeUnitEnum.minute).ConvertUnit(WeightUnitEnum.ng).Value;
         }
 
         /// <summary>
