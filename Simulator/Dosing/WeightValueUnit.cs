@@ -8,9 +8,16 @@ namespace Simulator.Dosing
     /// </summary>
     public class WeightValueUnit : ValueUnit
     {
-
+        /// <summary>
+        /// 重量単位
+        /// </summary>
         public WeightUnitEnum WeightUnit { get; set; }
 
+        /// <summary>
+        /// 値と単位で重量データを作成します。
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <param name="weightUnit">重量単位</param>
         public WeightValueUnit(double value, WeightUnitEnum weightUnit)
         {
             Value = value;
@@ -75,13 +82,12 @@ namespace Simulator.Dosing
             return Minus(weight.Value, weight.WeightUnit);
         }
 
-
-        public override ValueUnit Multiply(ValueUnit other)
-        {
-            throw new NotImplementedException();
-        }
-
-
+        /// <summary>
+        /// 割り算
+        /// </summary>
+        /// <param name="other">割るデータ</param>
+        /// <returns>重量÷体積の場合は濃度を返す（<seealso cref="ConcentrationValueUnit"/>）。
+        /// 重量÷時間の場合は速度を返す（<seealso cref="WeightFlowValueUnit"/>）。</returns>
         public override ValueUnit Divide(ValueUnit other)
         {
             if (other is VolumeValueUnit)
@@ -101,9 +107,13 @@ namespace Simulator.Dosing
 
         }
 
-
         #endregion
 
+        /// <summary>
+        /// 重量単位を任意の単位に変換する。
+        /// </summary>
+        /// <param name="unit">重量単位</param>
+        /// <returns>変換されたデータ</returns>
         public WeightValueUnit ConvertUnit(WeightUnitEnum unit)
         {
             if (unit == WeightUnitEnum.None || unit == this.WeightUnit)

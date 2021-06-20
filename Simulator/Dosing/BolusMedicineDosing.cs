@@ -29,11 +29,20 @@ namespace Simulator.Dosing
         /// </summary>
         private bool _isAlreadyReturned = false;
 
+        /// <summary>
+        /// 空の投与データを作成します。
+        /// </summary>
         public BolusMedicineDosing()
         {
+            WeightUnit = WeightUnitEnum.None;
         }
 
-
+        /// <summary>
+        /// 時刻と量を指定してボーラス投与データを作成します。
+        /// </summary>
+        /// <param name="doseTime">投与時刻</param>
+        /// <param name="doseAmount">投与量</param>
+        /// <param name="weightUnit">投与量単位</param>
         public BolusMedicineDosing(DateTime doseTime, double doseAmount, WeightUnitEnum weightUnit)
         {
             DoseTime = doseTime;
@@ -41,6 +50,11 @@ namespace Simulator.Dosing
             WeightUnit = weightUnit;
         }
 
+        /// <summary>
+        /// 時刻と量を指定してボーラス投与データを作成します。
+        /// </summary>
+        /// <param name="doseTime">投与時刻</param>
+        /// <param name="weight">投与量</param>
         public BolusMedicineDosing(DateTime doseTime, WeightValueUnit weight)
         : this(doseTime, weight.Value, weight.WeightUnit)
         {

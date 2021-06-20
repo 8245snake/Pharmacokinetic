@@ -9,7 +9,9 @@ namespace Simulator.Dosing
     /// </summary>
     public abstract class FlowValueUnit : ValueUnit
     {
-
+        /// <summary>
+        /// 時間単位
+        /// </summary>
         public TimeUnitEnum TimeUnit { get; set; }
 
         /// <summary>

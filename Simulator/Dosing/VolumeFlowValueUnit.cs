@@ -2,18 +2,26 @@
 
 namespace Simulator.Dosing
 {
+    /// <summary>
+    /// 体積単位での流速を表現するクラス
+    /// </summary>
     public class VolumeFlowValueUnit : FlowValueUnit
     {
 
         private VolumeUnitEnum _volumeUnit = VolumeUnitEnum.None;
         private ConcentrationValueUnit _concentration;
 
-
+        /// <summary>
+        /// 体積単位
+        /// </summary>
         public VolumeUnitEnum VolumeUnit
         {
             get => _volumeUnit;
         }
 
+        /// <summary>
+        /// 濃度
+        /// </summary>
         public ConcentrationValueUnit Concentration
         {
             get => _concentration;
@@ -34,6 +42,12 @@ namespace Simulator.Dosing
             TimeUnit = timeUnit;
         }
 
+        /// <summary>
+        /// 体積、時間単位を任意の単位に変換します。
+        /// </summary>
+        /// <param name="volumeUnit">変換先の体積単位</param>
+        /// <param name="timeUnit">変換先の時間単位</param>
+        /// <returns>変換された流速データ</returns>
         public VolumeFlowValueUnit ConvertUnit(VolumeUnitEnum volumeUnit, TimeUnitEnum timeUnit)
         {
             if (this.VolumeUnit == VolumeUnitEnum.None)
@@ -45,17 +59,23 @@ namespace Simulator.Dosing
             return new VolumeFlowValueUnit(volume.Value / time.Value, volumeUnit, _concentration, timeUnit);
         }
 
-        public override string ToString()
-        {
-            return $"{this.Value}{this.VolumeUnit.Name()}/{this.TimeUnit.Name()}";
-        }
-
+        /// <summary>
+        /// 時間単位を変換します
+        /// </summary>
+        /// <param name="timeUnit">時間単位</param>
+        /// <returns>変換された流速データ</returns>
         public override FlowValueUnit ConvertTimeUnit(TimeUnitEnum timeUnit)
         {
             TimeValueUnit time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
             return new VolumeFlowValueUnit(this.Value / time.Value, this.VolumeUnit, _concentration, timeUnit);
         }
 
+        /// <summary>
+        /// 指定した時間分の流量（重量）を取得します。
+        /// </summary>
+        /// <param name="value">値</param>
+        /// <param name="timeUnit">時間単位</param>
+        /// <returns>重量。単位は濃度の重量単位と同じ。</returns>
         public override WeightValueUnit ToWeight(double value, TimeUnitEnum timeUnit)
         {
             // 単位時間あたりの体積を出す
@@ -66,9 +86,18 @@ namespace Simulator.Dosing
             return new WeightValueUnit(weight.Value * value, weight.WeightUnit);
         }
 
+        /// <summary>
+        /// 指定した時間分の流量（重量）を取得します。
+        /// </summary>
+        /// <param name="time">時間</param>
+        /// <returns>重量。単位は濃度の重量単位と同じ。</returns>
         public override WeightValueUnit ToWeight(TimeValueUnit time)
         {
             return ToWeight(time.Value, time.TimeUnit);
+        }
+        public override string ToString()
+        {
+            return $"{this.Value}{this.VolumeUnit.Name()}/{this.TimeUnit.Name()}";
         }
     }
 }

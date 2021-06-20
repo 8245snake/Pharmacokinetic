@@ -8,6 +8,9 @@ namespace Simulator.Dosing
     public static class EnumExtension
     {
 
+        /// <summary>
+        /// 単位の名前を返す
+        /// </summary>
         public static string Name(this ValueUnit.VolumeUnitEnum self)
         {
             switch (self)
@@ -23,6 +26,9 @@ namespace Simulator.Dosing
             }
         }
 
+        /// <summary>
+        /// 単位の名前を返す
+        /// </summary>
         public static string Name(this ValueUnit.WeightUnitEnum self)
         {
             switch (self)
@@ -44,6 +50,9 @@ namespace Simulator.Dosing
             }
         }
 
+        /// <summary>
+        /// 単位の名前を返す
+        /// </summary>
         public static string Name(this ValueUnit.TimeUnitEnum self)
         {
             switch (self)

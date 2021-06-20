@@ -2,11 +2,17 @@
 
 namespace Simulator.Dosing
 {
+    /// <summary>
+    /// 単位付きの値を表現するクラス
+    /// </summary>
     public class ValueUnit
     {
 
         #region const
 
+        /// <summary>
+        /// 重量単位
+        /// </summary>
         public enum WeightUnitEnum
         {
             /// <summary>
@@ -36,6 +42,9 @@ namespace Simulator.Dosing
             None = 0
         }
 
+        /// <summary>
+        /// 体積単位
+        /// </summary>
         public enum VolumeUnitEnum
         {
             /// <summary>
@@ -52,6 +61,9 @@ namespace Simulator.Dosing
             None = 0
         }
 
+        /// <summary>
+        /// 時間単位
+        /// </summary>
         public enum TimeUnitEnum
         {
             /// <summary>
@@ -75,24 +87,47 @@ namespace Simulator.Dosing
         #endregion
 
         #region Operator
+
+        /// <summary>
+        /// 値
+        /// </summary>
         public double Value { get; set; } = 0.0;
 
-
+        /// <summary>
+        /// 足し算
+        /// </summary>
+        /// <param name="other">足すデータ</param>
+        /// <returns>加算結果</returns>
         public virtual ValueUnit Plus(ValueUnit other)
         {
             return other;
         }
 
+        /// <summary>
+        /// 引き算
+        /// </summary>
+        /// <param name="other">引くデータ</param>
+        /// <returns>減算結果</returns>
         public virtual ValueUnit Minus(ValueUnit other)
         {
             return other;
         }
 
+        /// <summary>
+        /// 掛け算
+        /// </summary>
+        /// <param name="other">掛けるデータ</param>
+        /// <returns>積算結果</returns>
         public virtual ValueUnit Multiply(ValueUnit other)
         {
             return other;
         }
 
+        /// <summary>
+        /// 割り算
+        /// </summary>
+        /// <param name="other">割るデータ</param>
+        /// <returns>除算結果</returns>
         public virtual ValueUnit Divide(ValueUnit other)
         {
             return other;
@@ -120,6 +155,11 @@ namespace Simulator.Dosing
 
         #endregion
 
+        /// <summary>
+        /// ディープコピー
+        /// </summary>
+        /// <param name="value">オリジナル</param>
+        /// <returns>クローン</returns>
         public virtual ValueUnit DeepCopy(ValueUnit value)
         {
             return (ValueUnit)this.MemberwiseClone();
