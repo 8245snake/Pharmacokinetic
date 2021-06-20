@@ -248,6 +248,23 @@ namespace Simulator.Models
         }
 
         /// <summary>
+        /// 刻み時間あたりの速度定数に変換したモデルを取得します。
+        /// </summary>
+        /// <param name="h">刻み時間</param>
+        /// <returns>変換後のモデル</returns>
+        public PharmacokineticModel DivideByStep(double h)
+        {
+            PharmacokineticModel model = this.DeepCopy();
+            model.K10 /= h;
+            model.K12 /= h;
+            model.K13 /= h;
+            model.K21 /= h;
+            model.K31 /= h;
+            model.Ke0 /= h;
+            return model;
+        }
+
+        /// <summary>
         /// クローンを作成します。
         /// </summary>
         /// <returns>クローン</returns>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Simulator.Dosing;
 using Simulator.Models;
+using Simulator.Values;
 using static Simulator.Values.ValueUnit;
 
 
@@ -64,37 +65,35 @@ namespace Simulator
         /// 計算間隔より精度を高めることはできないので必ず<see cref="StepSeconds"/>の倍数を指定すること。</param>
         public void BolusDose(DateTime time, double amount, WeightUnitEnum weightUnit, int offsetSecond = 0)
         {
-            IMedicineDosing dosing = null;
+            IMedicineDosing dosing;
 
             if ((offsetSecond > 0) && (offsetSecond % StepSeconds == 0))
-            {               
-                // 拡散時間ありのボーラスは短時間の持続を入れる
-                var flow = amount / offsetSecond;
-
-                dosing = new ContinuousMedicineDosing()
-                {
-                    DoseStartTime = time,
-                    DoseEndTime = time.AddSeconds(offsetSecond),
-                    FlowVelocity = flow,
-                    WeightUnit = weightUnit,
-                    TimeUnit = TimeUnitEnum.second,
-                };
+            {
+                // 拡散時間ありのボーラスはoffsetSecond秒の持続を入れる
+                WeightFlowValueUnit flow = new WeightFlowValueUnit(amount / offsetSecond, weightUnit, TimeUnitEnum.second);
+                DateTime end = time.AddSeconds(offsetSecond);
+                dosing = new ContinuousMedicineDosing(time, end, flow);
             }
             else
             {
-                dosing = new BolusMedicineDosing()
-                {
-                    DoseTime = time,
-                    DoseAmount = amount,
-                    WeightUnit = weightUnit,
-                };
+                // 普通のボーラス投与
+                dosing = new BolusMedicineDosing(time, amount, weightUnit);
             }
 
-            if (dosing != null)
-            {
-                _MedicineDosingList.Add(dosing);
-            }
+            _MedicineDosingList.Add(dosing);
 
+        }
+
+        /// <summary>
+        /// ボーラス投与
+        /// </summary>
+        /// <param name="time">投与時刻</param>
+        /// <param name="weight">投与量</param>
+        /// <param name="offsetSecond">ピークに達するまでの遅延時間（秒）。拡散時間を表現するため。
+        /// 計算間隔より精度を高めることはできないので必ず<see cref="StepSeconds"/>の倍数を指定すること。</param>
+        public void BolusDose(DateTime time, WeightValueUnit weight, int offsetSecond = 0)
+        {
+            BolusDose(time, weight.Value, weight.WeightUnit, offsetSecond);
         }
 
         /// <summary>
@@ -132,6 +131,7 @@ namespace Simulator
         /// 血中濃度など予測して逐次返す
         /// </summary>
         /// <param name="predictSource">モデル</param>
+        /// <param name="weightUnit">取得する濃度の重量単位</param>
         /// <para>重量の単位変換する場合は指定する（デフォルトはμg）</para>
         /// <returns>予測結果</returns>
         public IEnumerable<SimulatorResult> Predict(PharmacokineticModel predictSource, WeightUnitEnum weightUnit = WeightUnitEnum.ug)
@@ -142,17 +142,11 @@ namespace Simulator
                 item.Initialize();
             }
 
-            // 刻み時間（）
+            // 刻み時間（min^-1）
             double h = 60 / (double) StepSeconds;
 
             // 単位時間あたりの係数に変換する
-            PharmacokineticModel model = predictSource.DeepCopy();
-            model.K10 /= h;
-            model.K12 /= h;
-            model.K13 /= h;
-            model.K21 /= h;
-            model.K31 /= h;
-            model.Ke0 /= h;
+            PharmacokineticModel model = predictSource.DivideByStep(h);
 
             //濃度(mg/L)
             double c1 = 0.0;
