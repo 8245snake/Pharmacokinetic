@@ -1,7 +1,6 @@
-﻿using System;
-using static Simulator.Dosing.ValueUnit;
+﻿using static Simulator.Values.ValueUnit;
 
-namespace Simulator.Dosing
+namespace Simulator.Values
 {
     /// <summary>
     /// 流速を表す抽象クラス。

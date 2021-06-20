@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using static Simulator.Dosing.ValueUnit;
+using static Simulator.Values.ValueUnit;
 
-namespace Simulator.Dosing
+namespace Simulator.Values
 {
     /// <summary>
     /// 複数の単位を持つ値を表現するクラス。（未実装）

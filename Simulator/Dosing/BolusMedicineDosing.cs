@@ -1,5 +1,6 @@
 ﻿using System;
-using static Simulator.Dosing.ValueUnit;
+using Simulator.Values;
+using static Simulator.Values.ValueUnit;
 
 namespace Simulator.Dosing
 {

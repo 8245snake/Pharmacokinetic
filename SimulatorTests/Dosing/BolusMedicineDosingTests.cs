@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Simulator.Dosing;
 using System;
+using Simulator.Values;
 
 namespace Simulator.Dosing.Test
 {

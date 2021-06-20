@@ -8,6 +8,7 @@ using Simulator.Dosing;
 using Simulator.Factories;
 using static Simulator.Dosing.Medicine;
 using Simulator.Models;
+using Simulator.Values;
 
 namespace SimulationApp
 {

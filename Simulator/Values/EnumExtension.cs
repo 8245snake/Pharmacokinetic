@@ -1,9 +1,6 @@
-﻿
-using System;
-using System.Runtime.CompilerServices;
-using Simulator.Dosing;
+﻿using System;
 
-namespace Simulator.Dosing
+namespace Simulator.Values
 {
     public static class EnumExtension
     {

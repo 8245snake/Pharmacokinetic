@@ -6,7 +6,8 @@ using Simulator;
 using Simulator.Dosing;
 using Simulator.Factories;
 using Simulator.Models;
-using  static  Simulator.Dosing.ValueUnit;
+using Simulator.Values;
+using  static  Simulator.Values.ValueUnit;
 
 namespace SimulationConsole
 {

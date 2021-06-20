@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Simulator.Dosing
+namespace Simulator.Values
 {
     /// <summary>
     /// 重量単位での流速を表現するクラス

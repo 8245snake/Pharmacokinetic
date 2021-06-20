@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Simulator.Dosing
+﻿namespace Simulator.Values
 {
     /// <summary>
     /// 単位付きの値を表現するクラス

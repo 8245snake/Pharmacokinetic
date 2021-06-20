@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static Simulator.Dosing.ValueUnit;
+using Simulator.Values;
+using static Simulator.Values.ValueUnit;
 
 namespace Simulator.Dosing
 {

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.CodeDom;
 
-namespace Simulator.Dosing
+namespace Simulator.Values
 {
 
     /// <summary>

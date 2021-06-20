@@ -1,4 +1,4 @@
-﻿namespace Simulator.Dosing
+﻿namespace Simulator.Values
 {
     
     /// <summary>
