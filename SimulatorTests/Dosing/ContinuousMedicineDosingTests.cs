@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Simulator.Dosing;
-using System;
 using Simulator.Values;
 
-
-namespace Simulator.Dosing.Test
+namespace SimulatorTests.Dosing
 {
     [TestClass()]
     public class ContinuousMedicineDosingTests

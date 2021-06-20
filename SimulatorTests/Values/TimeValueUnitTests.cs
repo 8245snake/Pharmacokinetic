@@ -1,13 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Simulator.Dosing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Simulator.Values;
 
-namespace Simulator.Dosing.Test
+namespace SimulatorTests.Values
 {
     [TestClass()]
     public class TimeValueUnitTests

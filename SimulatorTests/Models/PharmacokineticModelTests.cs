@@ -1,12 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Reflection;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Simulator.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 
-namespace Simulator.Models.Test
+namespace SimulatorTests.Models
 {
     [TestClass()]
     public class PharmacokineticModelTests

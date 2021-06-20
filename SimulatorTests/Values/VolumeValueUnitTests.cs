@@ -1,9 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Simulator.Dosing;
 using Simulator.Values;
 using static Simulator.Values.ValueUnit;
 
-namespace Simulator.Dosing.Test
+namespace SimulatorTests.Values
 {
     [TestClass()]
     public class VolumeValueUnitTests

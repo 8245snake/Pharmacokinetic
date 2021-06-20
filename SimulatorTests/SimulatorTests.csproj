@@ -43,13 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dosing\BolusMedicineDosingTests.cs" />
-    <Compile Include="Dosing\ConcentrationValueUnitTests.cs" />
+    <Compile Include="Values\ConcentrationValueUnitTests.cs" />
     <Compile Include="Dosing\ContinuousMedicineDosingTests.cs" />
-    <Compile Include="Dosing\TimeValueUnitTests.cs" />
-    <Compile Include="Dosing\VolumeFlowValueUnitTests.cs" />
-    <Compile Include="Dosing\VolumeValueUnitTests.cs" />
-    <Compile Include="Dosing\WeightFlowValueUnitTests.cs" />
-    <Compile Include="Dosing\WeightValueUnitTests.cs" />
+    <Compile Include="Values\TimeValueUnitTests.cs" />
+    <Compile Include="Values\VolumeFlowValueUnitTests.cs" />
+    <Compile Include="Values\VolumeValueUnitTests.cs" />
+    <Compile Include="Values\WeightFlowValueUnitTests.cs" />
+    <Compile Include="Values\WeightValueUnitTests.cs" />
     <Compile Include="Models\PharmacokineticModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,6 +67,7 @@
       <Name>Simulator</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
