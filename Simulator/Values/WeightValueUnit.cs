@@ -101,7 +101,7 @@ namespace Simulator.Values
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("濃度と速度計算以外の除算は未実装です。");
             }
 
         }

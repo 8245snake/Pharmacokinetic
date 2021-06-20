@@ -75,15 +75,26 @@ namespace Simulator.Values
         /// </summary>
         /// <param name="value">値</param>
         /// <param name="timeUnit">時間単位</param>
-        /// <returns>重量。単位は濃度の重量単位と同じ。</returns>
+        /// <returns>重量<seealso cref="WeightValueUnit"/>。単位は濃度の重量単位と同じ。</returns>
         public override WeightValueUnit ToWeight(double value, TimeUnitEnum timeUnit)
         {
             // 単位時間あたりの体積を出す
-            VolumeFlowValueUnit conv = this.ConvertTimeUnit(timeUnit) as VolumeFlowValueUnit;
+            var conv = this.ConvertTimeUnit(timeUnit) as VolumeFlowValueUnit;
             // 単位時間あたりの体積と濃度から重量を出す
             var weight = _concentration.ToWeight(conv.Value, conv.VolumeUnit);
             // 投与時間を掛けて返す
             return new WeightValueUnit(weight.Value * value, weight.WeightUnit);
+        }
+
+        /// <summary>
+        /// 重量単位に換算した流速を取得します。
+        /// </summary>
+        /// <returns>流速の<seealso cref="WeightFlowValueUnit"/>データ</returns>
+        public WeightFlowValueUnit ToWeightFlow()
+        {
+            // 単位時間あたりの重量を出して流速に変換
+            var weight = this.ToWeight(1, this.TimeUnit);
+            return new WeightFlowValueUnit(weight.Value, weight.WeightUnit, this.TimeUnit);
         }
 
         /// <summary>

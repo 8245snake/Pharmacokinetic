@@ -37,7 +37,7 @@ namespace Simulator.Values
             }
             else
             {
-                throw new NotImplementedException();
+                throw new NotImplementedException("濃度計算以外の除算は未実装です。");
             }
 
         }
