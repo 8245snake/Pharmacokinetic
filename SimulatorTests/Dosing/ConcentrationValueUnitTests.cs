@@ -64,6 +64,7 @@ namespace Simulator.Dosing.Test
             ConcentrationValueUnit conc = new ConcentrationValueUnit(0.005, WeightUnitEnum.mg, VolumeUnitEnum.mL);
             VolumeValueUnit vol = new VolumeValueUnit(1000, VolumeUnitEnum.mL);
             Assert.AreEqual("5mg", conc.ToWeight(vol).ToString());
+            Assert.AreEqual("5mg", conc.ToWeight(1000, VolumeUnitEnum.mL).ToString());
         }
 
         [TestMethod()]

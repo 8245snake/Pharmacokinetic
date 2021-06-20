@@ -84,13 +84,21 @@ namespace Simulator.Dosing
 
         public override ValueUnit Divide(ValueUnit other)
         {
-            VolumeValueUnit volume = other as VolumeValueUnit;
-            if (volume == null)
+            if (other is VolumeValueUnit)
+            {
+                // 重量÷体積の場合は濃度を出す
+                return new ConcentrationValueUnit(this, other as VolumeValueUnit);
+            }else if (other is TimeValueUnit)
+            {
+                // 重量÷時間の場合は速度を出す
+                var time = other as TimeValueUnit;
+                return new FlowValueUnit(this.Value / time.Value, this.WeightUnit, time.TimeUnit);
+            }
+            else
             {
                 throw new NotImplementedException();
             }
-            // 重量÷体積の場合は濃度を出す
-            return new ConcentrationValueUnit(this, volume);
+
         }
 
 
@@ -103,7 +111,9 @@ namespace Simulator.Dosing
                 return new WeightValueUnit(this.Value, unit);
             }
 
-            double factor = 0.0;
+            // 係数
+            double factor;
+
             if (unit == WeightUnitEnum.kg)
             {
                 // kgだけ特殊計算（変換先がkgの場合）

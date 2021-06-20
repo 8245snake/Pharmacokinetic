@@ -1,4 +1,5 @@
-﻿using System.CodeDom;
+﻿using System;
+using System.CodeDom;
 
 namespace Simulator.Dosing
 {
@@ -15,6 +16,28 @@ namespace Simulator.Dosing
         {
             Value = value;
             VolumeUnit = volumeUnit;
+        }
+
+        public override ValueUnit Multiply(ValueUnit other)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override ValueUnit Divide(ValueUnit other)
+        {
+            if (other is TimeValueUnit)
+            {
+                // 体積÷時間の場合は速度を出す（濃度は未確定なのでダミーとする）
+                var time = other as TimeValueUnit;
+                var conc = new ConcentrationValueUnit(1, WeightUnitEnum.None, VolumeUnitEnum.None);
+                return new FlowValueUnit(this.Value / time.Value, this.VolumeUnit, conc, time.TimeUnit);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+
         }
 
         public VolumeValueUnit ConvertUnit(VolumeUnitEnum unit)

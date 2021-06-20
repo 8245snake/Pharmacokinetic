@@ -13,7 +13,7 @@ namespace Simulator.Dosing.Test
         {
             BolusMedicineDosing dosing = new BolusMedicineDosing()
             {
-                DoseTime = new DateTime(2021,6,19,10, 0, 0),
+                DoseTime = new DateTime(2021, 6, 19, 10, 0, 0),
                 DoseAmount = 100,
                 WeightUnit = ValueUnit.WeightUnitEnum.ng,
             };
@@ -98,6 +98,28 @@ namespace Simulator.Dosing.Test
             amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0), 1);
             Assert.AreEqual(100, amount);
 
+        }
+
+        [TestMethod()]
+        public void InitializeTest()
+        {
+            BolusMedicineDosing dosing = new BolusMedicineDosing()
+            {
+                DoseTime = new DateTime(2021, 6, 19, 10, 0, 0),
+                DoseAmount = 100,
+                WeightUnit = ValueUnit.WeightUnitEnum.ng,
+            };
+
+            // 投与時間ジャスト→取得成功
+            double amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0), 60);
+            Assert.AreEqual(100, amount);
+
+            // フラグをリセット
+            dosing.Initialize();
+
+            // もう一度読んだら→取得成功
+            amount = dosing.GetDosing(new DateTime(2021, 6, 19, 10, 0, 0), 60);
+            Assert.AreEqual(100, amount);
         }
     }
 }

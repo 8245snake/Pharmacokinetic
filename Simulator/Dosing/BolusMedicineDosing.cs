@@ -21,7 +21,7 @@ namespace Simulator.Dosing
         /// <summary>
         /// 投与量単位（重量）
         /// </summary>
-        public ValueUnit.WeightUnitEnum WeightUnit { get; set; }
+        public WeightUnitEnum WeightUnit { get; set; }
 
 
         /// <summary>

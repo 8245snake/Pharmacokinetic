@@ -120,7 +120,10 @@ namespace Simulator.Dosing
 
         #endregion
 
-
+        public virtual ValueUnit DeepCopy(ValueUnit value)
+        {
+            return (ValueUnit)this.MemberwiseClone();
+        }
 
 
         #region statucMethod

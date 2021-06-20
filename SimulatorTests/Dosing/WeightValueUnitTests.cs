@@ -204,5 +204,13 @@ namespace Simulator.Dosing.Test
             VolumeValueUnit b = new VolumeValueUnit(10, VolumeUnitEnum.mL);
             Assert.AreEqual("5mg/ml", (a / b).ToString());
         }
+
+        [TestMethod()]
+        public void DivideTest2()
+        {
+            WeightValueUnit a = new WeightValueUnit(50, WeightUnitEnum.mg);
+            TimeValueUnit b = new TimeValueUnit(5, TimeUnitEnum.hour);
+            Assert.AreEqual("10mg/h", (a / b).ToString());
+        }
     }
 }

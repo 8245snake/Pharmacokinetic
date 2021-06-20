@@ -1,4 +1,5 @@
-﻿using static Simulator.Dosing.ValueUnit;
+﻿using System;
+using static Simulator.Dosing.ValueUnit;
 
 namespace Simulator.Dosing
 {
@@ -58,6 +59,10 @@ namespace Simulator.Dosing
 
         public FlowValueUnit ConvertUnit(WeightUnitEnum weightUnit, TimeUnitEnum timeUnit)
         {
+            if (this.WeightUnit == WeightUnitEnum.None)
+            {
+                throw new NotImplementedException("重量が未設定です");
+            }
             WeightValueUnit weight = new WeightValueUnit(this.Value, this.WeightUnit).ConvertUnit(weightUnit);
             TimeValueUnit time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
             return new FlowValueUnit(weight.Value / time.Value, weightUnit, timeUnit);
@@ -65,8 +70,12 @@ namespace Simulator.Dosing
 
         public FlowValueUnit ConvertUnit(VolumeUnitEnum volumeUnit, TimeUnitEnum timeUnit)
         {
-            VolumeValueUnit volume = new VolumeValueUnit(this.Value, this.VolumeUnit).ConvertUnit(volumeUnit);
-            TimeValueUnit time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
+            if (this.VolumeUnit == VolumeUnitEnum.None)
+            {
+                throw new NotImplementedException("体積が未設定です");
+            }
+            var volume = new VolumeValueUnit(this.Value, this.VolumeUnit).ConvertUnit(volumeUnit);
+            var time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
             return new FlowValueUnit(volume.Value / time.Value, volumeUnit, _concentration, timeUnit);
         }
 
