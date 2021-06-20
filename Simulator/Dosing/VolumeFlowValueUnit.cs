@@ -52,17 +52,23 @@ namespace Simulator.Dosing
 
         public override FlowValueUnit ConvertTimeUnit(TimeUnitEnum timeUnit)
         {
-            throw new NotImplementedException();
+            TimeValueUnit time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
+            return new VolumeFlowValueUnit(this.Value / time.Value, this.VolumeUnit, _concentration, timeUnit);
         }
 
         public override WeightValueUnit ToWeight(double value, TimeUnitEnum timeUnit)
         {
-            throw new NotImplementedException();
+            // 単位時間あたりの体積を出す
+            VolumeFlowValueUnit conv = this.ConvertTimeUnit(timeUnit) as VolumeFlowValueUnit;
+            // 単位時間あたりの体積と濃度から重量を出す
+            var weight = _concentration.ToWeight(conv.Value, conv.VolumeUnit);
+            // 投与時間を掛けて返す
+            return new WeightValueUnit(weight.Value * value, weight.WeightUnit);
         }
 
         public override WeightValueUnit ToWeight(TimeValueUnit time)
         {
-            throw new NotImplementedException();
+            return ToWeight(time.Value, time.TimeUnit);
         }
     }
 }

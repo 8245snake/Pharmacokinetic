@@ -45,9 +45,10 @@
     <Compile Include="Dosing\BolusMedicineDosingTests.cs" />
     <Compile Include="Dosing\ConcentrationValueUnitTests.cs" />
     <Compile Include="Dosing\ContinuousMedicineDosingTests.cs" />
-    <Compile Include="Dosing\FlowValueUnitTests.cs" />
     <Compile Include="Dosing\TimeValueUnitTests.cs" />
+    <Compile Include="Dosing\VolumeFlowValueUnitTests.cs" />
     <Compile Include="Dosing\VolumeValueUnitTests.cs" />
+    <Compile Include="Dosing\WeightFlowValueUnitTests.cs" />
     <Compile Include="Dosing\WeightValueUnitTests.cs" />
     <Compile Include="Models\PharmacokineticModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

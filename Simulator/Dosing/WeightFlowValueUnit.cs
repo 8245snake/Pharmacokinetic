@@ -44,17 +44,20 @@ namespace Simulator.Dosing
 
         public override FlowValueUnit ConvertTimeUnit(TimeUnitEnum timeUnit)
         {
-            throw new NotImplementedException();
+            TimeValueUnit time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
+            return new WeightFlowValueUnit(this.Value / time.Value, this.WeightUnit, timeUnit);
         }
 
         public override WeightValueUnit ToWeight(double value, TimeUnitEnum timeUnit)
         {
-            throw new NotImplementedException();
+            // 単位時間あたりの量に変換する
+            WeightFlowValueUnit conv = this.ConvertTimeUnit(timeUnit) as WeightFlowValueUnit;
+            return new WeightValueUnit(conv.Value * value, conv.WeightUnit);
         }
 
         public override WeightValueUnit ToWeight(TimeValueUnit time)
         {
-            throw new NotImplementedException();
+            return ToWeight(time.Value, time.TimeUnit);
         }
     }
 }
