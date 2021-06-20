@@ -15,25 +15,70 @@ namespace Simulator.Factories
     /// </summary>
     public class PharmacokineticModelFactory
     {
-        public double Weight { get; set; }
-        public double Stat { get; set; }
-        public double Age { get; set; }
-        public bool IsMale { get; set; }
+        private double _weight;
+        private bool _weightInitialized = false;
+        private double _stat;
+        private bool _statInitialized = false;
+        private double _age;
+        private bool _ageInitialized = false;
+        private bool _isMale;
+        private bool _isMaleInitialized = false;
 
-        // パラメータを保持
+        /// <summary>
+        /// 体重
+        /// </summary>
+        public double Weight
+        {
+            get => _weight;
+            set { _weight = value; _weightInitialized = true; }
+        }
+
+        /// <summary>
+        /// 身長
+        /// </summary>
+        public double Stat
+        {
+            get => _stat;
+            set { _stat = value; _statInitialized = true; }
+        }
+
+        /// <summary>
+        /// 年齢
+        /// </summary>
+        public double Age
+        {
+            get => _age;
+            set { _age = value; _ageInitialized = true; }
+        }
+
+        /// <summary>
+        /// 性別（True：男性、False：女性）
+        /// </summary>
+        public bool IsMale
+        {
+            get => _isMale;
+            set { _isMale = value; _isMaleInitialized = true; }
+        }
+
+
+        // パラメータを保持する辞書
         private Dictionary<string, double> _CustomParams = new Dictionary<string, double>();
-
+        // カスタムパラメータを読み終わったかのフラグ
         private bool _IsCustomParamsComliled = false;
-
-        // Compute関数を呼ぶためだけのオブジェクト
-        private DataTable _ParamTable = new DataTable();
-
+        // パラメータ解析用の正規表現
         private Regex _ParamRegex = new Regex("<(.*?)>", RegexOptions.Compiled);
 
         public PharmacokineticModelFactory()
         {
         }
 
+        /// <summary>
+        /// 体重、身長、年齢、性別を指定してファクトリを生成します。
+        /// </summary>
+        /// <param name="weight">体重</param>
+        /// <param name="stat">身長</param>
+        /// <param name="age">年齢</param>
+        /// <param name="isMale">性別（True：男性、False：女性）</param>
         public PharmacokineticModelFactory(double weight, double stat, double age, bool isMale)
         {
             Weight = weight;
@@ -41,8 +86,8 @@ namespace Simulator.Factories
             Age = age;
             IsMale = isMale;
 
+            // パラメータをパースする
             CompileCustomParams();
-
         }
 
         public PharmacokineticModelFactory(IndividualModel individual)
@@ -73,6 +118,8 @@ namespace Simulator.Factories
 
         private double Evaluate(string expression)
         {
+            var exceptions = new List<string>();
+
             // 基本的な情報で置換する
             string replaced = ReplaceProperty(expression);
 
@@ -85,14 +132,24 @@ namespace Simulator.Factories
                     {
                         replaced = replaced.Replace(item.Value, val.ToString());
                     }
+                    else
+                    {
+                        exceptions.Add(item.Value);
+                    }
                 }
+            }
+
+            if (exceptions.Count > 0)
+            {
+                // 解析不能なら例外を出す
+                throw new ParseErrorException(exceptions);
             }
 
             Type t = Type.GetTypeFromProgID("MSScriptControl.ScriptControl");
             object obj = Activator.CreateInstance(t);
-            t.InvokeMember("Language", BindingFlags.SetProperty, null, obj, new object[] {"vbscript"});
+            t.InvokeMember("Language", BindingFlags.SetProperty, null, obj, new object[] { "vbscript" });
             //Eval関数で計算を実行して結果を取得
-            double result = (double) t.InvokeMember("Eval", BindingFlags.InvokeMethod, null, obj, new object[] { replaced });
+            double result = (double)t.InvokeMember("Eval", BindingFlags.InvokeMethod, null, obj, new object[] { replaced });
             return result;
         }
 
@@ -105,9 +162,20 @@ namespace Simulator.Factories
         {
             // 基本的な情報で置換する
             string replaced = expression;
-            replaced = replaced.Replace("<体重>", Weight.ToString());
-            replaced = replaced.Replace("<年齢>", Age.ToString());
-            replaced = replaced.Replace("<身長>", Stat.ToString());
+
+            if (_weightInitialized)
+            {
+                replaced = replaced.Replace("<体重>", Weight.ToString());
+            }
+            if (_statInitialized)
+            {
+                replaced = replaced.Replace("<身長>", Stat.ToString());
+            }
+            if (_ageInitialized)
+            {
+                replaced = replaced.Replace("<年齢>", Age.ToString());
+
+            }
             return replaced;
         }
 
@@ -121,7 +189,7 @@ namespace Simulator.Factories
         {
             // 先に性別分岐パラメータを探す
             string suffix = IsMale ? "M" : "F";
-            if (_CustomParams.ContainsKey($"{key}_{suffix}"))
+            if (_CustomParams.ContainsKey($"{key}_{suffix}") && _isMaleInitialized)
             {
                 value = _CustomParams[$"{key}_{suffix}"];
                 return true;
@@ -156,7 +224,7 @@ namespace Simulator.Factories
 
                     if (_ParamRegex.IsMatch(replaced))
                     {
-                        
+
                         foreach (Match item in _ParamRegex.Matches(replaced))
                         {
                             if (TryGetParam(item.Groups[1].Value, out var val))
