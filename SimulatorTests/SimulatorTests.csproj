@@ -45,6 +45,7 @@
     <Compile Include="Dosing\BolusMedicineDosingTests.cs" />
     <Compile Include="Values\ConcentrationValueUnitTests.cs" />
     <Compile Include="Dosing\ContinuousMedicineDosingTests.cs" />
+    <Compile Include="Values\GammaFlowValueUnitTests.cs" />
     <Compile Include="Values\TimeValueUnitTests.cs" />
     <Compile Include="Values\VolumeFlowValueUnitTests.cs" />
     <Compile Include="Values\VolumeValueUnitTests.cs" />

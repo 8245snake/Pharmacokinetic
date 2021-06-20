@@ -119,12 +119,14 @@ namespace Simulator
         }
 
         /// <summary>
-        /// 投与データ追加
+        /// 持続投与
         /// </summary>
-        /// <param name="dosing">投与データ</param>
-        public void AddDose(IMedicineDosing dosing)
+        /// <param name="start">開始時刻</param>
+        /// <param name="end">終了時刻</param>
+        /// <param name="flow">流速</param>
+        public void ContinuousDose(DateTime start, DateTime end, WeightFlowValueUnit flow)
         {
-            _MedicineDosingList.Add(dosing);
+            ContinuousDose(start, end, flow.Value, flow.WeightUnit, flow.TimeUnit);
         }
 
         /// <summary>

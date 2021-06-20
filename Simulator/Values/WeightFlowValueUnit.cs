@@ -7,16 +7,15 @@ namespace Simulator.Values
     /// </summary>
     public class WeightFlowValueUnit : FlowValueUnit
     {
-
-        private WeightUnitEnum _weightUnit;
-
         /// <summary>
         /// 重量単位
         /// </summary>
-        public WeightUnitEnum WeightUnit
+        public WeightUnitEnum WeightUnit { get; set; }
+
+        public WeightFlowValueUnit()
         {
-            get => _weightUnit;
         }
+
 
         /// <summary>
         /// 重量/時間で流速データを作成します
@@ -27,7 +26,7 @@ namespace Simulator.Values
         public WeightFlowValueUnit(double flow, WeightUnitEnum weightUnit, TimeUnitEnum timeUnit)
         {
             Value = flow;
-            _weightUnit = weightUnit;
+            WeightUnit = weightUnit;
             TimeUnit = timeUnit;
         }
 
