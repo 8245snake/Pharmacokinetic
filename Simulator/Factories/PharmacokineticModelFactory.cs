@@ -11,7 +11,7 @@ namespace Simulator.Factories
     /// <summary>
     /// 薬物動態モデルのファクトリクラス。
     /// </summary>
-    public class PharmacokineticModelFactory
+    public class PharmacokineticModelFactory : IPharmacokineticFactory
     {
         private double _weight;
         private bool _weightInitialized = false;
@@ -66,6 +66,9 @@ namespace Simulator.Factories
         // パラメータ解析用の正規表現
         private Regex _ParamRegex = new Regex("<(.*?)>", RegexOptions.Compiled);
 
+        /// <summary>
+        /// パラメータを指定せずにファクトリを生成します。
+        /// </summary>
         public PharmacokineticModelFactory()
         {
         }
@@ -88,22 +91,44 @@ namespace Simulator.Factories
             CompileCustomParams();
         }
 
+        /// <summary>
+        /// 個人データを使用してファクトリを生成します。
+        /// </summary>
+        /// <param name="individual">個人データ</param>
         public PharmacokineticModelFactory(IndividualModel individual)
         : this(individual.Weight, individual.Stat, individual.Age, individual.IsMale)
         {
         }
 
         /// <summary>
+        /// 個人パラメータをセットします。
+        /// </summary>
+        /// <param name="individual">個人データ</param>
+        public void SetIndivisual(IndividualModel individual)
+        {
+            Weight = individual.Weight;
+            Stat = individual.Stat;
+            Age = individual.Age;
+            IsMale = individual.IsMale;
+
+            // パラメータを初期化
+            _IsCustomParamsComliled = false;
+            _CustomParams = new Dictionary<string, double>();
+            // パラメータをパースする
+            CompileCustomParams();
+        }
+
+        /// <summary>
         /// 薬物動態モデルを作成します。
         /// </summary>
-        /// <param name="modelNumber">モデル番号。Model.iniのmodel_Xの番号。</param>
+        /// <param name="modelName">モデル名。Model.iniのmodel_XXXキーのXXXの部分。</param>
         /// <returns>薬物動態モデル</returns>
         /// <exception cref="ParseErrorException">式のパースに失敗した場合</exception>
-        public PharmacokineticModel Create(int modelNumber)
+        public PharmacokineticModel Create(string modelName)
         {
             try
             {
-                var section = Configurations.Config.Sections[$"model_{modelNumber}"];
+                var section = Configurations.Config.Sections[$"model_{modelName}"];
                 string name = section.Keys["name"].Value;
                 double k10 = Evaluate(section.Keys["k10"].Value);
                 double k12 = Evaluate(section.Keys["k12"].Value);

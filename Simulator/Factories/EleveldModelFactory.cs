@@ -8,7 +8,7 @@ namespace Simulator.Factories
     /// <summary>
     /// Eleveldモデル専用のファクトリークラス
     /// </summary>
-    public class EleveldModelFactory
+    public class EleveldModelFactory : PharmacokineticModelFactory, IPharmacokineticFactory
     {
 
         // 参照用データ（文献では70kg, 170cm, 35歳の男性をrefとしている）
@@ -47,11 +47,7 @@ namespace Simulator.Factories
         private const double ETA_7 = 0.463;
 
         public double PMA { get; set; }
-        public double AGE { get; set; }
-        public double WGT { get; set; }
-        public double STAT { get; set; }
-        public double BMI => WGT / STAT / STAT;
-        public bool IsMale { get; set; }
+        public double BMI => Weight / Stat / Stat;
         public bool Opiates { get; set; }
 
         /// <summary>
@@ -65,24 +61,42 @@ namespace Simulator.Factories
         /// <param name="hasOpiates">オピオイド有無（True:あり, False:なし）</param>
         public EleveldModelFactory(double weight, double stat, double age, double pma, bool isMale, bool hasOpiates)
         {
-            WGT = weight;
-            STAT = stat;
-            AGE = age;
+            Weight = weight;
+            Stat = stat;
+            Age = age;
             PMA = pma;
             IsMale = isMale;
             Opiates = hasOpiates;
         }
 
+        /// <summary>
+        /// 個人データを使用してファクトリを生成します。
+        /// </summary>
+        /// <param name="individual">個人データ</param>
         public EleveldModelFactory(IndividualModel individual)
             : this(individual.Weight, individual.Stat, individual.Age, individual.PMA, individual.IsMale,
                 individual.Opiates)
         {
         }
 
+        /// <summary>
+        /// 個人パラメータをセットします。
+        /// </summary>
+        /// <param name="individual">個人データ</param>
+        public new void SetIndivisual(IndividualModel individual)
+        {
+            Weight = individual.Weight;
+            Stat = individual.Stat;
+            Age = individual.Age;
+            PMA = individual.PMA;
+            IsMale = individual.IsMale;
+            Opiates = individual.Opiates;
+        }
+
 
         private double AgingFunction(double x)
         {
-            return Math.Exp(x * (AGE - AGE_ref));
+            return Math.Exp(x * (Age - AGE_ref));
         }
 
         private double SigmoidFunction(double x, double e50, double lambda)
@@ -107,7 +121,7 @@ namespace Simulator.Factories
 
         private double Q3MaturationFunction()
         {
-            return SigmoidFunction((AGE * 54 + 40) / 54,THETA_14, 1);
+            return SigmoidFunction((Age * 54 + 40) / 54,THETA_14, 1);
         }
 
         private double Q3MaturationFunctionRef()
@@ -117,7 +131,7 @@ namespace Simulator.Factories
 
         private double OpiatesFunction(double x)
         {
-            return (Opiates) ? Math.Exp(x * AGE) : 1;
+            return (Opiates) ? Math.Exp(x * Age) : 1;
         }
 
         private double A1Sallami(double age, double weight, double bmi)
@@ -138,13 +152,13 @@ namespace Simulator.Factories
 
 
 
-        private double V1Arterial => THETA_1 * (CentralFunction(WGT) / CentralFunction(WGT_ref)) * Math.Exp(ETA_1);
-        private double V1Venous => V1Arterial * (1 + THETA_17 * (1 - CentralFunction(WGT)));
+        private double V1Arterial => THETA_1 * (CentralFunction(Weight) / CentralFunction(WGT_ref)) * Math.Exp(ETA_1);
+        private double V1Venous => V1Arterial * (1 + THETA_17 * (1 - CentralFunction(Weight)));
 
-        private double V2 => THETA_2 * (WGT / WGT_ref) * AgingFunction(THETA_10) * Math.Exp(ETA_2);
+        private double V2 => THETA_2 * (Weight / WGT_ref) * AgingFunction(THETA_10) * Math.Exp(ETA_2);
         private double V2_ref => THETA_2 * AgingFunction(THETA_10) * Math.Exp(ETA_2);
 
-        private double V3 => THETA_3 * (A1Sallami(AGE, WGT, BMI) / A1Sallami(AGE_ref, WGT_ref, BMI_ref)) *
+        private double V3 => THETA_3 * (A1Sallami(Age, Weight, BMI) / A1Sallami(AGE_ref, WGT_ref, BMI_ref)) *
                              OpiatesFunction(THETA_13) * Math.Exp(ETA_3);
 
         private double V3_ref => THETA_3 * OpiatesFunction(THETA_13) * Math.Exp(ETA_3);
@@ -155,7 +169,7 @@ namespace Simulator.Factories
             get
             {
                 double k = IsMale ? THETA_4 : THETA_15;
-                return k * Math.Pow(WGT/WGT_ref, 0.75) * (CLMaturationFunction() / CLMaturationFunctionRef()) * OpiatesFunction(THETA_11) * Math.Exp(ETA_4);
+                return k * Math.Pow(Weight/WGT_ref, 0.75) * (CLMaturationFunction() / CLMaturationFunctionRef()) * OpiatesFunction(THETA_11) * Math.Exp(ETA_4);
             }
         }
 
@@ -173,17 +187,18 @@ namespace Simulator.Factories
         private double Ce50 => THETA_1 * AgingFunction(THETA_7) * Math.Exp(ETA_1);
 
 
-        private double Ke0Arterial => THETA_2 * Math.Pow(WGT / 70, -0.25) * Math.Exp(ETA_2);
-        private double Ke0Venous => THETA_8 * Math.Pow(WGT / 70, -0.25) * Math.Exp(ETA_2);
+        private double Ke0Arterial => THETA_2 * Math.Pow(Weight / 70, -0.25) * Math.Exp(ETA_2);
+        private double Ke0Venous => THETA_8 * Math.Pow(Weight / 70, -0.25) * Math.Exp(ETA_2);
+
 
         /// <summary>
         /// Eleveldモデルを作成する
         /// </summary>
-        /// <param name="name">任意の名前</param>
+        /// <param name="modelName">任意の名前</param>
         /// <returns>モデル</returns>
-        public PharmacokineticModel Create(string name)
+        public new PharmacokineticModel Create(string modelName)
         {
-            var model = new PharmacokineticModel(name, WGT)
+            var model = new PharmacokineticModel(modelName, Weight)
             {
                 V1 = V1Venous,
                 V2 = V2,

@@ -6,7 +6,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using Simulator;
 using Simulator.Dosing;
 using Simulator.Factories;
-using static Simulator.Dosing.Medicine;
+using static Simulator.Models.MedicineModel;
 using Simulator.Models;
 using Simulator.Values;
 
@@ -33,19 +33,19 @@ namespace SimulationApp
             // プロポフォールのモデル作成（50kg）
             var factory = new PharmacokineticModelFactory(50, 1.5, 40, true);
             List<PharmacokineticModel> models = new List<PharmacokineticModel>();
-            models.Add(factory.Create(1));
-            models.Add(factory.Create(2));
+            models.Add(factory.Create("1"));
+            models.Add(factory.Create("2"));
             models.Add(EleveldModelFactory.Create("ﾌﾟﾛﾎﾟﾌｫｰﾙ_Eleveld", 50, 1.5, 40, 2200, false, true));
             _combMedicine.Add("プロポフォール", models);
             // レミフェンタニル
             models = new List<PharmacokineticModel>();
-            models.Add(factory.Create(3));
-            models.Add(factory.Create(4));
+            models.Add(factory.Create("3"));
+            models.Add(factory.Create("4"));
             _combMedicine.Add("レミフェンタニル", models);
             // フェンタニル
             models = new List<PharmacokineticModel>();
-            models.Add(factory.Create(5));
-            models.Add(factory.Create(6));
+            models.Add(factory.Create("5"));
+            models.Add(factory.Create("S"));
             _combMedicine.Add("フェンタニル", models);
 
             combMedicine.SelectedIndex = -1;
