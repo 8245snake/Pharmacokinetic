@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Reflection;
 using Simulator.Models;
@@ -11,7 +10,6 @@ namespace Simulator.Factories
 
     /// <summary>
     /// 薬物動態モデルのファクトリクラス。
-    /// 設定読み込みやポリモルフィズムができていないので現状ではテスト用モデルを作成するだけのクラス。
     /// </summary>
     public class PharmacokineticModelFactory
     {
@@ -95,27 +93,46 @@ namespace Simulator.Factories
         {
         }
 
-
+        /// <summary>
+        /// 薬物動態モデルを作成します。
+        /// </summary>
+        /// <param name="modelNumber">モデル番号。Model.iniのmodel_Xの番号。</param>
+        /// <returns>薬物動態モデル</returns>
+        /// <exception cref="ParseErrorException">式のパースに失敗した場合</exception>
         public PharmacokineticModel Create(int modelNumber)
         {
-            var section = Configurations.Config.Sections[$"model_{modelNumber}"];
-            string name = section.Keys["name"].Value;
-            double k10 = Evaluate(section.Keys["k10"].Value);
-            double k12 = Evaluate(section.Keys["k12"].Value);
-            double k13 = Evaluate(section.Keys["k13"].Value);
-            double k21 = Evaluate(section.Keys["k21"].Value);
-            double k31 = Evaluate(section.Keys["k31"].Value);
-            double ke0 = Evaluate(section.Keys["ke0"].Value);
-            double v1 = Evaluate(section.Keys["V1"].Value);
+            try
+            {
+                var section = Configurations.Config.Sections[$"model_{modelNumber}"];
+                string name = section.Keys["name"].Value;
+                double k10 = Evaluate(section.Keys["k10"].Value);
+                double k12 = Evaluate(section.Keys["k12"].Value);
+                double k13 = Evaluate(section.Keys["k13"].Value);
+                double k21 = Evaluate(section.Keys["k21"].Value);
+                double k31 = Evaluate(section.Keys["k31"].Value);
+                double ke0 = Evaluate(section.Keys["ke0"].Value);
+                double v1 = Evaluate(section.Keys["V1"].Value);
 
-            var model = new PharmacokineticModel(name, k10, k12, k13, k21, k31, ke0, Weight);
-            model.V1 = v1;
-            model.V2 = (section.Keys.ContainsKey("V2")) ? Evaluate(section.Keys["V2"].Value) : k12 * v1 / k21;
-            model.V3 = (section.Keys.ContainsKey("V3")) ? Evaluate(section.Keys["V3"].Value) : k13 * v1 / k31;
-            return model;
+                var model = new PharmacokineticModel(name, k10, k12, k13, k21, k31, ke0, Weight);
+                model.V1 = v1;
+                model.V2 = (section.Keys.ContainsKey("V2")) ? Evaluate(section.Keys["V2"].Value) : k12 * v1 / k21;
+                model.V3 = (section.Keys.ContainsKey("V3")) ? Evaluate(section.Keys["V3"].Value) : k13 * v1 / k31;
+                return model;
+            }
+            catch (ParseErrorException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
         }
 
+        /// <summary>
+        /// パラメータを置換して文字列の式を計算した結果を返す。
+        /// </summary>
+        /// <param name="expression">式</param>
+        /// <returns>計算結果</returns>
+        /// <exception cref="ParseErrorException">式のパースに失敗した場合</exception>
         private double Evaluate(string expression)
         {
             var exceptions = new List<string>();
@@ -210,7 +227,7 @@ namespace Simulator.Factories
         /// </summary>
         private void CompileCustomParams()
         {
-            // 依存関係が複雑なパラメータがあるかもしれないので10回まで繰り替えす
+            // 依存関係が複雑なパラメータがあるかもしれないので10回まで繰り返す
             for (int i = 0; i < 10; i++)
             {
                 foreach (var param in Configurations.Config.Sections["CustomParams"].GetIniValues())
