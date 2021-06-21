@@ -29,7 +29,7 @@ namespace SimulationConsole
         {
             var time = new DateTime(2021, 6, 12, 12, 30, 0);
             var f = new PharmacokineticModelFactory();
-            PharmacokineticModel model = f.Create(1);
+            PharmacokineticModel model = f.Create("1");
             PharmacokineticSimulator sim = new PharmacokineticSimulator()
             {
                 DurationdMinutes = 10,
@@ -56,7 +56,7 @@ namespace SimulationConsole
             var time = new DateTime(2021, 6, 12, 12, 30, 0);
 
             var f = new PharmacokineticModelFactory();
-            PharmacokineticModel model = f.Create(1);
+            PharmacokineticModel model = f.Create("1");
             PharmacokineticSimulator sim = new PharmacokineticSimulator()
             {
                 DurationdMinutes = 10,
@@ -95,7 +95,7 @@ namespace SimulationConsole
 
             // プロポフォールのモデルでシミュレーション開始
             var f = new PharmacokineticModelFactory();
-            PharmacokineticModel model = f.Create(1);
+            PharmacokineticModel model = f.Create("1");
             foreach (var result in sim.Predict(model, ValueUnit.WeightUnitEnum.ng))
             {
                 Console.WriteLine(result.ToString());
@@ -118,7 +118,7 @@ namespace SimulationConsole
 
             // プロポフォールのモデルでシミュレーション開始
             var f = new PharmacokineticModelFactory();
-            PharmacokineticModel model = f.Create(1);
+            PharmacokineticModel model = f.Create("1");
             foreach (var result in sim.Predict(model, ValueUnit.WeightUnitEnum.ug))
             {
                 Console.WriteLine(result.ToString());
