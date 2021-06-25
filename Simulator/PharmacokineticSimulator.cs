@@ -157,9 +157,8 @@ namespace Simulator
             double ce = 0.0;
 
             DateTime targetTime = CalculationStartTime;
-            DateTime lastTime = CalculationLastTime;
 
-            while (targetTime < lastTime)
+            while (targetTime < CalculationLastTime)
             {
                 // その時刻のボーラスと持続の投与量の合計値を出す
                 double bolus = _MedicineDosingList.Where(dosing => dosing is BolusMedicineDosing)
@@ -182,7 +181,10 @@ namespace Simulator
                     Ce = ce / model.V1 / 1000 * factor, 
                     Bolus = bolus,
                     Continuous = continuous,
-                    PlotTime = targetTime};
+                    PlotTime = targetTime,
+                    WeightUnit = weightUnit,
+                    VolumeUnit = VolumeUnitEnum.mL
+                };
 
                 // 加算
                 targetTime = targetTime.AddSeconds(StepSeconds);
@@ -227,6 +229,16 @@ namespace Simulator
         /// ボーラス投与量（ng）
         /// </summary>
         public double Bolus { get; set; }
+
+        /// <summary>
+        /// 重量単位
+        /// </summary>
+        public WeightUnitEnum WeightUnit { get; set; }
+
+        /// <summary>
+        /// 容量単位
+        /// </summary>
+        public VolumeUnitEnum VolumeUnit { get; set; }
 
         /// <summary>
         /// 持続投与量（ng/min）

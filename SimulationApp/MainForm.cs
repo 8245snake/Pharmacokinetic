@@ -45,7 +45,7 @@ namespace SimulationApp
             // フェンタニル
             models = new List<PharmacokineticModel>();
             models.Add(factory.Create("5"));
-            models.Add(factory.Create("S"));
+            models.Add(factory.Create("6"));
             _combMedicine.Add("フェンタニル", models);
 
             combMedicine.SelectedIndex = -1;
