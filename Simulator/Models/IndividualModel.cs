@@ -12,11 +12,11 @@ namespace Simulator.Models
         /// </summary>
         public double Age { get; set; }
         /// <summary>
-        /// 体重
+        /// 体重(kg)
         /// </summary>
         public double Weight { get; set; }
         /// <summary>
-        /// 身長
+        /// 身長(m)
         /// </summary>
         public double Stat { get; set; }
         /// <summary>

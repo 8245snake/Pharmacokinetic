@@ -1,0 +1,107 @@
+﻿@inject WebTCI.Services.ChartService _ChartService
+
+@using Simulator.Dosing
+@using Simulator.Values
+@implements IDisposable
+
+<div style="left: @(Left)px; top: @(Top)px; font-size: small; @StyleHidden" class="position-relative dosing-label">
+    @Text
+    @if (DosingData.Dosing is ContinuousMedicineDosing)
+    {
+        <div style="width: @(Width)px; height: @(Height)px; background-color: blue;">
+        </div>
+    }
+
+</div>
+
+
+
+
+@code {
+
+    [Parameter]
+    public DosingDataModel DosingData { get; set; }
+
+    private double Left { get; set; }
+    private double Top { get; set; }
+    private double Width { get; set; }
+    private double Height { get; set; }
+
+    private string Text { get; set; }
+
+    private string StyleHidden { get; set; }
+
+    protected override void OnInitialized()
+    {
+        SetLabelProperty();
+    }
+
+    public void Dispose()
+    {
+    }
+
+    protected override bool ShouldRender()
+    {
+        SetLabelProperty();
+        return true;
+    }
+
+
+    private void SetLabelProperty()
+    {
+        Height = 10;
+        StyleHidden = "";
+
+        switch (DosingData.Dosing)
+        {
+            case BolusMedicineDosing bolus:
+                Text = DosingData.DosingValue.ToString();
+                var left_tmp = ConvertTimeToPixelX(bolus.DoseTime);
+                if (left_tmp >= _ChartService.ChartRect.Left && left_tmp <= _ChartService.ChartRect.Right)
+                {
+                    Left = (double)left_tmp;
+                }
+                else
+                {
+                    StyleHidden = "display: none;";
+                }
+                break;
+            case ContinuousMedicineDosing infusion:
+                Text = DosingData.DosingValue.ToString();
+                var temp_Left = ConvertTimeToPixelX(infusion.DoseStartTime);
+                if (temp_Left >= _ChartService.ChartRect.Left && temp_Left <= _ChartService.ChartRect.Right)
+                {
+                    Left = (double)temp_Left;
+                }else if (infusion.DoseStartTime < _ChartService.StartTime)
+                {
+                    Left = 0;
+                }
+                else
+                {
+                    StyleHidden = "display: none;";
+                }
+
+                if (infusion.DoseEndTime > _ChartService.EndTime)
+                {
+                    Width = _ChartService.CanvasWidth - Left - _ChartService.PaddeingLeft;
+                }
+                else
+                {
+                    StyleHidden = "display: none;";
+                }
+                break;
+        }
+    }
+
+
+
+    private decimal ConvertTimeToPixelX(DateTime time)
+    {
+        double totalWidth = _ChartService.ChartRect.Width;
+        double totalSeconds = (_ChartService.EndTime - _ChartService.StartTime).TotalSeconds;
+        decimal pixelsPersecond = (decimal)totalWidth / (decimal)totalSeconds;
+
+        decimal x = pixelsPersecond * (decimal)(time - _ChartService.StartTime).TotalSeconds;
+        return x;
+    }
+}

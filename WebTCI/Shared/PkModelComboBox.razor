@@ -1,0 +1,18 @@
+﻿@inject WebTCI.Services.PkModelService _Service;
+@using Simulator.Models
+
+<select class="custom-select" @onchange="OnChange">
+    @foreach (Tuple<int, string> medicine in PkModelService.GetMedicineOption())
+    {
+        <option value="@medicine.Item1">@medicine.Item2</option>
+    }
+</select>
+
+@code {
+
+
+    private void OnChange(ChangeEventArgs e)
+    {
+        _Service.SelectedMedicineType = Enum.Parse<PkModelService.MedicineTypes>(e.Value.ToString());
+    }
+}

@@ -81,10 +81,12 @@ namespace Simulator.Values
             return ToWeight(time.Value, time.TimeUnit);
         }
 
-
         public override string ToString()
         {
-            return $"{this.Value}{this.WeightUnit.Name()}/{this.TimeUnit.Name()}";
+            return $"{this.Value}{UnitName}";
         }
+
+        public override string UnitName => $"{this.WeightUnit.Name()}/{this.TimeUnit.Name()}";
+
     }
 }

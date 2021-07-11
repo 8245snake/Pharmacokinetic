@@ -1,0 +1,33 @@
+﻿@inherits LayoutComponentBase
+@inject IJSRuntime JS
+@inject WebTCI.Services.WindowStateService _WindowStateService
+
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+
+<div class="container-fluid">
+    <div style="height: 97%">
+        @Body
+    </div>
+</div>
+
+
+<DosingInputWindow />
+
+
+
+@code
+{
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _WindowStateService.SetJsRuntime(JS);
+    }
+
+
+
+
+}

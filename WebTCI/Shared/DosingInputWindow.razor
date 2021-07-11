@@ -1,0 +1,143 @@
+﻿@using Microsoft.Extensions.Logging
+@using System.Numerics
+@using Simulator.Dosing
+@using Simulator.Values
+@using static Models.DosingDataModel
+@using static Models.DosingMethodModel
+@using static Simulator.Values.ValueUnit
+
+@implements IDisposable
+
+@inject ILogger<DosingInputWindow> logger;
+@inject DosingService _DosingService
+@inject PkModelService _PkModelService
+@inject PatientSelectService _PatientSelectService
+@inject TimePointingService _TimePointingService
+
+<div class="@MaskStyle" @onclick="CancelCliced"></div>
+
+<!-- Modal -->
+<div class="@ModalStyle" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModal1Label">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CancelCliced">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <input type="datetime-local" class="px-lg-4" @bind="SelectedDateTime" />
+
+            <form class="form-inline">
+
+                <input type="text" class="form-control" placeholder="投与量" @bind="InputValue">
+
+                <select class="custom-select" @bind="SelectedUnitName">
+                    @foreach (var dosingMethod in _PkModelService.GetDosingMethods(_PkModelService.SelectedMedicineType))
+                    {
+                        <option value="@dosingMethod.UnitName">@dosingMethod.UnitName</option>
+                    }
+                </select>
+            </form>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" @onclick="CancelCliced">Cancel</button>
+            <button type="button" class="btn btn-primary" @onclick="OkCliced">OK</button>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+
+
+    private string SelectedUnitName { get; set; }
+    private string InputValue { get; set; }
+
+    private DateTime SelectedDateTime
+    {
+        get => _TimePointingService.PointingTime;
+        set => _TimePointingService.PointingTime = value;
+    }
+
+    private string MaskStyle { get; set; } = "modal-hidden";
+    private string ModalStyle { get; set; } = "modal-hidden";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _DosingService.DosingInputWindowCalled += DosingServiceOnDosingInputWindowCalled;
+    }
+
+    public void Dispose()
+    {
+        _DosingService.DosingInputWindowCalled -= DosingServiceOnDosingInputWindowCalled;
+    }
+
+
+    private void DosingServiceOnDosingInputWindowCalled(DosingTypes dosingType, DosingMethodModel defaultDosingMethod = null, DosingDataModel defaultDosingData = null)
+    {
+
+        if (defaultDosingMethod.UnitName != null)
+        {
+            SelectedUnitName = defaultDosingMethod.UnitName;
+        }
+
+        if (defaultDosingData == null)
+        {
+            InputValue = "";
+        }
+        else
+        {
+            //todo:入力済みデータの表示
+        }
+        OpenDialog();
+    }
+
+    private void OkCliced(MouseEventArgs obj)
+    {
+
+        // 入力値 TODO:バリデーション
+        double value = 0.0;
+        if (!double.TryParse(InputValue, out value))
+        {
+            return;
+        }
+
+        DosingMethodModel dosingMethod = _PkModelService.GetDosingMethods(_PkModelService.SelectedMedicineType).FirstOrDefault(item => item.UnitName == SelectedUnitName);
+        if (dosingMethod != null)
+        {
+            // todo:濃度
+            var dosing = dosingMethod.CreateDosingData(value, SelectedDateTime, _PatientSelectService.SelectedPatient.Weight, null);
+            _DosingService.AddDosing(dosing);
+        }
+
+        CloseDialog();
+    }
+
+    private void CancelCliced(MouseEventArgs obj)
+    {
+        logger.LogInformation("CancelCliced");
+
+
+        CloseDialog();
+    }
+
+    private void OpenDialog()
+    {
+        MaskStyle = "modal-mask";
+        ModalStyle = "modal-dialog";
+        StateHasChanged();
+    }
+
+    private void CloseDialog()
+    {
+        MaskStyle = "modal-hidden";
+        ModalStyle = "modal-hidden";
+        StateHasChanged();
+    }
+
+
+}

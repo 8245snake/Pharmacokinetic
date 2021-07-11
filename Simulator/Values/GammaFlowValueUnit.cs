@@ -43,7 +43,10 @@ namespace Simulator.Values
 
         public override string ToString()
         {
-            return $"{Value}{WeightUnit.Name()}/kg/{TimeUnit.Name()}";
+            return $"{Value}{UnitName}";
         }
+
+        public override string UnitName => $"{WeightUnit.Name()}/kg/{TimeUnit.Name()}";
+
     }
 }

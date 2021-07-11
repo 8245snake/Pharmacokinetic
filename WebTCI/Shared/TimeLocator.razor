@@ -1,0 +1,89 @@
+﻿@inject WebTCI.Services.ChartService _ChartService
+
+@implements IDisposable
+
+@using static Services.ChartService
+
+<div id="time-locator" class="p-xl-2">
+    <form class="form-inline">
+        <p class="font-weight-normal">@_ChartService.StartTime.ToString("yyyy/MM/dd HH:mm")</p>
+        <p class="font-weight-normal"> ～ </p>
+        <p class="font-weight-normal">@_ChartService.EndTime.ToString("yyyy/MM/dd HH:mm")</p>
+        <p class="font-weight-normal">　</p>
+        <button type="button" class="btn btn-light btn-sm" @onclick="GoPrevMore">＜＜</button>
+        <button type="button" class="btn btn-light btn-sm" @onclick="GoPrev">＜</button>
+        <button type="button" class="btn btn-light btn-sm" @onclick="GoNext">＞</button>
+        <button type="button" class="btn btn-light btn-sm" @onclick="GoNextMore">＞＞</button>
+        <div>
+            <input type="range" class="custom-range" min="0" max="5" step="1" @bind="@TimeScale">
+        </div>
+    </form>
+</div>
+
+@code {
+
+    private TimeScaleEnum _timeScale;
+
+    private int TimeScale
+    {
+        get => (int)_timeScale;
+        set
+        {
+            _timeScale = (TimeScaleEnum)value;
+            _ChartService.TimeScale = _timeScale;
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+        _ChartService.TimeRangeChanged += TimeRangeChanged;
+        TimeScale = 2;
+
+        DateTime start = DateTime.Now.AddHours(-2);
+        start = start.AddSeconds(-start.Second);
+
+        DateTime end = start.AddHours(5);
+        _ChartService.SetTimeRange(start, end);
+        _ChartService.TimeScale = _timeScale;
+    }
+
+    public void Dispose()
+    {
+        _ChartService.TimeRangeChanged -= TimeRangeChanged;
+    }
+
+    private void TimeRangeChanged(DateTime starttime, DateTime endtime)
+    {
+        StateHasChanged();
+    }
+
+    private void GoPrevMore(MouseEventArgs e)
+    {
+        _ChartService.SetTimeRange(
+            _ChartService.StartTime.AddMinutes(-1 * _timeScale.FullMinutes()),
+            _ChartService.EndTime.AddMinutes(-1 * _timeScale.FullMinutes()));
+    }
+
+    private void GoPrev(MouseEventArgs e)
+    {
+        _ChartService.SetTimeRange(
+            _ChartService.StartTime.AddMinutes(-1 * _timeScale.HalfMinutes()),
+            _ChartService.EndTime.AddMinutes(-1 * _timeScale.HalfMinutes()));
+    }
+
+    private void GoNextMore(MouseEventArgs e)
+    {
+        _ChartService.SetTimeRange(
+            _ChartService.StartTime.AddMinutes(_timeScale.FullMinutes()),
+            _ChartService.EndTime.AddMinutes(_timeScale.FullMinutes()));
+    }
+
+    private void GoNext(MouseEventArgs e)
+    {
+        _ChartService.SetTimeRange(
+            _ChartService.StartTime.AddMinutes(_timeScale.HalfMinutes()),
+            _ChartService.EndTime.AddMinutes(_timeScale.HalfMinutes()));
+    }
+
+}

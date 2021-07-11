@@ -6,6 +6,8 @@
     public class ValueUnit
     {
 
+        public virtual string UnitName { get; }
+
         #region const
 
         /// <summary>

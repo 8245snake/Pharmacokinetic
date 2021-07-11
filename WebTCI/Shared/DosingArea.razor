@@ -1,0 +1,84 @@
+﻿@using Microsoft.Extensions.Logging
+@using static WebTCI.Models.DosingMethodModel
+@using System.ComponentModel
+
+@implements IDisposable
+@inject ILogger<DosingArea> logger;
+@inject WebTCI.Services.ChartService _ChartService
+@inject WebTCI.Services.PkModelService _PkModelService
+@inject WebTCI.Services.PatientSelectService _PatientSelectService
+@inject WebTCI.Services.WindowStateService _WindowStateService
+@inject WebTCI.Services.DosingService _DosingService
+
+
+
+<div id="dosing-area" class="border border-dark">
+    <div class="d-flex flex-row">
+        <button type="button" class="btn btn-primary btn-sm" style="width: @(_ChartService.PaddeingLeft)px;">ボーラス</button>
+        <div>
+            @foreach (var data in _DosingService.GetDosingModels(_PkModelService.SelectedMedicineType).Where(model => model.DosingType == DosingTypes.Bolus))
+            {
+                <DosingLabel DosingData="data"></DosingLabel>
+            }
+        </div>
+    </div>
+    <div class="d-flex flex-row">
+        <button type="button" class="btn btn-info btn-sm" style="width: @(_ChartService.PaddeingLeft)px;">持続注入</button>
+        <div>
+            @foreach (var data in _DosingService.GetDosingModels(_PkModelService.SelectedMedicineType).Where(model => model.DosingType == DosingTypes.Infusion))
+            {
+                <DosingLabel DosingData="data"></DosingLabel>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        _ChartService.TimeRangeChanged += OnTimeRangeChanged;
+        _PkModelService.SelectedMedicineChanged += OnSelectedMedicineChanged;
+        _PkModelService.ModelSelectionChanged += OnModelSelectionChanged;
+        _DosingService.DosingDataChanged += OnDosingDataChanged;
+        _WindowStateService.ChartAreaResized += OnChartAreaResized;
+    }
+
+    public void Dispose()
+    {
+        _ChartService.TimeRangeChanged -= OnTimeRangeChanged;
+        _PkModelService.SelectedMedicineChanged -= OnSelectedMedicineChanged;
+        _PkModelService.ModelSelectionChanged -= OnModelSelectionChanged;
+        _DosingService.DosingDataChanged -= OnDosingDataChanged;
+    }
+
+    #region EventHandler
+
+    private void OnDosingDataChanged(DosingService sender)
+    {
+        StateHasChanged();
+    }
+
+    private void OnModelSelectionChanged(MedicineModel medicine, PkModel model, bool ischecked)
+    {
+        StateHasChanged();
+    }
+
+    private void OnSelectedMedicineChanged(PkModelService.MedicineTypes medicine)
+    {
+        StateHasChanged();
+    }
+
+    private void OnTimeRangeChanged(DateTime starttime, DateTime endtime)
+    {
+        StateHasChanged();
+    }
+
+    private void OnChartAreaResized(object sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    #endregion
+
+}

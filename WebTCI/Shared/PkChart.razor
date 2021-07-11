@@ -1,0 +1,261 @@
+﻿@inject WebTCI.Services.ChartService _ChartService
+@inject WebTCI.Services.PkModelService _PkModelService
+@inject WebTCI.Services.PatientSelectService _PatientSelectService
+@inject WebTCI.Services.WindowStateService _WindowStateService
+@inject WebTCI.Services.DosingService _DosingService
+@inject ILogger<PkChart> logger;
+
+@implements IDisposable
+
+@using Blazor.Extensions.Canvas.Canvas2D
+@using Blazor.Extensions
+@using System.Drawing
+@using Microsoft.Extensions.Logging
+@using Simulator
+@using Simulator.Models
+@using Simulator.Values
+@using WebTCI.Pages
+@using MedicineModel = WebTCI.Models.MedicineModel
+
+
+<div id="chart-area" class="position-relative d-flex flex-column">
+    <BECanvas Width="@_ChartService.CanvasWidth" Height="@_ChartService.CanvasHeight" @ref="_canvasReference" />
+</div>
+
+
+@code {
+
+    private Canvas2DContext _context;
+
+    protected BECanvasComponent _canvasReference;
+
+    private ComponentInfo ActualComponentInfo => WindowStateService.ChartAreaInfo;
+
+    protected override void OnInitialized()
+    {
+        // 各種イベントハンドラの紐付け
+        _ChartService.TimeRangeChanged += OnTimeRangeChanged;
+        _PkModelService.SelectedMedicineChanged += OnSelectedMedicineChanged;
+        _PkModelService.ModelSelectionChanged += OnModelSelectionChanged;
+        _DosingService.DosingDataChanged += OnDosingDataChanged;
+        _WindowStateService.ChartAreaResized += OnChartAreaResized;
+
+    }
+
+    public void Dispose()
+    {
+        _ChartService.TimeRangeChanged -= OnTimeRangeChanged;
+        _PkModelService.SelectedMedicineChanged -= OnSelectedMedicineChanged;
+        _PkModelService.ModelSelectionChanged -= OnModelSelectionChanged;
+        _DosingService.DosingDataChanged -= OnDosingDataChanged;
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Canvas初期化
+        this._context = await this._canvasReference.CreateCanvas2DAsync();
+        // チャートエリアのDOM情報を最新化
+        WindowStateService.ChartAreaInfo = await _WindowStateService.GetComponentInfo("chart-area");
+        // グラフエリアの背景のみ描画
+        await DrawBaseLines();
+    }
+
+    private void OnChartAreaResized(object sender, EventArgs e)
+    {
+        _ChartService.CanvasHeight = (int)WindowStateService.ChartAreaInfo.Height;
+        _ChartService.CanvasWidth = (int)WindowStateService.ChartAreaInfo.Width;
+        StateHasChanged();
+    }
+
+
+    private void OnTimeRangeChanged(DateTime starttime, DateTime endtime)
+    {
+        // タイムスケールが変化したら再描画
+        ReDraw();
+    }
+
+    private void OnSelectedMedicineChanged(PkModelService.MedicineTypes medicine)
+    {
+        // 対象の薬剤が変化したら再描画
+        ReDraw();
+    }
+
+    private void OnModelSelectionChanged(MedicineModel medicine, PkModel model, bool ischecked)
+    {
+        // 薬物動態モデルの選択状態が変化したら再描画
+        ReDraw();
+    }
+
+    private void OnDosingDataChanged(DosingService sender)
+    {
+        // 投与データが変化したら再描画
+        var firstDosingData = _DosingService.GetDosingModels(_PkModelService.SelectedMedicineType).OrderBy(dose => dose.DosingTime).FirstOrDefault();
+        if (firstDosingData != null)
+        {
+            _ChartService.SimulationStartTime = firstDosingData.DosingTime.AddMinutes(-1).AddSeconds(-1 * firstDosingData.DosingTime.Second);
+        }
+
+        ReDraw();
+    }
+
+
+    private async Task DrawBaseLines()
+    {
+        await _context.BeginPathAsync();
+
+        await _context.ClearRectAsync(0, 0, _ChartService.CanvasWidth, _ChartService.CanvasHeight);
+        await _context.SetLineWidthAsync(1);
+
+        // 背景黒
+        await this._context.SetFillStyleAsync("black");
+        await this._context.FillRectAsync(0, 0, _ChartService.CanvasWidth, _ChartService.CanvasHeight);
+
+        // 線を引く
+        await _context.SetStrokeStyleAsync("white");
+
+        // 縦線
+        foreach (Tuple<string, double> timeAxis in GetXAxis())
+        {
+            double x = timeAxis.Item2;
+            await _context.MoveToAsync(x, _ChartService.ChartRect.Y);
+            await _context.LineToAsync(x, _ChartService.ChartRect.Bottom);
+            await _context.StrokeTextAsync(timeAxis.Item1, x - 10, _ChartService.ChartRect.Bottom + 10);
+
+        }
+
+        // 横線
+        foreach (Tuple<string, double> yAxis in GetYAxis())
+        {
+            double y = yAxis.Item2;
+            await _context.MoveToAsync(_ChartService.ChartRect.X, y);
+            await _context.LineToAsync(_ChartService.ChartRect.Right, y);
+            await _context.StrokeTextAsync(yAxis.Item1, _ChartService.ChartRect.X - 10, y);
+        }
+
+        await _context.StrokeAsync();
+
+    }
+
+    private IEnumerable<Tuple<string, double>> GetXAxis()
+    {
+        DateTime time = _ChartService.StartTime;
+        int step = _ChartService.TimeScale.StepMinutes();
+        int stepNumber = (int)(_ChartService.TimeScale.FullMinutes() / step);
+        var h = (decimal)_ChartService.ChartRect.Width / (decimal)stepNumber;
+        for (int i = 0; i <= stepNumber; i++)
+        {
+            double x = _ChartService.ChartRect.X + i * (double)h;
+            yield return new Tuple<string, double>(time.ToString("HH:mm"), x);
+            time = time.AddMinutes(step);
+        }
+    }
+
+    private IEnumerable<Tuple<string, double>> GetYAxis()
+    {
+
+        MedicineModel medicine = _PkModelService.SelectedMedicine;
+        double h = _ChartService.ChartRect.Height / medicine.DisplayValueMax;
+
+        for (int i = 0; i <= medicine.DisplayValueMax; i++)
+        {
+            double y = _ChartService.ChartRect.Bottom - i * h;
+            yield return new Tuple<string, double>($"{i}", y);
+        }
+
+    }
+
+    private async void ReDraw()
+    {
+        await DrawBaseLines();
+        await PlotChart();
+    }
+
+    private async Task PlotChart()
+    {
+
+        await _context.BeginPathAsync();
+
+        // タイムスケールごとに刻みを調整
+        int step = 6;
+        if (_ChartService.TimeScale > ChartService.TimeScaleEnum.OneHour)
+        {
+            step = 60;
+        }
+        else if (_ChartService.TimeScale > ChartService.TimeScaleEnum.ThirtyMinute)
+        {
+            step = 30;
+        }
+        var duration = (_ChartService.EndTime - _ChartService.SimulationStartTime).TotalSeconds / 60 + 1;
+        var sim = new PharmacokineticSimulator(_ChartService.SimulationStartTime, step, (int)duration);
+
+        // 投与記録をインプット
+        foreach (var dosing in _DosingService.GetDosingModels(_PkModelService.SelectedMedicineType))
+        {
+            sim.AddDosing(dosing.Dosing);
+        }
+
+        // チェックされているモデルに関してプロットする
+        foreach (var pkModel in _PkModelService.GetPkModels(_PkModelService.SelectedMedicineType).Where(m => m.IsSelected))
+        {
+            var compiled = pkModel.Compile(_PatientSelectService.SelectedPatient);
+            var list = await sim.PredictAsync(compiled);
+
+            // todo:血中濃度の色設定
+            await _context.BeginPathAsync();
+            await _context.SetStrokeStyleAsync("red");
+            await _context.SetLineWidthAsync(3);
+            bool isFirst = true;
+            PointF pointBeforeC1 = new PointF(0, 0);
+            foreach (var result in list)
+            {
+
+                if (result.PlotTime < _ChartService.StartTime || result.PlotTime > _ChartService.EndTime || result.C1 > _PkModelService.SelectedMedicine.DisplayValueMax)
+                {
+                    // 画面外なら描かない
+                    continue;
+                }
+
+                PointF pointC1 = _ChartService.CalculatePoint(result.PlotTime, result.C1, _PkModelService.SelectedMedicine);
+
+                if (!isFirst)
+                {
+                    await _context.MoveToAsync(pointBeforeC1.X, pointBeforeC1.Y);
+                    await _context.LineToAsync(pointC1.X, pointC1.Y);
+                }
+
+                pointBeforeC1 = pointC1;
+                isFirst = false;
+            }
+            await _context.StrokeAsync();
+
+            await _context.BeginPathAsync();
+            // todo:効果部位濃度の色設定
+            await _context.SetStrokeStyleAsync("blue");
+            isFirst = true;
+            PointF pointBeforeCe = new PointF(0, 0);
+            foreach (var result in list)
+            {
+                if (result.PlotTime < _ChartService.StartTime || result.PlotTime > _ChartService.EndTime || result.C1 > _PkModelService.SelectedMedicine.DisplayValueMax)
+                {
+                    // 画面外なら描かない
+                    continue;
+                }
+
+                PointF pointCe = _ChartService.CalculatePoint(result.PlotTime, result.Ce, _PkModelService.SelectedMedicine);
+
+                if (!isFirst)
+                {
+                    await _context.MoveToAsync(pointBeforeCe.X, pointBeforeCe.Y);
+                    await _context.LineToAsync(pointCe.X, pointCe.Y);
+                }
+
+                pointBeforeCe = pointCe;
+                isFirst = false;
+            }
+            await _context.StrokeAsync();
+        }
+
+    }
+
+}

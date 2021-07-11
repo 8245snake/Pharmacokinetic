@@ -1,0 +1,78 @@
+﻿@inject WebTCI.Services.PkModelService _PkModelService
+@inject WebTCI.Services.DosingService _DosingService
+
+@implements IDisposable
+
+
+@using static WebTCI.Models.DosingMethodModel
+
+<div class="card p-xl-2">
+    <div class="d-flex flex-row">
+        <!-- ボーラス -->
+        <div class="">
+            <div class="d-flex flex-column">
+                @foreach (var dosingMethod in _PkModelService.GetDosingMethods(_PkModelService.SelectedMedicineType, DosingTypes.Bolus))
+                {
+                    <button type="button" class="btn btn-primary" @onclick="dosingMethod.OnClick">@dosingMethod.UnitName</button>
+                }
+            </div>
+        </div>
+        <!-- 持続 -->
+        <div class="">
+            <div class="d-flex flex-column">
+                @foreach (var dosingMethod in _PkModelService.GetDosingMethods(_PkModelService.SelectedMedicineType, DosingTypes.Infusion))
+                {
+                    <button type="button" class="btn btn-info" @onclick="dosingMethod.OnClick">@dosingMethod.UnitName</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        AddHandlers();
+    }
+
+    public void Dispose()
+    {
+        RemoveHandlers();
+    }
+
+    private void AddHandlers()
+    {
+        _PkModelService.SelectedMedicineChanged += OnSelectedMedicineChanged;
+
+        foreach (var dosingMethod in _PkModelService.GetDosingMethods(_PkModelService.SelectedMedicineType))
+        {
+            dosingMethod.DosingMethodClicked += OnDosingMethodClicked;
+        }
+    }
+
+    private void RemoveHandlers()
+    {
+        _PkModelService.SelectedMedicineChanged -= OnSelectedMedicineChanged;
+
+        foreach (var dosingMethod in _PkModelService.GetDosingMethods(_PkModelService.SelectedMedicineType))
+        {
+            dosingMethod.DosingMethodClicked -= OnDosingMethodClicked;
+        }
+    }
+
+    private void OnDosingMethodClicked(DosingMethodModel model)
+    {
+        _DosingService.ShowDosingInputWindow(model.DosingType, model);
+    }
+
+
+    private void OnSelectedMedicineChanged(PkModelService.MedicineTypes medicine)
+    {
+        RemoveHandlers();
+        StateHasChanged();
+        AddHandlers();
+    }
+
+
+}

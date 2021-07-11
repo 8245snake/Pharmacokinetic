@@ -9,7 +9,6 @@ namespace Simulator.Values
     {
 
         private VolumeUnitEnum _volumeUnit = VolumeUnitEnum.None;
-        private ConcentrationValueUnit _concentration;
 
         /// <summary>
         /// 体積単位
@@ -22,10 +21,7 @@ namespace Simulator.Values
         /// <summary>
         /// 濃度
         /// </summary>
-        public ConcentrationValueUnit Concentration
-        {
-            get => _concentration;
-        }
+        public ConcentrationValueUnit Concentration { get; set; }
 
         /// <summary>
         /// 体積/時間で流速データを作成します。濃度も必要になります。
@@ -38,7 +34,7 @@ namespace Simulator.Values
         {
             Value = flow;
             _volumeUnit = volumeUnit;
-            _concentration = concentration;
+            Concentration = concentration;
             TimeUnit = timeUnit;
         }
 
@@ -56,7 +52,7 @@ namespace Simulator.Values
             }
             var volume = new VolumeValueUnit(this.Value, this.VolumeUnit).ConvertUnit(volumeUnit);
             var time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
-            return new VolumeFlowValueUnit(volume.Value / time.Value, volumeUnit, _concentration, timeUnit);
+            return new VolumeFlowValueUnit(volume.Value / time.Value, volumeUnit, Concentration, timeUnit);
         }
 
         /// <summary>
@@ -67,7 +63,7 @@ namespace Simulator.Values
         public override FlowValueUnit ConvertTimeUnit(TimeUnitEnum timeUnit)
         {
             TimeValueUnit time = new TimeValueUnit(1, this.TimeUnit).ConvertUnit(timeUnit);
-            return new VolumeFlowValueUnit(this.Value / time.Value, this.VolumeUnit, _concentration, timeUnit);
+            return new VolumeFlowValueUnit(this.Value / time.Value, this.VolumeUnit, Concentration, timeUnit);
         }
 
         /// <summary>
@@ -81,7 +77,7 @@ namespace Simulator.Values
             // 単位時間あたりの体積を出す
             var conv = this.ConvertTimeUnit(timeUnit) as VolumeFlowValueUnit;
             // 単位時間あたりの体積と濃度から重量を出す
-            var weight = _concentration.ToWeight(conv.Value, conv.VolumeUnit);
+            var weight = Concentration.ToWeight(conv.Value, conv.VolumeUnit);
             // 投与時間を掛けて返す
             return new WeightValueUnit(weight.Value * value, weight.WeightUnit);
         }
@@ -108,7 +104,10 @@ namespace Simulator.Values
         }
         public override string ToString()
         {
-            return $"{this.Value}{this.VolumeUnit.Name()}/{this.TimeUnit.Name()}";
+            return $"{this.Value}{UnitName}";
         }
+
+        public override string UnitName => $"{this.VolumeUnit.Name()}/{this.TimeUnit.Name()}";
+
     }
 }

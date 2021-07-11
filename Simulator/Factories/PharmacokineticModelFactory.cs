@@ -126,30 +126,7 @@ namespace Simulator.Factories
         /// <exception cref="ParseErrorException">式のパースに失敗した場合</exception>
         public PharmacokineticModel Create(string modelName)
         {
-            try
-            {
-                var section = Configurations.Config.Sections[$"model_{modelName}"];
-                string name = section.Keys["name"].Value;
-                double k10 = Evaluate(section.Keys["k10"].Value);
-                double k12 = Evaluate(section.Keys["k12"].Value);
-                double k13 = Evaluate(section.Keys["k13"].Value);
-                double k21 = Evaluate(section.Keys["k21"].Value);
-                double k31 = Evaluate(section.Keys["k31"].Value);
-                double ke0 = Evaluate(section.Keys["ke0"].Value);
-                double v1 = Evaluate(section.Keys["V1"].Value);
-
-                var model = new PharmacokineticModel(name, k10, k12, k13, k21, k31, ke0, Weight);
-                model.V1 = v1;
-                model.V2 = (section.Keys.ContainsKey("V2")) ? Evaluate(section.Keys["V2"].Value) : k12 * v1 / k21;
-                model.V3 = (section.Keys.ContainsKey("V3")) ? Evaluate(section.Keys["V3"].Value) : k13 * v1 / k31;
-                return model;
-            }
-            catch (ParseErrorException e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -252,41 +229,41 @@ namespace Simulator.Factories
         /// </summary>
         private void CompileCustomParams()
         {
-            // 依存関係が複雑なパラメータがあるかもしれないので10回まで繰り返す
-            for (int i = 0; i < 10; i++)
-            {
-                foreach (var param in Configurations.Config.Sections["CustomParams"].GetIniValues())
-                {
-                    if (_CustomParams.ContainsKey(param.KeyName))
-                    {
-                        continue;
-                    }
+            //// 依存関係が複雑なパラメータがあるかもしれないので10回まで繰り返す
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    foreach (var param in Configurations.Config.Sections["CustomParams"].GetIniValues())
+            //    {
+            //        if (_CustomParams.ContainsKey(param.KeyName))
+            //        {
+            //            continue;
+            //        }
 
-                    string replaced = ReplaceProperty(param.Value);
+            //        string replaced = ReplaceProperty(param.Value);
 
-                    if (_ParamRegex.IsMatch(replaced))
-                    {
+            //        if (_ParamRegex.IsMatch(replaced))
+            //        {
 
-                        foreach (Match item in _ParamRegex.Matches(replaced))
-                        {
-                            if (TryGetParam(item.Groups[1].Value, out var val))
-                            {
-                                replaced = replaced.Replace(item.Value, val.ToString());
-                            }
-                        }
+            //            foreach (Match item in _ParamRegex.Matches(replaced))
+            //            {
+            //                if (TryGetParam(item.Groups[1].Value, out var val))
+            //                {
+            //                    replaced = replaced.Replace(item.Value, val.ToString());
+            //                }
+            //            }
 
-                        // 変換してパラメータが残っていなければ完了
-                        if (!_ParamRegex.IsMatch(replaced))
-                        {
-                            _CustomParams.Add(param.KeyName, Evaluate(replaced));
-                        }
-                    }
-                    else
-                    {
-                        _CustomParams.Add(param.KeyName, Evaluate(param.Value));
-                    }
-                }
-            }
+            //            // 変換してパラメータが残っていなければ完了
+            //            if (!_ParamRegex.IsMatch(replaced))
+            //            {
+            //                _CustomParams.Add(param.KeyName, Evaluate(replaced));
+            //            }
+            //        }
+            //        else
+            //        {
+            //            _CustomParams.Add(param.KeyName, Evaluate(param.Value));
+            //        }
+            //    }
+            //}
 
             _IsCustomParamsComliled = true;
         }

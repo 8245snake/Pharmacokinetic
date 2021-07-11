@@ -1,0 +1,97 @@
+﻿@page "/model-compare"
+
+@inject ILogger<ModelCompare> logger;
+@inject WebTCI.Services.PkModelService _PkModelService;
+@inject WebTCI.Services.PatientSelectService _PatientSelectService;
+@inject WebTCI.Services.WindowStateService _WindowStateService
+@inject WebTCI.Services.ChartService _ChartService
+
+@implements IDisposable
+
+@using Blazor.Extensions.Canvas.Canvas2D
+@using Blazor.Extensions
+@using Microsoft.Extensions.Logging
+@using Simulator.Models
+
+
+
+<div class="h-100 p-lg-1">
+    <div class="row">
+        <div class="col-3">
+            @*薬剤コンボボックス*@
+            <PkModelComboBox />
+            @*患者情報*@
+            <PatientFrame />
+        </div>
+        <div class="col-3">
+            @*投与法*@
+            <DosingMethodFrame />
+        </div>
+        <div class="col-6">
+            @*モデル選択*@
+            <PkModelFrame />
+        </div>
+    </div>
+
+    <div id="chart-time-area" @onmousemove="OnMouseMove" class="position-relative d-flex flex-column align-self-stretch">
+        @*時刻移動バーなど*@
+        <TimeLocator />
+        @*グラフ*@
+        <PkChart />
+        @*投与エリア*@
+        <DosingArea />
+    </div>
+    @*時刻線*@
+    <TimeLinePointer MouseX="MousePositionX"></TimeLinePointer>
+</div>
+
+
+
+@code {
+
+    private double MousePositionX { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _PatientSelectService.SelectedPatientChanged += OnSelectedPatientChanged;
+        _PkModelService.SelectedMedicineChanged += OnSelectedMedicineChanged;
+        _WindowStateService.ChartAreaResized += OnChartAreaResized;
+    }
+
+    public void Dispose()
+    {
+        _PatientSelectService.SelectedPatientChanged -= OnSelectedPatientChanged;
+        _PkModelService.SelectedMedicineChanged -= OnSelectedMedicineChanged;
+        _WindowStateService.ChartAreaResized -= OnChartAreaResized;
+    }
+
+
+
+    #region EventHandler
+
+    private void OnSelectedPatientChanged(IndividualModel patient)
+    {
+    }
+
+    private void OnSelectedMedicineChanged(PkModelService.MedicineTypes medicine)
+    {
+    }
+
+    private void OnChartAreaResized(object sender, EventArgs e)
+    {
+    }
+
+    private void OnMouseMove(MouseEventArgs e)
+    {
+        var chart = WindowStateService.ChartAreaInfo;
+        if (chart == null)
+        {
+            return;
+        }
+        var scrollX = WindowStateService.ChartAreaInfo.ScrollLeft;
+        MousePositionX = e.ClientX + scrollX;
+    }
+
+    #endregion
+
+}

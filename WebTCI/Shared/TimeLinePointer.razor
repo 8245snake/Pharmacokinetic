@@ -1,0 +1,169 @@
+﻿@using WebTCI.Pages
+@using Microsoft.Extensions.Logging
+
+@implements IDisposable
+
+@inject ILogger<TimeLinePointer> logger;
+@inject WebTCI.Services.TimePointingService _TimePointingService
+@inject WebTCI.Services.ChartService _ChartService
+@inject WebTCI.Services.WindowStateService _WindowStateService
+
+<div name="time-pointer" style="@CssStyle"></div>
+<div name="time-tooltip" style="@TooltipStyle">@TooltipText</div>
+
+
+@code {
+
+    private string CssStyle
+    {
+        get => _CssStyle;
+        set
+        {
+            _CssStyle = value;
+            StateHasChanged();
+        }
+    }
+
+    private string _CssStyle = "";
+
+    private string TooltipStyle { get; set; }
+
+    private string TooltipText { get; set; }
+
+
+    [Parameter]
+    public double MouseX
+    {
+        get => _MouseX;
+        set
+        {
+            _MouseX = value;
+            CssStyle = makeCssStyle(_MouseX);
+            TooltipStyle = makeTooltipStyle(_MouseX);
+            TooltipText = _TimePointingService.PointingTime.ToString("HH:mm:ss");
+
+            if (WindowStateService.ChartAreaInfo != null)
+            {
+                // 指している時刻をセットしたいが自身のPointingTimeChangedイベントは発火させたくない
+                _TimePointingService.PointingTimeChanged -= OnPointingTimeChanged;
+                _TimePointingService.PointingTime = _ChartService.StartTime.AddSeconds(MouseXtoSeconds(_MouseX));
+                _TimePointingService.PointingTimeChanged += OnPointingTimeChanged;
+            }
+        }
+    }
+
+    private double _MouseX;
+
+    private double PixelPerSocond
+    {
+        get
+        {
+            if (WindowStateService.ChartAreaInfo == null)
+            {
+                return 0;
+            }
+            decimal pixelParSeconds = (decimal)_ChartService.ChartRect.Width / (decimal)_ChartService.TimeScale.FullMinutes() / 60;
+            return (double)pixelParSeconds;
+        }
+    }
+
+
+    protected override void OnInitialized()
+    {
+
+        _TimePointingService.PointingTimeChanged += OnPointingTimeChanged;
+        _WindowStateService.ChartAreaResized += OnChartAreaResized;
+    }
+
+    public void Dispose()
+    {
+        _TimePointingService.PointingTimeChanged -= OnPointingTimeChanged;
+    }
+
+    #region EventHandler
+
+    private void OnPointingTimeChanged(TimePointingService sender, DateTime pointingtime)
+    {
+        if (WindowStateService.ChartAreaInfo == null)
+        {
+            return;
+        }
+
+        var seconds = (sender.PointingTime - _ChartService.StartTime).TotalSeconds;
+
+        MouseX = SecondsToMouseX(seconds);
+    }
+
+    private void OnChartAreaResized(object sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    #endregion
+
+
+    private string makeCssStyle(double mouseX)
+    {
+        if (isOutOfRange(mouseX))
+        {
+            return "visibility:hidden;";
+        }
+
+        double x = mouseX;
+        double y = WindowStateService.ChartAreaInfo.Y + _ChartService.PaddeingTop + WindowStateService.ChartAreaInfo.ScrollTop;
+        double h = WindowStateService.ChartAreaInfo.Height;
+        string style = $"width: 1px; height: {h}px; background-color: red; position: absolute; left: {x}px;top: {y}px";
+        return style;
+    }
+
+    private string makeTooltipStyle(double mouseX)
+    {
+        if (isOutOfRange(mouseX))
+        {
+            return "visibility:hidden;";
+        }
+
+        double x = mouseX - 50;
+        double y = WindowStateService.ChartAreaInfo.Y + WindowStateService.ChartAreaInfo.ScrollTop;
+        double h = _ChartService.PaddeingTop;
+        string style = $"width: 100px; height: {h}px; background-color: yellow; opacity:0.5; position: absolute; left: {x}px;top: {y}px";
+        return style;
+    }
+
+    private bool isOutOfRange(double mouseX)
+    {
+        // nullチェック＆マイナス値チェック
+        if (WindowStateService.ChartAreaInfo == null || mouseX < 0)
+        {
+            return true;
+        }
+
+        // グラフ表示領域チェック(左端）
+        if (WindowStateService.ChartAreaInfo.X + _ChartService.PaddeingLeft > mouseX)
+        {
+            return true;
+        }
+
+        // グラフ表示領域チェック(右端）
+        if (WindowStateService.ChartAreaInfo.Right - _ChartService.PaddeingRight < mouseX)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private double MouseXtoSeconds(double mouseX)
+    {
+        double positionX = mouseX - WindowStateService.ChartAreaInfo.X - WindowStateService.ChartAreaInfo.ScrollLeft - _ChartService.PaddeingLeft;
+        return (double)((decimal)positionX / (decimal)PixelPerSocond);
+    }
+
+
+    private double SecondsToMouseX(double seconds)
+    {
+        double pixels = seconds * PixelPerSocond;
+        return pixels + _ChartService.PaddeingLeft + WindowStateService.ChartAreaInfo.X + WindowStateService.ChartAreaInfo.ScrollLeft;
+    }
+
+}

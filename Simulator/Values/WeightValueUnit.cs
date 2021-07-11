@@ -143,7 +143,9 @@ namespace Simulator.Values
 
         public override string ToString()
         {
-            return $"{this.Value}{this.WeightUnit.Name()}";
+            return $"{this.Value}{this.UnitName}";
         }
+
+        public override string UnitName => this.WeightUnit.Name();
     }
 }

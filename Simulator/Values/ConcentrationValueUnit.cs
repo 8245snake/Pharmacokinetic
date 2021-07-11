@@ -70,7 +70,10 @@
 
         public override string ToString()
         {
-            return $"{this.Value}{this.WeightUnit.Name()}/{this.VolumeUnit.Name()}";
+            return $"{this.Value}{this.UnitName}";
         }
+
+        public override string UnitName => $"{this.WeightUnit.Name()}/{this.VolumeUnit.Name()}";
+
     }
 }

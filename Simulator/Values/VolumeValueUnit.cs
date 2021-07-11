@@ -59,7 +59,10 @@ namespace Simulator.Values
 
         public override string ToString()
         {
-            return $"{this.Value}{this.VolumeUnit.Name()}";
+            return $"{this.Value}{UnitName}";
         }
+
+        public override string UnitName => this.VolumeUnit.Name();
+
     }
 }

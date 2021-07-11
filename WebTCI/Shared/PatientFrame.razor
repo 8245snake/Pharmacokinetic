@@ -1,0 +1,52 @@
+﻿@inject WebTCI.Services.PatientSelectService _Service
+
+@implements IDisposable
+
+@using Simulator.Models
+
+
+@*患者情報フレーム*@
+
+<div class="card mt-3">
+    <div class="card-body">
+        <p class="card-text">
+            @PataintString
+        </p>
+    </div>
+</div>
+
+@code {
+
+    private string PataintString
+    {
+        get
+        {
+            IndividualModel patient = _Service.SelectedPatient;
+            if (patient == null)
+            {
+                return "なし";
+            }
+            string gender = (patient.IsMale) ? "男" : "女";
+            return $"{patient.Age}歳 {gender} {patient.Stat * 100}cm {patient.Weight}kg";
+
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _Service.SelectedPatientChanged += OnSelectedPatientChanged;
+    }
+
+    public void Dispose()
+    {
+        _Service.SelectedPatientChanged -= OnSelectedPatientChanged;
+    }
+
+    private void OnSelectedPatientChanged(IndividualModel patient)
+    {
+        StateHasChanged();
+    }
+
+
+
+}

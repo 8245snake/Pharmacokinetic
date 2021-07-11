@@ -1,0 +1,39 @@
+﻿@inject WebTCI.Services.PkModelService _PkModelService
+
+@implements IDisposable
+
+@using static WebTCI.Services.PkModelService
+
+<div class="card p-lg-2">
+
+
+    @foreach (var model in _PkModelService.GetPkModels(_PkModelService.SelectedMedicineType))
+    {
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="@model.ModelID" @bind="@model.IsSelected">
+            <label class="custom-control-label" for="@model.ModelID">@model.DisplayName</label>
+        </div>
+    }
+
+</div>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        _PkModelService.SelectedMedicineChanged += OnSelectedMedicineChanged;
+    }
+
+    public void Dispose()
+
+    {
+        _PkModelService.SelectedMedicineChanged -= OnSelectedMedicineChanged;
+    }
+
+
+    private void OnSelectedMedicineChanged(MedicineTypes medicine)
+    {
+        StateHasChanged();
+    }
+
+}
