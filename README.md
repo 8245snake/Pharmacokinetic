@@ -34,3 +34,9 @@ private static void TestBolusPropofol()
 }   
      
 ```
+
+# WEBアプリ版
+
+以下で公開中
+
+https://8245snake.github.io/Pharmacokinetic/
