@@ -57,8 +57,8 @@
       "System.Text.Json.dll": "sha256-1B0VfWffAXuZC4eYLkMxe0107GUk6+kzX5qAhQhE9ks=",
       "System.Text.RegularExpressions.dll": "sha256-wK1R7NeiDcmN3XN6z32hDN\/7\/ipGU\/RPpKgAog8s8rA=",
       "System.Threading.dll": "sha256-xZYnSecDwL13LLkOBRoEUrrbSpDFU+WMUQWJcskT9og=",
-      "WebTCI.Client.dll": "sha256-dp03yjFDXyHqRXuX\/us2oa\/iV1evX+I5+ca0\/\/sQzQM=",
-      "WebTCI.Core.dll": "sha256-Pb8ZIptO43RJ2AePTKJOtKK8FsdDEfeR7gFixEadXeo="
+      "WebTCI.Client.dll": "sha256-1E10VmYOQJoxmuANieHVRxh+GRTH7yc+ZLvUODCyy+U=",
+      "WebTCI.Core.dll": "sha256-YWD5Pnvp5TyoS6YlyEP5DsIhz+jzCjrV\/aT+6OtxNSk="
     },
     "extensions": null,
     "lazyAssembly": null,

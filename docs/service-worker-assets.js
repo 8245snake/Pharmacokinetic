@@ -53,7 +53,7 @@
       "url": "_framework\/icudt_no_CJK.dat"
     },
     {
-      "hash": "sha256-300UEvOrFeUiatdGTNj2OKmd7195Yv\/fzeIJBJCkb70=",
+      "hash": "sha256-QdWSRM4pBW7vrXTQlamFOny2jzOZyTVAhQ\/GHb\/XDhc=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -257,11 +257,11 @@
       "url": "_framework\/System.Threading.dll"
     },
     {
-      "hash": "sha256-dp03yjFDXyHqRXuX\/us2oa\/iV1evX+I5+ca0\/\/sQzQM=",
+      "hash": "sha256-1E10VmYOQJoxmuANieHVRxh+GRTH7yc+ZLvUODCyy+U=",
       "url": "_framework\/WebTCI.Client.dll"
     },
     {
-      "hash": "sha256-Pb8ZIptO43RJ2AePTKJOtKK8FsdDEfeR7gFixEadXeo=",
+      "hash": "sha256-YWD5Pnvp5TyoS6YlyEP5DsIhz+jzCjrV\/aT+6OtxNSk=",
       "url": "_framework\/WebTCI.Core.dll"
     },
     {
@@ -1577,5 +1577,5 @@
       "url": "_content\/WebTCI.Core\/webtci.js"
     }
   ],
-  "version": "rTRBw6wC"
+  "version": "tC1eCRKm"
 };
